@@ -1,0 +1,29 @@
+{
+  "name": "lock_code_manager Dev",
+  "image": "mcr.microsoft.com/devcontainers/base:ubuntu",
+  "forwardPorts": [8123],
+  "features": {
+    "ghcr.io/devcontainers/features/python:1": {
+      "version": "3.13",
+      "installTools": false
+    }
+  },
+  "containerEnv": {
+    "DEVCONTAINER": "1",
+    "PIP_BREAK_SYSTEM_PACKAGES": "1"
+  },
+  "postCreateCommand": "scripts/setup-devcontainer.sh",
+  "customizations": {
+    "vscode": {
+      "extensions": [
+        "charliermarsh.ruff",
+        "dbaeumer.vscode-eslint",
+        "ms-python.debugpy",
+        "ms-python.python",
+        "ms-python.vscode-pylance",
+        "visualstudioexptteam.vscodeintellicode",
+        "GitHub.vscode-pull-request-github"
+      ]
+    }
+  }
+}

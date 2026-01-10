@@ -1,0 +1,34 @@
+{
+  "config": {
+    "step": {
+      "user": {
+        "title": "Add TOYA legacy decoder",
+        "description": "Enter ToyaGo credentials",
+        "data": {
+          "username": "Username",
+          "password": "Password",
+          "name": "Name"
+        }
+      }
+    },
+    "error": {
+      "cannot_connect": "Cannot connect",
+      "invalid_auth": "Invalid authentication",
+      "no_devices": "No devices found",
+      "unknown": "Unknown error"
+    }
+  },
+  "options": {
+    "step": {
+      "init": {
+        "title": "Options",
+        "data": {
+          "poll_interval": "Poll interval (s)"
+        }
+      }
+    }
+  },
+  "media_browser": {
+    "channels": "Channels"
+  }
+}

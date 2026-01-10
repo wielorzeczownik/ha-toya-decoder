@@ -1,0 +1,44 @@
+# OS
+.DS_Store
+Thumbs.db
+
+# Editors
+.idea/
+.vscode/
+*.sublime-project
+*.sublime-workspace
+
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+*.egg-info/
+build/
+dist/
+.venv/
+venv/
+ENV/
+.env
+.env.*
+pip-wheel-metadata/
+
+# Testing / tooling
+.cache/
+.coverage
+.coverage.*
+.pytest_cache/
+.mypy_cache/
+.ruff_cache/
+.tox/
+.nox/
+htmlcov/
+
+# Node / frontend tooling
+node_modules/
+
+# Home Assistant dev data
+.storage/
+.ha/
+
+# Logs
+*.log

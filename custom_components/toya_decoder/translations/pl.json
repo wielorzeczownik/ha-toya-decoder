@@ -1,0 +1,34 @@
+{
+  "config": {
+    "step": {
+      "user": {
+        "title": "Dodaj dekoder TOYA (stary)",
+        "description": "Podaj dane logowania ToyaGo",
+        "data": {
+          "username": "U\u017cytkownik",
+          "password": "Has\u0142o",
+          "name": "Nazwa"
+        }
+      }
+    },
+    "error": {
+      "cannot_connect": "Nie mo\u017cna si\u0119 po\u0142\u0105czy\u0107",
+      "invalid_auth": "Nieprawid\u0142owe dane logowania",
+      "no_devices": "Nie znaleziono urz\u0105dze\u0144",
+      "unknown": "Nieznany b\u0142\u0105d"
+    }
+  },
+  "options": {
+    "step": {
+      "init": {
+        "title": "Opcje",
+        "data": {
+          "poll_interval": "Od\u015bwie\u017canie (s)"
+        }
+      }
+    }
+  },
+  "media_browser": {
+    "channels": "Kana\u0142y"
+  }
+}
