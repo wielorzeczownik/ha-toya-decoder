@@ -54,7 +54,7 @@
 </p>
 
 Home Assistant custom integration for legacy TOYA decoders (non-Android TV).
-It uses an unofficial API based on decompilation of an older Toya GO app.
+It uses an unofficial API based on decompilation of an older [Toya GO](https://play.google.com/store/apps/details?id=com.toya.toyago&hl=pl) app.
 
 ## What it provides
 
@@ -73,7 +73,7 @@ not supported, so they will not work with this integration.
 ## Installation (HACS)
 
 1. HACS -> Integrations -> Custom repositories -> Add this repo (type: Integration).
-2. Install "TOYA Decoder (Legacy)" from HACS.
+2. Install "TOYA Decoder" from HACS.
 3. Restart Home Assistant.
 4. Settings -> Devices & Services -> Add Integration -> "TOYA Decoder (Legacy)".
 
@@ -82,7 +82,7 @@ not supported, so they will not work with this integration.
 1. Copy `custom_components/toya_decoder` into your HA config directory:
    `<config>/custom_components/toya_decoder`
 2. Restart Home Assistant.
-3. Settings -> Devices & Services -> Add Integration -> "TOYA Decoder (Legacy)".
+3. Settings -> Devices & Services -> Add Integration -> "TOYA Decoder".
 
 ## Known limitations and issues
 
