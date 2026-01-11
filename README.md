@@ -24,14 +24,30 @@
 </p>
 
 <p align="center">
-  <img src="assets/toya-decoder.png" alt="TOYA Decoder" width="260">
+  <img
+    src="https://raw.githubusercontent.com/wielorzeczownik/ha-toya-decoder/main/assets/toya-decoder.png"
+    alt="TOYA Decoder"
+    width="260"
+  >
 </p>
-
-| [![Open HACS Repository](https://my.home-assistant.io/badges/hacs_repository.svg)](https://my.home-assistant.io/redirect/hacs_repository/?owner=wielorzeczownik&repository=ha-toya-decoder&category=integration) | [![Add Integration](https://my.home-assistant.io/badges/config_flow_start.svg)](https://my.home-assistant.io/redirect/config_flow_start/?domain=toya_decoder) |
-| :--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------: | :-----------------------------------------------------------------------------------------------------------------------------------------------------------: |
 
 Home Assistant custom integration for legacy TOYA decoders (non-Android TV).
 It uses an unofficial API based on decompilation of an older [Toya GO](https://play.google.com/store/apps/details?id=com.toya.toyago&hl=pl) app.
+
+<p align="center">
+  <a href="https://my.home-assistant.io/redirect/hacs_repository/?owner=wielorzeczownik&repository=ha-toya-decoder&category=integration">
+    <img
+      src="https://my.home-assistant.io/badges/hacs_repository.svg"
+      alt="Open HACS Repository"
+    />
+  </a>
+  <a href="https://my.home-assistant.io/redirect/config_flow_start/?domain=toya_decoder">
+    <img
+      src="https://my.home-assistant.io/badges/config_flow_start.svg"
+      alt="Add Integration"
+    />
+  </a>
+</p>
 
 ## What it provides
 
@@ -69,3 +85,10 @@ not supported, so they will not work with this integration.
 
 This project is community-made, unofficial, and may break if the backend API
 changes.
+
+<p align="center">
+  <img
+    src="https://img.shields.io/badge/HACS-Custom-orange?style=flat-square&logo=homeassistant&logoColor=white"
+    alt="HACS Custom"
+  />
+</p>
