@@ -85,10 +85,3 @@ not supported, so they will not work with this integration.
 
 This project is community-made, unofficial, and may break if the backend API
 changes.
-
-<p align="center">
-  <img
-    src="https://img.shields.io/badge/HACS-Custom-orange?style=flat-square&logo=homeassistant&logoColor=white"
-    alt="HACS Custom"
-  />
-</p>
