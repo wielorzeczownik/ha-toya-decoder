@@ -4,54 +4,31 @@
 
 <p align="center">
   <a href="https://hacs.xyz/">
-    <picture>
-      <source
-        media="(prefers-color-scheme: dark)"
-        srcset="https://img.shields.io/badge/HACS-Custom-orange?style=flat-square&logo=homeassistant&logoColor=white&labelColor=2d333b"
-      >
-      <source
-        media="(prefers-color-scheme: light)"
-        srcset="https://img.shields.io/badge/HACS-Custom-orange?style=flat-square&logo=homeassistant&logoColor=white"
-      >
-      <img
-        src="https://img.shields.io/badge/HACS-Custom-orange?style=flat-square&logo=homeassistant&logoColor=white"
-        alt="HACS Custom"
-      />
-    </picture>
+    <img
+      src="https://img.shields.io/badge/HACS-Custom-orange?style=flat-square&logo=homeassistant&logoColor=white"
+      alt="HACS Custom"
+    />
   </a>
   <a href="https://www.home-assistant.io/">
-    <picture>
-      <source
-        media="(prefers-color-scheme: dark)"
-        srcset="https://img.shields.io/badge/Home%20Assistant-2026.10.0-41bdf5?style=flat-square&logo=homeassistant&logoColor=white&labelColor=2d333b"
-      >
-      <source
-        media="(prefers-color-scheme: light)"
-        srcset="https://img.shields.io/badge/Home%20Assistant-2026.10.0-41bdf5?style=flat-square&logo=homeassistant&logoColor=white"
-      >
-      <img
-        src="https://img.shields.io/badge/Home%20Assistant-2026.10.0-41bdf5?style=flat-square&logo=homeassistant&logoColor=white"
-        alt="Home Assistant"
-      />
-    </picture>
+    <img
+      src="https://img.shields.io/badge/Home%20Assistant-2026.1.0-41bdf5?style=flat-square&logo=homeassistant&logoColor=white"
+      alt="Home Assistant"
+    />
   </a>
   <a href="LICENSE">
-    <picture>
-      <source
-        media="(prefers-color-scheme: dark)"
-        srcset="https://img.shields.io/badge/License-MIT-2ea043?style=flat-square&labelColor=2d333b"
-      >
-      <source
-        media="(prefers-color-scheme: light)"
-        srcset="https://img.shields.io/badge/License-MIT-2ea043?style=flat-square"
-      >
-      <img
-        src="https://img.shields.io/badge/License-MIT-2ea043?style=flat-square"
-        alt="License: MIT"
-      />
-    </picture>
+    <img
+      src="https://img.shields.io/badge/License-MIT-2ea043?style=flat-square"
+      alt="License: MIT"
+    />
   </a>
 </p>
+
+<p align="center">
+  <img src="assets/toya-decoder.png" alt="TOYA Decoder" width="260">
+</p>
+
+| [![Open HACS Repository](https://my.home-assistant.io/badges/hacs_repository.svg)](https://my.home-assistant.io/redirect/hacs_repository/?owner=wielorzeczownik&repository=ha-toya-decoder&category=integration) | [![Add Integration](https://my.home-assistant.io/badges/config_flow_start.svg)](https://my.home-assistant.io/redirect/config_flow_start/?domain=toya_decoder) |
+| :--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------: | :-----------------------------------------------------------------------------------------------------------------------------------------------------------: |
 
 Home Assistant custom integration for legacy TOYA decoders (non-Android TV).
 It uses an unofficial API based on decompilation of an older [Toya GO](https://play.google.com/store/apps/details?id=com.toya.toyago&hl=pl) app.
@@ -72,15 +49,7 @@ not supported, so they will not work with this integration.
 
 ## Installation (HACS)
 
-1. HACS -> Integrations -> Custom repositories -> Add this repo (type: Integration).
-2. Install "TOYA Decoder" from HACS.
-3. Restart Home Assistant.
-4. Settings -> Devices & Services -> Add Integration -> "TOYA Decoder (Legacy)".
-
-## Installation (manual)
-
-1. Copy `custom_components/toya_decoder` into your HA config directory:
-   `<config>/custom_components/toya_decoder`
+1. HACS -> Integrations -> Search for "TOYA Decoder" and install it.
 2. Restart Home Assistant.
 3. Settings -> Devices & Services -> Add Integration -> "TOYA Decoder".
 
