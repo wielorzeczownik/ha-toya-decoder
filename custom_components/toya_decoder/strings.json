@@ -17,18 +17,5 @@
       "no_devices": "No devices found",
       "unknown": "Unknown error"
     }
-  },
-  "options": {
-    "step": {
-      "init": {
-        "title": "Options",
-        "data": {
-          "poll_interval": "Poll interval (s)"
-        }
-      }
-    }
-  },
-  "media_browser": {
-    "channels": "Channels"
   }
 }

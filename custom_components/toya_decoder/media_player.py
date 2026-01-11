@@ -43,10 +43,6 @@ except ImportError:
     MediaClass = None
     MediaType = None
 
-try:
-    from homeassistant.helpers import translation as translation_helper
-except ImportError:
-    translation_helper = None
 
 _LOGGER = logging.getLogger(__name__)
 
@@ -328,17 +324,6 @@ class ToyaLegacyDecoderMediaPlayer(CoordinatorEntity, MediaPlayerEntity):
             MediaClass.DIRECTORY if MediaClass is not None else "directory"
         )
         title = "Channels"
-        if translation_helper is not None and self.hass is not None:
-            translations = await translation_helper.async_get_translations(
-                self.hass,
-                self.hass.config.language,
-                "media_browser",
-                integrations=[DOMAIN],
-            )
-            title = translations.get(
-                f"component.{DOMAIN}.media_browser.channels",
-                title,
-            )
 
         return BrowseMedia(
             title=title,

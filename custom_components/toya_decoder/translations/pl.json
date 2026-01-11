@@ -17,18 +17,5 @@
       "no_devices": "Nie znaleziono urz\u0105dze\u0144",
       "unknown": "Nieznany b\u0142\u0105d"
     }
-  },
-  "options": {
-    "step": {
-      "init": {
-        "title": "Opcje",
-        "data": {
-          "poll_interval": "Od\u015bwie\u017canie (s)"
-        }
-      }
-    }
-  },
-  "media_browser": {
-    "channels": "Kana\u0142y"
   }
 }
