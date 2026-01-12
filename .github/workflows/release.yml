@@ -3,7 +3,7 @@ name: Home Assistant Release
 on:
   push:
     branches:
-      - master
+      - main
   workflow_dispatch:
     inputs:
       bump:
