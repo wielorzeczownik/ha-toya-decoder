@@ -54,14 +54,7 @@ elif [[ "$last_tag" == "0.0.0" && -d "custom_components/toya_decoder" ]]; then
   integration_changed="true"
 fi
 
-changed="false"
-if [[ "$current_version" != "$last_tag" && "$integration_changed" == "true" ]]; then
-  changed="true"
-fi
-
 {
-  echo "changed=${changed}"
-  echo "last_tag=${last_tag}"
   echo "version=${current_version}"
-  echo "integration_changed=${integration_changed}"
+  echo "changed=${integration_changed}"
 } >> "${GITHUB_OUTPUT:-/dev/null}"

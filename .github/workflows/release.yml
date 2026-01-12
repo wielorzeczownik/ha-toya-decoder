@@ -31,12 +31,12 @@ jobs:
 
       - name: Stop if version unchanged
         if: steps.changes.outputs.changed != 'true'
-        run: echo "Manifest version unchanged; skipping release."
+        run: echo "Unchanged; skipping release."
 
       - name: Read manifest version
         if: steps.changes.outputs.changed == 'true'
         id: version
-        run: bash scripts/calc-version-bump.sh "${{ steps.changes.outputs.last_tag }}"
+        run: bash scripts/calc-version-bump.sh
 
       - name: Bump manifest version
         if: steps.changes.outputs.changed == 'true'
