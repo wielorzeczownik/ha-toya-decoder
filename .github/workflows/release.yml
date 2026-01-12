@@ -1,0 +1,77 @@
+name: Home Assistant Release
+
+on:
+  push:
+    branches:
+      - master
+  workflow_dispatch:
+    inputs:
+      bump:
+        description: "Version bump (major, minor, patch, or x.y.z)"
+        required: true
+        default: "patch"
+
+jobs:
+  release:
+    name: Create release from manifest version
+    runs-on: ubuntu-24.04
+    if: github.event_name != 'push' || github.actor != 'github-actions[bot]'
+    permissions:
+      contents: write
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v6
+        with:
+          fetch-depth: 0
+
+      - name: Detect integration changes
+        id: changes
+        run: bash scripts/detect-integration-change.sh
+
+      - name: Stop if version unchanged
+        if: steps.changes.outputs.changed != 'true'
+        run: echo "Manifest version unchanged; skipping release."
+
+      - name: Read manifest version
+        if: steps.changes.outputs.changed == 'true'
+        id: version
+        run: bash scripts/calc-version-bump.sh "${{ steps.changes.outputs.last_tag }}"
+
+      - name: Bump manifest version
+        if: steps.changes.outputs.changed == 'true'
+        run: |
+          bash scripts/bump-manifest-version.sh "${{ steps.version.outputs.version }}"
+
+      - name: Commit manifest bump
+        if: steps.changes.outputs.changed == 'true'
+        uses: EndBug/add-and-commit@v9
+        with:
+          add: custom_components/toya_decoder/manifest.json
+          message: "chore(release): bump version to v${{ steps.version.outputs.version }}"
+          default_author: github_actions
+
+      - name: Generate release notes
+        if: steps.changes.outputs.changed == 'true'
+        id: notes
+        run: bash scripts/generate-release-notes.sh "${{ steps.version.outputs.last_tag }}" "${{ steps.version.outputs.version }}"
+
+      - name: Tag repository
+        if: steps.changes.outputs.changed == 'true'
+        run: |
+          tag="v${{ steps.version.outputs.version }}"
+          if git rev-parse "$tag" >/dev/null 2>&1; then
+            echo "Tag ${tag} already exists; skipping."
+            exit 0
+          fi
+          git tag "$tag"
+          git push origin "$tag"
+
+      - name: Create GitHub release
+        if: steps.changes.outputs.changed == 'true'
+        uses: softprops/action-gh-release@v2
+        with:
+          token: ${{ secrets.GH_RELEASE_TOKEN }}
+          tag_name: v${{ steps.version.outputs.version }}
+          name: v${{ steps.version.outputs.version }}
+          body_path: ${{ steps.notes.outputs.body_path }}
