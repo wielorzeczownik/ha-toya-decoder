@@ -11,6 +11,7 @@ from homeassistant.components.media_player.const import (
 )
 from homeassistant.config_entries import ConfigEntry
 from homeassistant.core import HomeAssistant
+from homeassistant.helpers.entity import DeviceInfo
 from homeassistant.helpers.entity_platform import AddEntitiesCallback
 from homeassistant.helpers.update_coordinator import CoordinatorEntity
 
@@ -132,10 +133,17 @@ class ToyaLegacyDecoderMediaPlayer(CoordinatorEntity, MediaPlayerEntity):
     ) -> None:
         super().__init__(coordinator)
         self._smart_card = device.smart_card
+        self._chip_id = device.chip_id
         self._attr_name = f"{base_name} {self._smart_card}"
         self.coordinator = coordinator
         self._attr_unique_id = f"toya_decoder_{entry_id}_{self._smart_card}"
         self._channels = channels
+        self._attr_device_info = DeviceInfo(
+            identifiers={(DOMAIN, self._chip_id)},
+            name=f"{base_name} {self._smart_card}",
+            manufacturer="Toya",
+            model=self._chip_id,
+        )
 
         self._attr_supported_features = (
             _POWER_FEATURES
@@ -202,6 +210,7 @@ class ToyaLegacyDecoderMediaPlayer(CoordinatorEntity, MediaPlayerEntity):
 
         return {
             "smart_card": self._smart_card,
+            "chip_id": self._chip_id,
             "remote_commands": REMOTE_COMMANDS,
         }
 
