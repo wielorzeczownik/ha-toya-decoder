@@ -15,7 +15,13 @@
       alt="Home Assistant"
     />
   </a>
-  <a href="LICENSE">
+  <a href="https://github.com/wielorzeczownik/ha-toya-decoder/releases/latest">
+    <img
+      src="https://img.shields.io/github/v/release/wielorzeczownik/ha-toya-decoder?style=flat-square"
+      alt="Latest Release"
+    />
+  </a>
+  <a href="https://github.com/wielorzeczownik/ha-toya-decoder/blob/main/LICENSE">
     <img
       src="https://img.shields.io/badge/License-MIT-2ea043?style=flat-square"
       alt="License: MIT"
@@ -65,9 +71,10 @@ not supported, so they will not work with this integration.
 
 ## Installation (HACS)
 
-1. HACS -> Integrations -> Search for "TOYA Decoder" and install it.
-2. Restart Home Assistant.
-3. Settings -> Devices & Services -> Add Integration -> "TOYA Decoder".
+1. HACS -> Integrations -> Add custom repository -> URL of this repo, category "Integration".
+2. HACS -> Integrations -> Search for "TOYA Decoder" and install it.
+3. Restart Home Assistant.
+4. Settings -> Devices & Services -> Add Integration -> "TOYA Decoder".
 
 ## Known limitations and issues
 
