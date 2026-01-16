@@ -1,12 +1,14 @@
 {
   "domain": "toya_decoder",
   "name": "TOYA Decoder",
-  "codeowners": ["@wielorzeczownik"],
+  "codeowners": [
+    "@wielorzeczownik"
+  ],
   "config_flow": true,
   "documentation": "https://github.com/wielorzeczownik/ha-toya-decoder",
   "integration_type": "device",
   "iot_class": "cloud_polling",
   "issue_tracker": "https://github.com/wielorzeczownik/ha-toya-decoder/issues",
   "requirements": [],
-  "version": "0.0.8"
+  "version": "0.0.9"
 }
