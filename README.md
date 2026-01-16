@@ -65,9 +65,9 @@ It uses an unofficial API based on decompilation of an older [Toya GO](https://p
 
 ## Supported devices
 
-This integration only supports decoders that return a non-empty `smartcard`
-value from the API. Android TV (ATV) devices return an empty string and are
-not supported, so they will not work with this integration.
+This integration only supports decoders that return a non-empty `smartcard` value from the API. Android TV (ATV) devices return an empty string and are not supported, so they will not work with this integration.
+
+> Note: Toya recently introduced 2FA for its customer portal. The app that this integration is based on does not require 2FA yet, so enabling 2FA on your account does not affect this integration.
 
 ## Installation (HACS)
 
