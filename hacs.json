@@ -2,6 +2,6 @@
   "name": "TOYA Decoder",
   "zip_release": true,
   "filename": "toya_decoder.zip",
-  "homeassistant": "2026.1.0",
+  "homeassistant": "2024.6.0",
   "render_readme": true
 }

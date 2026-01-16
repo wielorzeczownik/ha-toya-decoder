@@ -11,7 +11,7 @@
   </a>
   <a href="https://www.home-assistant.io/">
     <img
-      src="https://img.shields.io/badge/Home%20Assistant-2026.1.0-41bdf5?style=flat-square&logo=homeassistant&logoColor=white"
+      src="https://img.shields.io/badge/Home%20Assistant-2024.6.0-41bdf5?style=flat-square&logo=homeassistant&logoColor=white"
       alt="Home Assistant"
     />
   </a>
