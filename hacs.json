@@ -3,5 +3,6 @@
   "zip_release": true,
   "filename": "toya_decoder.zip",
   "homeassistant": "2024.6.0",
+  "hide_default_branch": true,
   "render_readme": true
 }
