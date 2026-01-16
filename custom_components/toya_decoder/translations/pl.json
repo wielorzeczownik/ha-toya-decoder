@@ -5,20 +5,20 @@
         "title": "Dodaj dekoder TOYA (stary)",
         "description": "Podaj dane logowania ToyaGo",
         "data": {
-          "username": "U\u017cytkownik",
-          "password": "Has\u0142o",
+          "username": "Użytkownik",
+          "password": "Hasło",
           "name": "Nazwa"
         }
       }
     },
     "error": {
-      "cannot_connect": "Nie mo\u017cna si\u0119 po\u0142\u0105czy\u0107",
-      "invalid_auth": "Nieprawid\u0142owe dane logowania",
-      "no_devices": "Nie znaleziono urz\u0105dze\u0144",
-      "unknown": "Nieznany b\u0142\u0105d"
+      "cannot_connect": "Nie można się połączyć",
+      "invalid_auth": "Nieprawidłowe dane logowania",
+      "no_devices": "Nie znaleziono urządzeń",
+      "unknown": "Nieznany błąd"
     }
   },
   "common": {
-    "channels": "Kana\u0142y"
+    "channels": "Kanały"
   }
 }
