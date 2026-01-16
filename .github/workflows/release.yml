@@ -5,16 +5,30 @@ on:
     branches:
       - main
   workflow_dispatch:
-    inputs:
-      bump:
-        description: "Version bump (major, minor, patch, or x.y.z)"
-        required: true
-        default: "patch"
 
 jobs:
+  hassfest:
+    name: hassfest
+    runs-on: ubuntu-24.04
+    steps:
+      - uses: actions/checkout@v6
+      - uses: home-assistant/actions/hassfest@master
+
+  hacs:
+    name: HACS
+    runs-on: ubuntu-24.04
+    steps:
+      - uses: actions/checkout@v6
+      - uses: hacs/action@main
+        with:
+          category: integration
+
   release:
     name: Create release from manifest version
     runs-on: ubuntu-24.04
+    needs:
+      - hassfest
+      - hacs
     if: github.event_name != 'push' || github.actor != 'github-actions[bot]'
     permissions:
       contents: write
