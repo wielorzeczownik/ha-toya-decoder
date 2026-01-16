@@ -336,11 +336,11 @@ class ToyaLegacyDecoderMediaPlayer(CoordinatorEntity, MediaPlayerEntity):
         translations = await async_get_translations(
             self.hass,
             self.hass.config.language,
-            "media_browser",
+            "common",
             [DOMAIN],
         )
         title = translations.get(
-            f"component.{DOMAIN}.media_browser.channels", "Channels"
+            f"component.{DOMAIN}.common.channels", "Channels"
         )
 
         return BrowseMedia(
