@@ -15,11 +15,9 @@ from .api import (
 )
 from .const import (
     CONF_NAME,
-    CONF_POLL_INTERVAL,
     CONF_PASSWORD,
     CONF_USERNAME,
     DEFAULT_NAME,
-    DEFAULT_POLL_INTERVAL,
     DOMAIN,
 )
 
