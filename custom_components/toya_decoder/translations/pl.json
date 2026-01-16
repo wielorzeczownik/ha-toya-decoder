@@ -19,6 +19,7 @@
     }
   },
   "common": {
-    "channels": "Kanały"
+    "channels": "Kanały",
+    "default_name": "Dekoder TOYA"
   }
 }

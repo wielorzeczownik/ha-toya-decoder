@@ -19,6 +19,7 @@
     }
   },
   "common": {
-    "channels": "Канали"
+    "channels": "Канали",
+    "default_name": "Декодер TOYA"
   }
 }

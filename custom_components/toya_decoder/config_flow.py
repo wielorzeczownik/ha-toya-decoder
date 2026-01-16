@@ -5,7 +5,7 @@ from __future__ import annotations
 import voluptuous as vol
 
 from homeassistant import config_entries
-from homeassistant.core import callback
+from homeassistant.core import HomeAssistant, callback
 from homeassistant.data_entry_flow import FlowResult
 
 from .api import (
@@ -17,9 +17,9 @@ from .const import (
     CONF_NAME,
     CONF_PASSWORD,
     CONF_USERNAME,
-    DEFAULT_NAME,
     DOMAIN,
 )
+from .helpers import async_get_default_name
 
 
 def _unique_id_from_username(username: str) -> str:
@@ -28,7 +28,7 @@ def _unique_id_from_username(username: str) -> str:
     return username.strip().lower()
 
 
-async def _validate_input(data: dict) -> dict:
+async def _validate_input(data: dict, default_name: str) -> dict:
     """Validate user credentials and fetch devices."""
     api = ToyaDecoderApi(
         username=data[CONF_USERNAME],
@@ -38,7 +38,7 @@ async def _validate_input(data: dict) -> dict:
     devices = await api.async_get_devices()
 
     return {
-        "title": data.get(CONF_NAME) or DEFAULT_NAME,
+        "title": data.get(CONF_NAME) or default_name,
         "devices": devices,
     }
 
@@ -53,6 +53,9 @@ class ConfigFlow(config_entries.ConfigFlow, domain=DOMAIN):
     ) -> FlowResult:
         """Handle the initial step from the UI."""
         errors: dict[str, str] = {}
+        default_name = await async_get_default_name(
+            self.hass, self.context.get("language")
+        )
 
         if user_input is not None:
             username = user_input[CONF_USERNAME]
@@ -60,7 +63,7 @@ class ConfigFlow(config_entries.ConfigFlow, domain=DOMAIN):
             self._abort_if_unique_id_configured()
 
             try:
-                info = await _validate_input(user_input)
+                info = await _validate_input(user_input, default_name)
             except ToyaDecoderAuthError:
                 errors["base"] = "invalid_auth"
             except ToyaDecoderConnectionError:
@@ -80,7 +83,7 @@ class ConfigFlow(config_entries.ConfigFlow, domain=DOMAIN):
             {
                 vol.Required(CONF_USERNAME): str,
                 vol.Required(CONF_PASSWORD): str,
-                vol.Optional(CONF_NAME, default=DEFAULT_NAME): str,
+                vol.Optional(CONF_NAME, default=default_name): str,
             }
         )
 

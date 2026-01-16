@@ -19,6 +19,7 @@
     }
   },
   "common": {
-    "channels": "Channels"
+    "channels": "Channels",
+    "default_name": "TOYA Decoder"
   }
 }

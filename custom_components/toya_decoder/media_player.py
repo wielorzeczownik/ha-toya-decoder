@@ -19,13 +19,13 @@ from homeassistant.helpers.update_coordinator import CoordinatorEntity
 from .api import ToyaDecoderChannel, ToyaDecoderDevice
 from .const import (
     CONF_NAME,
-    DEFAULT_NAME,
     DOMAIN,
     DeviceStatus,
     RemoteCommand,
     REMOTE_COMMANDS,
 )
 from .coordinator import ToyaDecoderCoordinator
+from .helpers import async_get_default_name
 
 try:
     from homeassistant.components.media_player.const import (
@@ -92,7 +92,8 @@ async def async_setup_entry(
     data = hass.data[DOMAIN][entry.entry_id]
     coordinator: ToyaDecoderCoordinator = data["coordinator"]
 
-    base_name = entry.data.get(CONF_NAME) or DEFAULT_NAME
+    default_name = await async_get_default_name(hass)
+    base_name = entry.data.get(CONF_NAME) or default_name
     devices = coordinator.data or []
     if not devices:
         try:
