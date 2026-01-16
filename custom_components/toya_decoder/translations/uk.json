@@ -1,0 +1,24 @@
+{
+  "config": {
+    "step": {
+      "user": {
+        "title": "Додати декодер TOYA (старий)",
+        "description": "Введіть облікові дані ToyaGo",
+        "data": {
+          "username": "Ім'я користувача",
+          "password": "Пароль",
+          "name": "Назва"
+        }
+      }
+    },
+    "error": {
+      "cannot_connect": "Не вдається підключитися",
+      "invalid_auth": "Неправильні облікові дані",
+      "no_devices": "Пристроїв не знайдено",
+      "unknown": "Невідома помилка"
+    }
+  },
+  "media_browser": {
+    "channels": "Канали"
+  }
+}
