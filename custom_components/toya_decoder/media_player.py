@@ -13,6 +13,7 @@ from homeassistant.config_entries import ConfigEntry
 from homeassistant.core import HomeAssistant
 from homeassistant.helpers.entity import DeviceInfo
 from homeassistant.helpers.entity_platform import AddEntitiesCallback
+from homeassistant.helpers.translation import async_get_translations
 from homeassistant.helpers.update_coordinator import CoordinatorEntity
 
 from .api import ToyaDecoderChannel, ToyaDecoderDevice
@@ -332,7 +333,15 @@ class ToyaLegacyDecoderMediaPlayer(CoordinatorEntity, MediaPlayerEntity):
         root_class = (
             MediaClass.DIRECTORY if MediaClass is not None else "directory"
         )
-        title = "Channels"
+        translations = await async_get_translations(
+            self.hass,
+            self.hass.config.language,
+            "media_browser",
+            [DOMAIN],
+        )
+        title = translations.get(
+            f"component.{DOMAIN}.media_browser.channels", "Channels"
+        )
 
         return BrowseMedia(
             title=title,

@@ -17,5 +17,8 @@
       "no_devices": "No devices found",
       "unknown": "Unknown error"
     }
+  },
+  "media_browser": {
+    "channels": "Channels"
   }
 }

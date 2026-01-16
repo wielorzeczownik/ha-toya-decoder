@@ -17,5 +17,8 @@
       "no_devices": "Nie znaleziono urz\u0105dze\u0144",
       "unknown": "Nieznany b\u0142\u0105d"
     }
+  },
+  "media_browser": {
+    "channels": "Kana\u0142y"
   }
 }
