@@ -85,7 +85,7 @@ jobs:
         if: steps.changes.outputs.changed == 'true'
         run: |
           mkdir -p dist
-          (cd custom_components && zip -r ../dist/toya_decoder.zip toya_decoder)
+          zip -r dist/toya_decoder.zip custom_components/toya_decoder
 
       - name: Create GitHub release
         if: steps.changes.outputs.changed == 'true'
