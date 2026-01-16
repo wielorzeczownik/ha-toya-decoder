@@ -81,12 +81,6 @@ jobs:
           git tag "$tag"
           git push origin "$tag"
 
-      - name: Build release zip
-        if: steps.changes.outputs.changed == 'true'
-        run: |
-          mkdir -p dist
-          (cd custom_components && zip -r ../dist/toya_decoder.zip toya_decoder)
-
       - name: Create GitHub release
         if: steps.changes.outputs.changed == 'true'
         uses: softprops/action-gh-release@v2
@@ -95,4 +89,3 @@ jobs:
           tag_name: v${{ steps.version.outputs.version }}
           name: v${{ steps.version.outputs.version }}
           body_path: ${{ steps.notes.outputs.body_path }}
-          files: dist/toya_decoder.zip
