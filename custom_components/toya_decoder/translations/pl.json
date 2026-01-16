@@ -2,8 +2,8 @@
   "config": {
     "step": {
       "user": {
-        "title": "Dodaj dekoder TOYA (stary)",
-        "description": "Podaj dane logowania ToyaGo",
+        "title": "Dodaj dekoder TOYA",
+        "description": "Podaj dane logowania eBOA",
         "data": {
           "username": "Użytkownik",
           "password": "Hasło",

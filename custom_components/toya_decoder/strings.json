@@ -2,8 +2,8 @@
   "config": {
     "step": {
       "user": {
-        "title": "Add TOYA legacy decoder",
-        "description": "Enter ToyaGo credentials",
+        "title": "Add TOYA decoder",
+        "description": "Enter eBOA credentials",
         "data": {
           "username": "Username",
           "password": "Password",

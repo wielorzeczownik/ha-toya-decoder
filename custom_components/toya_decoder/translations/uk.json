@@ -2,8 +2,8 @@
   "config": {
     "step": {
       "user": {
-        "title": "Додати декодер TOYA (старий)",
-        "description": "Введіть облікові дані ToyaGo",
+        "title": "Додати декодер TOYA",
+        "description": "Введіть облікові дані eBOA",
         "data": {
           "username": "Ім'я користувача",
           "password": "Пароль",
