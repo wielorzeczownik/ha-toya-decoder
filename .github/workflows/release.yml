@@ -47,7 +47,7 @@ jobs:
         if: steps.changes.outputs.changed != 'true'
         run: echo "Unchanged; skipping release."
 
-      - name: Read manifest version
+      - name: Read version
         if: steps.changes.outputs.changed == 'true'
         id: version
         run: bash scripts/calc-version-bump.sh
