@@ -3,30 +3,10 @@
 </h1>
 
 <p align="center">
-  <a href="https://hacs.xyz/">
-    <img
-      src="https://img.shields.io/badge/HACS-Custom-orange?style=flat-square&logo=homeassistant&logoColor=white"
-      alt="HACS Custom"
-    />
-  </a>
-  <a href="https://www.home-assistant.io/">
-    <img
-      src="https://img.shields.io/badge/Home%20Assistant-2024.6.0-41bdf5?style=flat-square&logo=homeassistant&logoColor=white"
-      alt="Home Assistant"
-    />
-  </a>
-  <a href="https://github.com/wielorzeczownik/ha-toya-decoder/releases/latest">
-    <img
-      src="https://img.shields.io/github/v/release/wielorzeczownik/ha-toya-decoder?style=flat-square"
-      alt="Latest Release"
-    />
-  </a>
-  <a href="https://github.com/wielorzeczownik/ha-toya-decoder/blob/main/LICENSE">
-    <img
-      src="https://img.shields.io/badge/License-MIT-2ea043?style=flat-square"
-      alt="License: MIT"
-    />
-  </a>
+  <a href="https://hacs.xyz/"><img src="https://img.shields.io/badge/HACS-Custom-orange?style=flat-square&logo=homeassistant&logoColor=white" alt="HACS Custom"/></a>
+  <a href="https://www.home-assistant.io/"><img src="https://img.shields.io/badge/Home%20Assistant-2024.6.0-41bdf5?style=flat-square&logo=homeassistant&logoColor=white" alt="Home Assistant"/></a>
+  <a href="https://github.com/wielorzeczownik/ha-toya-decoder/releases/latest"><img src="https://img.shields.io/github/v/release/wielorzeczownik/ha-toya-decoder?style=flat-square" alt="Latest Release"/></a>
+  <a href="https://github.com/wielorzeczownik/ha-toya-decoder/blob/main/LICENSE"><img src="https://img.shields.io/badge/License-MIT-2ea043?style=flat-square" alt="License: MIT"/></a>
 </p>
 
 <p align="center">
@@ -41,18 +21,8 @@ Home Assistant custom integration for legacy TOYA decoders (non-Android TV).
 It uses an unofficial API based on decompilation of an older [Toya GO](https://play.google.com/store/apps/details?id=com.toya.toyago&hl=pl) app.
 
 <p align="center">
-  <a href="https://my.home-assistant.io/redirect/hacs_repository/?owner=wielorzeczownik&repository=ha-toya-decoder&category=integration">
-    <img
-      src="https://my.home-assistant.io/badges/hacs_repository.svg"
-      alt="Open HACS Repository"
-    />
-  </a>
-  <a href="https://my.home-assistant.io/redirect/config_flow_start/?domain=toya_decoder">
-    <img
-      src="https://my.home-assistant.io/badges/config_flow_start.svg"
-      alt="Add Integration"
-    />
-  </a>
+  <a href="https://my.home-assistant.io/redirect/hacs_repository/?owner=wielorzeczownik&repository=ha-toya-decoder&category=integration"><img src="https://my.home-assistant.io/badges/hacs_repository.svg" alt="Open HACS Repository"/></a>
+  <a href="https://my.home-assistant.io/redirect/config_flow_start/?domain=toya_decoder"><img src="https://my.home-assistant.io/badges/config_flow_start.svg" alt="Add Integration" /></a>
 </p>
 
 ## What it provides
