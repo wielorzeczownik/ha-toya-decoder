@@ -41,10 +41,9 @@ This integration only supports decoders that return a non-empty `smartcard` valu
 
 ## Installation (HACS)
 
-1. HACS -> Integrations -> Add custom repository -> URL of this repo, category "Integration".
-2. HACS -> Integrations -> Search for "TOYA Decoder" and install it.
-3. Restart Home Assistant.
-4. Settings -> Devices & Services -> Add Integration -> "TOYA Decoder".
+1. HACS -> Integrations -> Search for "TOYA Decoder" and install it.
+2. Restart Home Assistant.
+3. Settings -> Devices & Services -> Add Integration -> "TOYA Decoder".
 
 ## Known limitations and issues
 
