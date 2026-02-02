@@ -4,7 +4,14 @@ on:
   push:
     branches:
       - main
+    paths:
+      - "custom_components/toya_decoder/**"
+      - "hacs.json"
   workflow_dispatch:
+
+concurrency:
+  group: release-main
+  cancel-in-progress: true
 
 jobs:
   hassfest:
@@ -23,76 +30,213 @@ jobs:
         with:
           category: integration
 
-  release:
-    name: Create release from manifest version
-    runs-on: ubuntu-24.04
+  prepare-release:
     needs:
       - hassfest
       - hacs
-    if: github.event_name != 'push' || github.actor != 'github-actions[bot]'
+    if: ${{ !contains(github.event.head_commit.message || '', '[skip ci]') }}
+    runs-on: ubuntu-24.04
     permissions:
       contents: write
-
+    outputs:
+      released: ${{ steps.bump.outputs.released }}
+      version: ${{ steps.bump.outputs.version }}
+      tag: ${{ steps.bump.outputs.tag }}
+      commit_changes: ${{ steps.bump.outputs.commit_changes }}
     steps:
-      - name: Checkout repository
+      - name: Checkout
         uses: actions/checkout@v6
         with:
           fetch-depth: 0
 
-      - name: Detect integration changes
-        id: changes
-        run: bash scripts/detect-integration-change.sh
-
-      - name: Stop if version unchanged
-        if: steps.changes.outputs.changed != 'true'
-        run: echo "Unchanged; skipping release."
-
-      - name: Read version
-        if: steps.changes.outputs.changed == 'true'
-        id: version
-        run: bash scripts/calc-version-bump.sh
+      - name: Determine next version (git-cliff)
+        id: cliff_bumped
+        uses: orhun/git-cliff-action@v4
+        with:
+          config: cliff.toml
+          args: --bumped-version
+        env:
+          OUTPUT: bumped-version.txt
+          GITHUB_REPO: ${{ github.repository }}
 
       - name: Bump manifest version
-        if: steps.changes.outputs.changed == 'true'
+        id: bump
+        shell: bash
         run: |
-          bash scripts/bump-manifest-version.sh "${{ steps.version.outputs.version }}"
+          set -euo pipefail
 
-      - name: Commit manifest bump
-        if: steps.changes.outputs.changed == 'true'
+          manifest_path="custom_components/toya_decoder/manifest.json"
+          current_version=$(python3 - "$manifest_path" <<'PY'
+          import json
+          import sys
+
+          with open(sys.argv[1], "r", encoding="utf-8") as handle:
+              data = json.load(handle)
+
+          version = str(data.get("version", "")).strip()
+          if not version:
+              print("Missing version in manifest.json", file=sys.stderr)
+              sys.exit(1)
+          print(version)
+          PY
+          )
+
+          next_tag="${{ steps.cliff_bumped.outputs.content }}"
+          next_tag=$(echo "$next_tag" | tr -d '[:space:]')
+          if [[ -z "$next_tag" ]]; then
+            echo "Unable to determine next version from git-cliff"
+            exit 1
+          fi
+          if [[ "$next_tag" != v* ]]; then
+            next_tag="v$next_tag"
+          fi
+
+          next_version="${next_tag#v}"
+          current_tag="v${current_version}"
+          has_current_tag="false"
+          if git rev-parse -q --verify "refs/tags/${current_tag}" >/dev/null; then
+            has_current_tag="true"
+          fi
+          latest_tag=$(git describe --tags --abbrev=0 2>/dev/null || true)
+
+          if [[ "$has_current_tag" == "false" && -z "$latest_tag" ]]; then
+            echo "No existing tags found. Creating initial release for ${current_tag}."
+            echo "released=true" >> "$GITHUB_OUTPUT"
+            echo "version=$current_version" >> "$GITHUB_OUTPUT"
+            echo "tag=$current_tag" >> "$GITHUB_OUTPUT"
+            echo "commit_changes=false" >> "$GITHUB_OUTPUT"
+            exit 0
+          fi
+
+          if [[ "$next_version" == "$current_version" ]]; then
+            if [[ "$has_current_tag" == "false" ]]; then
+              echo "No bump from git-cliff, but no current tag exists. Creating release for ${current_tag}."
+              echo "released=true" >> "$GITHUB_OUTPUT"
+              echo "version=$current_version" >> "$GITHUB_OUTPUT"
+              echo "tag=$current_tag" >> "$GITHUB_OUTPUT"
+              echo "commit_changes=false" >> "$GITHUB_OUTPUT"
+              exit 0
+            fi
+
+            commits_since_tag=$(git rev-list --count "${current_tag}..HEAD")
+            if [[ "$commits_since_tag" -eq 0 ]]; then
+              echo "No new commits since ${current_tag}. Nothing to release."
+              echo "released=false" >> "$GITHUB_OUTPUT"
+              echo "version=$current_version" >> "$GITHUB_OUTPUT"
+              echo "tag=$current_tag" >> "$GITHUB_OUTPUT"
+              echo "commit_changes=false" >> "$GITHUB_OUTPUT"
+              exit 0
+            fi
+
+            IFS='.' read -r major minor patch <<< "$current_version"
+            next_version="${major}.${minor}.$((patch + 1))"
+            next_tag="v${next_version}"
+            echo "No semantic bump from git-cliff; fallback to patch bump -> ${next_tag}"
+          fi
+
+          python3 - "$manifest_path" "$next_version" <<'PY'
+          import json
+          import sys
+
+          path = sys.argv[1]
+          version = sys.argv[2]
+
+          with open(path, "r", encoding="utf-8") as handle:
+              data = json.load(handle)
+          data["version"] = version
+          with open(path, "w", encoding="utf-8") as handle:
+              json.dump(data, handle, indent=2)
+              handle.write("\n")
+          PY
+
+          echo "released=true" >> "$GITHUB_OUTPUT"
+          echo "version=$next_version" >> "$GITHUB_OUTPUT"
+          echo "tag=$next_tag" >> "$GITHUB_OUTPUT"
+          echo "commit_changes=true" >> "$GITHUB_OUTPUT"
+
+      - name: Generate release notes (git-cliff)
+        if: ${{ steps.bump.outputs.released == 'true' }}
+        uses: orhun/git-cliff-action@v4
+        with:
+          config: cliff.toml
+          args: --unreleased --tag ${{ steps.bump.outputs.tag }}
+        env:
+          OUTPUT: release-notes.md
+          GITHUB_REPO: ${{ github.repository }}
+
+      - name: Commit, tag, and push
+        if: ${{ steps.bump.outputs.released == 'true' && steps.bump.outputs.commit_changes == 'true' }}
         uses: EndBug/add-and-commit@v9
         with:
           add: custom_components/toya_decoder/manifest.json
-          message: "chore(release): bump version to v${{ steps.version.outputs.version }}"
           default_author: github_actions
+          message: "chore(release): ${{ steps.bump.outputs.tag }} [skip ci]"
+          tag: "${{ steps.bump.outputs.tag }}"
+          push: true
 
-      - name: Generate release notes
-        if: steps.changes.outputs.changed == 'true'
-        id: notes
-        run: bash scripts/generate-release-notes.sh "${{ steps.version.outputs.last_tag }}" "${{ steps.version.outputs.version }}"
-
-      - name: Tag repository
-        if: steps.changes.outputs.changed == 'true'
+      - name: Push tag only
+        if: ${{ steps.bump.outputs.released == 'true' && steps.bump.outputs.commit_changes == 'false' }}
         run: |
-          tag="v${{ steps.version.outputs.version }}"
-          if git rev-parse "$tag" >/dev/null 2>&1; then
-            echo "Tag ${tag} already exists; skipping."
+          if git rev-parse -q --verify "refs/tags/${{ steps.bump.outputs.tag }}" >/dev/null; then
+            echo "Tag ${{ steps.bump.outputs.tag }} already exists; skipping push."
             exit 0
           fi
-          git tag "$tag"
-          git push origin "$tag"
+          git tag "${{ steps.bump.outputs.tag }}"
+          git push origin "${{ steps.bump.outputs.tag }}"
+
+      - name: Upload release notes
+        if: ${{ steps.bump.outputs.released == 'true' }}
+        uses: actions/upload-artifact@v6
+        with:
+          name: release-notes
+          path: release-notes.md
+
+  build-artifact:
+    needs: prepare-release
+    if: ${{ needs.prepare-release.outputs.released == 'true' }}
+    runs-on: ubuntu-24.04
+    steps:
+      - name: Checkout tag
+        uses: actions/checkout@v6
+        with:
+          ref: ${{ needs.prepare-release.outputs.tag }}
 
       - name: Build release zip
-        if: steps.changes.outputs.changed == 'true'
         run: |
           mkdir -p dist
           (cd custom_components/toya_decoder && zip -r ../../dist/toya_decoder.zip .)
 
+      - name: Upload zip artifact
+        uses: actions/upload-artifact@v6
+        with:
+          name: release-zip
+          path: dist/toya_decoder.zip
+
+  publish-release:
+    needs:
+      - prepare-release
+      - build-artifact
+    if: ${{ needs.prepare-release.outputs.released == 'true' }}
+    runs-on: ubuntu-24.04
+    permissions:
+      contents: write
+    steps:
+      - name: Download zip artifact
+        uses: actions/download-artifact@v7
+        with:
+          name: release-zip
+          path: dist
+
+      - name: Download release notes
+        uses: actions/download-artifact@v7
+        with:
+          name: release-notes
+          path: .
+
       - name: Create GitHub release
-        if: steps.changes.outputs.changed == 'true'
         uses: softprops/action-gh-release@v2
         with:
-          token: ${{ secrets.GH_RELEASE_TOKEN }}
-          tag_name: v${{ steps.version.outputs.version }}
-          name: v${{ steps.version.outputs.version }}
-          body_path: ${{ steps.notes.outputs.body_path }}
+          tag_name: ${{ needs.prepare-release.outputs.tag }}
+          name: ${{ needs.prepare-release.outputs.tag }}
+          body_path: release-notes.md
           files: dist/toya_decoder.zip
