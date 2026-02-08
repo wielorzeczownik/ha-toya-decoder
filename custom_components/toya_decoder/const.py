@@ -7,7 +7,6 @@ from homeassistant.const import Platform
 DOMAIN = "toya_decoder"
 
 CONF_NAME = "name"
-CONF_POLL_INTERVAL = "poll_interval"
 CONF_USERNAME = "username"
 CONF_PASSWORD = "password"
 
