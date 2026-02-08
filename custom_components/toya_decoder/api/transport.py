@@ -3,9 +3,9 @@
 from __future__ import annotations
 
 import ssl
+import xmlrpc.client
 from typing import Any
 from urllib.parse import urlparse
-import xmlrpc.client
 
 
 class _TimeoutTransport(xmlrpc.client.Transport):

@@ -3,9 +3,7 @@
 from __future__ import annotations
 
 import voluptuous as vol
-
 from homeassistant import config_entries
-from homeassistant.core import HomeAssistant, callback
 from homeassistant.data_entry_flow import FlowResult
 
 from .api import (
@@ -111,7 +109,9 @@ class ConfigFlow(config_entries.ConfigFlow, domain=DOMAIN):
             return self.async_abort(reason="reauth_missing_entry")
 
         username = entry.data.get(CONF_USERNAME, "")
-        default_name = entry.data.get(CONF_NAME) or await async_get_default_name(
+        default_name = entry.data.get(
+            CONF_NAME
+        ) or await async_get_default_name(
             self.hass, self.context.get("language")
         )
 

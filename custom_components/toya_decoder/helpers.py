@@ -18,4 +18,6 @@ async def async_get_default_name(
         "common",
         [DOMAIN],
     )
-    return translations.get(f"component.{DOMAIN}.common.default_name", DEFAULT_NAME)
+    return translations.get(
+        f"component.{DOMAIN}.common.default_name", DEFAULT_NAME
+    )

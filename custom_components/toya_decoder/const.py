@@ -23,7 +23,6 @@ class RemoteCommand(str, Enum):
     """Supported remote control commands."""
 
     def __str__(self) -> str:
-
         return self.value
 
     PLAYPAUSE = "playpause"

@@ -16,17 +16,6 @@ from homeassistant.helpers.entity_platform import AddEntitiesCallback
 from homeassistant.helpers.translation import async_get_translations
 from homeassistant.helpers.update_coordinator import CoordinatorEntity
 
-from .api import ToyaDecoderChannel, ToyaDecoderDevice
-from .const import (
-    CONF_NAME,
-    DOMAIN,
-    DeviceStatus,
-    RemoteCommand,
-    REMOTE_COMMANDS,
-)
-from .coordinator import ToyaDecoderCoordinator
-from .helpers import async_get_default_name
-
 try:
     from homeassistant.components.media_player.const import (
         MediaPlayerDeviceClass,
@@ -45,6 +34,16 @@ except ImportError:
     MediaClass = None
     MediaType = None
 
+from .api import ToyaDecoderChannel, ToyaDecoderDevice
+from .const import (
+    CONF_NAME,
+    DOMAIN,
+    REMOTE_COMMANDS,
+    DeviceStatus,
+    RemoteCommand,
+)
+from .coordinator import ToyaDecoderCoordinator
+from .helpers import async_get_default_name
 
 _LOGGER = logging.getLogger(__name__)
 
@@ -73,10 +72,7 @@ def _build_channel_sources(
     )
     for channel in ordered:
         number = str(channel.number)
-        if channel.name:
-            label = f"{number} {channel.name}"
-        else:
-            label = number
+        label = f"{number} {channel.name}" if channel.name else number
 
         sources[label] = channel
 

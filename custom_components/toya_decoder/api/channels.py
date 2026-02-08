@@ -23,9 +23,8 @@ def extract_products_xml(res: Any) -> str:
     if isinstance(res, list):
         return "".join(str(item) for item in res)
 
-    if isinstance(res, dict):
-        if "products" in res:
-            return extract_products_xml(res["products"])
+    if isinstance(res, dict) and "products" in res:
+        return extract_products_xml(res["products"])
 
     return str(res)
 

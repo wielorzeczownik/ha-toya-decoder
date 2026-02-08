@@ -3,10 +3,15 @@
 from __future__ import annotations
 
 import asyncio
-from typing import Any
 import xmlrpc.client
+from typing import Any
 
-from ..const import DEFAULT_ENDPOINT, DEFAULT_MODEL, DEFAULT_VERSION, DeviceStatus
+from ..const import (
+    DEFAULT_ENDPOINT,
+    DEFAULT_MODEL,
+    DEFAULT_VERSION,
+    DeviceStatus,
+)
 from .auth import extract_token, is_auth_fault_message, raise_if_auth_fault
 from .channels import extract_products_xml, parse_channels
 from .devices import parse_devices
