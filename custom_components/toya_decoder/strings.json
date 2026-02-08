@@ -9,6 +9,13 @@
           "password": "Password",
           "name": "Name"
         }
+      },
+      "reauth_confirm": {
+        "title": "Reauthenticate TOYA decoder",
+        "description": "Enter your password to continue",
+        "data": {
+          "password": "Password"
+        }
       }
     },
     "error": {
@@ -16,6 +23,10 @@
       "invalid_auth": "Invalid authentication",
       "no_devices": "No devices found",
       "unknown": "Unknown error"
+    },
+    "abort": {
+      "reauth_successful": "Reauthentication was successful",
+      "reauth_missing_entry": "Missing reauthentication entry"
     }
   },
   "common": {

@@ -9,6 +9,13 @@
           "password": "Hasło",
           "name": "Nazwa"
         }
+      },
+      "reauth_confirm": {
+        "title": "Ponowna autoryzacja dekodera TOYA",
+        "description": "Podaj hasło, aby kontynuować",
+        "data": {
+          "password": "Hasło"
+        }
       }
     },
     "error": {
@@ -16,6 +23,10 @@
       "invalid_auth": "Nieprawidłowe dane logowania",
       "no_devices": "Nie znaleziono urządzeń",
       "unknown": "Nieznany błąd"
+    },
+    "abort": {
+      "reauth_successful": "Ponowna autoryzacja zakończona",
+      "reauth_missing_entry": "Brak wpisu do ponownej autoryzacji"
     }
   },
   "common": {
