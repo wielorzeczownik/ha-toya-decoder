@@ -9,6 +9,9 @@ on:
       - "hacs.json"
   workflow_dispatch:
 
+permissions:
+  contents: read
+
 concurrency:
   group: release-main
   cancel-in-progress: true
