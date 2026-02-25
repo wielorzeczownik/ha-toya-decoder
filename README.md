@@ -9,8 +9,8 @@
   <a href="https://github.com/wielorzeczownik/ha-toya-decoder/releases/latest"><img src="https://img.shields.io/github/v/release/wielorzeczownik/ha-toya-decoder?style=flat-square&labelColor=2d333b&color=2ea043" alt="Latest Release"/></a>
   <a href="https://github.com/wielorzeczownik/ha-toya-decoder/blob/main/LICENSE"><img src="https://img.shields.io/badge/License-MIT-2ea043?style=flat-square&labelColor=2d333b" alt="License: MIT"/></a>
   <br/>
-  <a href="https://github.com/hacs/integration"><img src="https://img.shields.io/badge/HACS-Default-orange.svg?style=flat-square&logo=homeassistant&logoColor=white" alt="HACS Default"/></a>
-  <a href="https://www.home-assistant.io/"><img src="https://img.shields.io/badge/Home%20Assistant-2024.6.0-41bdf5?style=flat-square&logo=homeassistant&logoColor=white" alt="Home Assistant"/></a>
+  <a href="https://github.com/hacs/integration"><img src="https://img.shields.io/badge/HACS-Default-orange.svg?style=flat-square&logo=homeassistant&logoColor=white&labelColor=2d333b" alt="HACS Default"/></a>
+  <a href="https://www.home-assistant.io/"><img src="https://img.shields.io/badge/Home%20Assistant-2024.6.0-41bdf5?style=flat-square&logo=homeassistant&logoColor=white&labelColor=2d333b" alt="Home Assistant"/></a>
 </p>
 
 <p align="center">
