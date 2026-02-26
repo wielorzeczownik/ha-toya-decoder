@@ -189,7 +189,7 @@ jobs:
 
       - name: Upload release notes
         if: ${{ steps.bump.outputs.released == 'true' }}
-        uses: actions/upload-artifact@v6
+        uses: actions/upload-artifact@v7
         with:
           name: release-notes
           path: release-notes.md
@@ -210,7 +210,7 @@ jobs:
           (cd custom_components/toya_decoder && zip -r ../../dist/toya_decoder.zip .)
 
       - name: Upload zip artifact
-        uses: actions/upload-artifact@v6
+        uses: actions/upload-artifact@v7
         with:
           name: release-zip
           path: dist/toya_decoder.zip
