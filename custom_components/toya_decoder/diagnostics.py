@@ -2,14 +2,19 @@
 
 from __future__ import annotations
 
-from datetime import datetime
-from typing import Any
+from typing import TYPE_CHECKING, Any
 
 from homeassistant.components.diagnostics import async_redact_data
 from homeassistant.config_entries import ConfigEntry
+from homeassistant.const import CONF_PASSWORD, CONF_USERNAME
 from homeassistant.core import HomeAssistant
 
-from .const import CONF_PASSWORD, CONF_USERNAME, DOMAIN
+from .api.models import ToyaDecoderDevice
+from .const import DOMAIN
+
+if TYPE_CHECKING:
+    from .api import ToyaDecoderApi
+    from .coordinator import ToyaDecoderCoordinator
 
 REDACT_KEYS = {
     CONF_USERNAME,
@@ -20,23 +25,12 @@ REDACT_KEYS = {
 }
 
 
-def _serialize_datetime(value: datetime | None) -> str | None:
-    if value is None:
-        return None
-
-    return value.isoformat()
-
-
-def _device_to_dict(device: Any) -> dict[str, Any]:
+def _device_to_dict(device: ToyaDecoderDevice) -> dict[str, Any]:
     return {
-        "smart_card": getattr(device, "smart_card", None),
-        "chip_id": getattr(device, "chip_id", None),
-        "status": getattr(device, "status", None).name
-        if getattr(device, "status", None) is not None
-        else None,
-        "status_value": int(getattr(device, "status", 0))
-        if getattr(device, "status", None) is not None
-        else None,
+        "smart_card": device.smart_card,
+        "chip_id": device.chip_id,
+        "status": device.status.name,
+        "status_value": int(device.status),
     }
 
 
@@ -45,8 +39,10 @@ async def async_get_config_entry_diagnostics(
 ) -> dict[str, Any]:
     """Return diagnostics for a config entry."""
     data = hass.data.get(DOMAIN, {}).get(entry.entry_id, {})
-    coordinator = data.get("coordinator")
-    api = data.get("api")
+    coordinator: ToyaDecoderCoordinator | None = data.get("coordinator")
+    api: ToyaDecoderApi | None = data.get("api")
+
+    interval = coordinator.update_interval if coordinator else None
 
     diagnostics: dict[str, Any] = {
         "entry": {
@@ -54,29 +50,25 @@ async def async_get_config_entry_diagnostics(
             "options": dict(entry.options),
         },
         "coordinator": {
-            "last_update_success": getattr(
-                coordinator, "last_update_success", None
+            "last_update_success": coordinator.last_update_success
+            if coordinator
+            else None,
+            "update_interval_seconds": interval.total_seconds()
+            if interval
+            else None,
+            "data": (
+                [_device_to_dict(d) for d in (coordinator.data or [])]
+                if coordinator
+                else []
             ),
-            "last_update_success_time": _serialize_datetime(
-                getattr(coordinator, "last_update_success_time", None)
-            ),
-            "update_interval_seconds": getattr(
-                getattr(coordinator, "update_interval", None),
-                "total_seconds",
-                lambda: None,
-            )(),
-            "data": [
-                _device_to_dict(device)
-                for device in (getattr(coordinator, "data", None) or [])
-            ],
         },
         "api": {
-            "endpoint": getattr(api, "_endpoint", None),
-            "version": getattr(api, "_version", None),
-            "model": getattr(api, "_model", None),
-            "device_id": getattr(api, "_device_id", None),
-            "timeout_s": getattr(api, "_timeout_s", None),
-            "key_delay_s": getattr(api, "_key_delay_s", None),
+            "endpoint": api._endpoint if api else None,
+            "version": api._version if api else None,
+            "model": api._model if api else None,
+            "device_id": api._device_id if api else None,
+            "timeout_s": api._timeout_s if api else None,
+            "key_delay_s": api._key_delay_s if api else None,
         },
     }
 
