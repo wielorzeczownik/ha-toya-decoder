@@ -35,7 +35,6 @@ def parse_devices(res: Any) -> list[ToyaDecoderDevice]:
                         str(chip_id),
                     )
                 )
-
         return out
 
     raw = str(devices)
@@ -74,7 +73,6 @@ def parse_devices(res: Any) -> list[ToyaDecoderDevice]:
             smart_card = None
             chip_id = None
             status = None
-
     return out
 
 

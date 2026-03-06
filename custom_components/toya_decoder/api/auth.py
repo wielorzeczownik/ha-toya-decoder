@@ -31,7 +31,6 @@ def _normalize_token(raw: str) -> str:
 
     if token.startswith('"') and token.endswith('"') and len(token) >= 2:
         token = token[1:-1]
-
     return token
 
 
@@ -42,7 +41,6 @@ def _extract_token_from_value(res: Any) -> str | None:
 
     if isinstance(res, (str, int, bool)):
         token = _normalize_token(str(res))
-
         return token or None
 
     if isinstance(res, (list, tuple)):
@@ -50,7 +48,6 @@ def _extract_token_from_value(res: Any) -> str | None:
             token = _extract_token_from_value(item)
             if token:
                 return token
-
         return None
 
     if isinstance(res, dict):
@@ -70,7 +67,6 @@ def _extract_token_from_value(res: Any) -> str | None:
         values = list(res.values())
         if len(values) == 1:
             return _extract_token_from_value(values[0])
-
     return None
 
 
@@ -81,7 +77,6 @@ def extract_token(res: Any) -> str:
         raise ToyaDecoderAuthError(
             f"Unexpected GetAuth response: {_format_response(res)}"
         )
-
     return token
 
 
@@ -99,7 +94,6 @@ def _extract_fault_payload(res: Any) -> tuple[str | int | None, str | None]:
             or res.get("fault_string")
             or res.get("message")
         )
-
         return code, str(text) if text is not None else None
 
     if isinstance(res, (list, tuple)):
@@ -107,7 +101,6 @@ def _extract_fault_payload(res: Any) -> tuple[str | int | None, str | None]:
             code, text = _extract_fault_payload(item)
             if code is not None or text:
                 return code, text
-
     return None, None
 
 
@@ -117,7 +110,6 @@ def is_auth_fault_message(text: str | None) -> bool:
         return False
 
     lowered = text.lower()
-
     return "not author" in lowered or "unauthor" in lowered
 
 
@@ -129,7 +121,6 @@ def _is_auth_fault(res: Any) -> bool:
 
     if is_auth_fault_message(text):
         return True
-
     return str(code) == "2"
 
 

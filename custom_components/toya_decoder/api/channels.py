@@ -25,7 +25,6 @@ def extract_products_xml(res: Any) -> str:
 
     if isinstance(res, dict) and "products" in res:
         return extract_products_xml(res["products"])
-
     return str(res)
 
 
@@ -38,7 +37,6 @@ def _extract_attr_value(body: str, key: str) -> str | None:
     match = pattern.search(body)
     if not match:
         return None
-
     return html.unescape(match.group(1).strip())
 
 
@@ -77,5 +75,4 @@ def parse_channels(xml: str) -> list[ToyaDecoderChannel]:
                 thumbnail=thumbnail,
             )
         )
-
     return out
