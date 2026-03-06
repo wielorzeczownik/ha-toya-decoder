@@ -3,13 +3,18 @@
 from __future__ import annotations
 
 import asyncio
+import hashlib
+import os
+import socket
 import xmlrpc.client
-from typing import Any
+from collections.abc import Callable
+from typing import Any, TypeVar
 
 from ..const import (
     DEFAULT_ENDPOINT,
     DEFAULT_MODEL,
     DEFAULT_VERSION,
+    REMOTE_COMMANDS,
     DeviceStatus,
 )
 from .auth import extract_token, is_auth_fault_message, raise_if_auth_fault
@@ -22,7 +27,27 @@ from .errors import (
 )
 from .models import ToyaDecoderChannel, ToyaDecoderDevice, ToyaDecoderState
 from .transport import make_client
-from .utils import build_device_id, normalize_cmd
+
+_T = TypeVar("_T")
+
+
+def _build_device_id() -> str:
+    """Build a deterministic device id for the API session."""
+    base = f"{socket.gethostname()}|{os.getcwd()}"
+    digest = hashlib.sha1(base.encode("utf-8")).hexdigest()[:16]
+    return f"ha-{digest}"
+
+
+def _normalize_cmd(key: str) -> str:
+    """Normalize and validate command names."""
+    text = str(key).strip()
+    if len(text) == 1 and text.isdigit():
+        return text
+
+    cmd = text.lower()
+    if cmd in REMOTE_COMMANDS:
+        return cmd
+    raise ToyaDecoderApiError(f"Unsupported command: {key}")
 
 
 class ToyaDecoderApi:
@@ -44,7 +69,7 @@ class ToyaDecoderApi:
         self._endpoint = endpoint
         self._version = version
         self._model = model
-        self._device_id = device_id or build_device_id()
+        self._device_id = device_id or _build_device_id()
         self._key_delay_s = key_delay_s
         self._timeout_s = timeout_s
         self._token: str | None = None
@@ -54,8 +79,29 @@ class ToyaDecoderApi:
         """Return a simplified power state computed from device status."""
         devices = await self.async_get_devices()
         is_on = any(device.status == DeviceStatus.ON for device in devices)
-
         return ToyaDecoderState(is_on=is_on)
+
+    async def _call_with_retry(self, fn: Callable[[str], _T]) -> _T:
+        """Call a token-accepting sync function, retrying once on auth failure."""
+        token = await self.async_login()
+        try:
+            return await asyncio.to_thread(fn, token)
+        except ToyaDecoderAuthError:
+            self._token = None
+            token = await self.async_login()
+            return await asyncio.to_thread(fn, token)
+
+    async def async_login(self) -> str:
+        if self._token:
+            return self._token
+
+        return await asyncio.to_thread(self._login)
+
+    async def async_get_devices(self) -> list[ToyaDecoderDevice]:
+        return await self._call_with_retry(self._get_pvr_devices)
+
+    async def async_get_channels(self) -> list[ToyaDecoderChannel]:
+        return await self._call_with_retry(self._get_channels)
 
     async def async_send_key(self, smart_card: str, key: str) -> None:
         """Send a remote control command to a specific smart card."""
@@ -63,14 +109,10 @@ class ToyaDecoderApi:
         if not smart_card:
             raise ToyaDecoderApiError("Missing smart_card")
 
-        cmd = normalize_cmd(key)
-        token = await self.async_login()
-        try:
-            await asyncio.to_thread(self._send_key, token, smart_card, cmd)
-        except ToyaDecoderAuthError:
-            self._token = None
-            token = await self.async_login()
-            await asyncio.to_thread(self._send_key, token, smart_card, cmd)
+        cmd = _normalize_cmd(key)
+        await self._call_with_retry(
+            lambda token: self._send_key(token, smart_card, cmd)
+        )
 
     async def async_set_channel(self, smart_card: str, channel: str) -> None:
         """Send the channel number as a sequence of digit key presses."""
@@ -82,32 +124,6 @@ class ToyaDecoderApi:
             await self.async_send_key(smart_card, digit)
             if self._key_delay_s > 0:
                 await asyncio.sleep(self._key_delay_s)
-
-    async def async_login(self) -> str:
-        if self._token:
-            return self._token
-
-        return await asyncio.to_thread(self._login)
-
-    async def async_get_devices(self) -> list[ToyaDecoderDevice]:
-        token = await self.async_login()
-        try:
-            return await asyncio.to_thread(self._get_pvr_devices, token)
-        except ToyaDecoderAuthError:
-            self._token = None
-            token = await self.async_login()
-
-            return await asyncio.to_thread(self._get_pvr_devices, token)
-
-    async def async_get_channels(self) -> list[ToyaDecoderChannel]:
-        token = await self.async_login()
-        try:
-            return await asyncio.to_thread(self._get_channels, token)
-        except ToyaDecoderAuthError:
-            self._token = None
-            token = await self.async_login()
-
-            return await asyncio.to_thread(self._get_channels, token)
 
     def _login(self) -> str:
         """Authenticate and cache the token for subsequent calls."""
@@ -123,19 +139,16 @@ class ToyaDecoderApi:
             "toyago.SetVersion",
             [self._device_id, f"{self._version}-{self._model}", token],
         )
-
         self._token = token
         self._set_version = str(set_version_res)
-
         return token
 
     def _call(self, method: str, params: list[Any]) -> Any:
         """Call a raw XML-RPC method and translate failures."""
         client = make_client(self._endpoint, self._timeout_s)
         try:
-            res = client.__getattr__(method)(*params)
+            res = getattr(client, method)(*params)
             raise_if_auth_fault(res)
-
             return res
         except xmlrpc.client.Fault as err:
             if method == "toyago.GetAuth" or is_auth_fault_message(
@@ -155,7 +168,6 @@ class ToyaDecoderApi:
     def _get_pvr_devices(self, token: str) -> list[ToyaDecoderDevice]:
         """Fetch devices for the given auth token."""
         res = self._call("toyago.GetPvrDevices", [self._device_id, token])
-
         return parse_devices(res)
 
     def _send_key(self, token: str, smart_card: str, cmd: str) -> None:
