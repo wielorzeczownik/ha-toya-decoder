@@ -1,14 +1,12 @@
 """Constants and enums for the Toya decoder integration."""
 
+from __future__ import annotations
+
 from enum import Enum, IntEnum
 
 from homeassistant.const import Platform
 
 DOMAIN = "toya_decoder"
-
-CONF_NAME = "name"
-CONF_USERNAME = "username"
-CONF_PASSWORD = "password"
 
 DEFAULT_NAME = "TOYA Decoder"
 DEFAULT_POLL_INTERVAL = 5
