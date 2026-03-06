@@ -4,61 +4,46 @@ from __future__ import annotations
 
 import logging
 
-from homeassistant.components.media_player import MediaPlayerEntity
+from homeassistant.components.media_player import (
+    MediaPlayerDeviceClass,
+    MediaPlayerEntity,
+)
+from homeassistant.components.media_player.browse_media import BrowseMedia
 from homeassistant.components.media_player.const import (
+    MediaClass,
     MediaPlayerEntityFeature,
     MediaPlayerState,
+    MediaType,
 )
 from homeassistant.config_entries import ConfigEntry
+from homeassistant.const import CONF_NAME
 from homeassistant.core import HomeAssistant
-from homeassistant.helpers.entity import DeviceInfo
+from homeassistant.helpers.device_registry import DeviceInfo
 from homeassistant.helpers.entity_platform import AddEntitiesCallback
 from homeassistant.helpers.translation import async_get_translations
 from homeassistant.helpers.update_coordinator import CoordinatorEntity
 
-try:
-    from homeassistant.components.media_player.const import (
-        MediaPlayerDeviceClass,
-    )
-except ImportError:
-    MediaPlayerDeviceClass = None
-
-try:
-    from homeassistant.components.media_player.browse_media import BrowseMedia
-    from homeassistant.components.media_player.const import (
-        MediaClass,
-        MediaType,
-    )
-except ImportError:
-    BrowseMedia = None
-    MediaClass = None
-    MediaType = None
-
 from .api import ToyaDecoderChannel, ToyaDecoderDevice
-from .const import (
-    CONF_NAME,
-    DOMAIN,
-    REMOTE_COMMANDS,
-    DeviceStatus,
-    RemoteCommand,
-)
+from .const import DOMAIN, REMOTE_COMMANDS, DeviceStatus, RemoteCommand
 from .coordinator import ToyaDecoderCoordinator
 from .helpers import async_get_default_name
 
 _LOGGER = logging.getLogger(__name__)
 
-
-def _feature(*names: str) -> MediaPlayerEntityFeature:
-    """Return a MediaPlayerEntityFeature mask built from names."""
-    value = MediaPlayerEntityFeature(0)
-    for name in names:
-        if hasattr(MediaPlayerEntityFeature, name):
-            value |= getattr(MediaPlayerEntityFeature, name)
-
-    return value
-
-
-_POWER_FEATURES = _feature("TURN_ON") | _feature("TURN_OFF")
+_POWER_FEATURES = (
+    MediaPlayerEntityFeature.TURN_ON | MediaPlayerEntityFeature.TURN_OFF
+)
+_SUPPORTED_FEATURES = (
+    _POWER_FEATURES
+    | MediaPlayerEntityFeature.VOLUME_STEP
+    | MediaPlayerEntityFeature.VOLUME_MUTE
+    | MediaPlayerEntityFeature.NEXT_TRACK
+    | MediaPlayerEntityFeature.PREVIOUS_TRACK
+    | MediaPlayerEntityFeature.PLAY
+    | MediaPlayerEntityFeature.PAUSE
+    | MediaPlayerEntityFeature.BROWSE_MEDIA
+    | MediaPlayerEntityFeature.PLAY_MEDIA
+)
 
 
 def _build_channel_sources(
@@ -73,7 +58,6 @@ def _build_channel_sources(
     for channel in ordered:
         number = str(channel.number)
         label = f"{number} {channel.name}" if channel.name else number
-
         sources[label] = channel
 
     return sources
@@ -113,13 +97,15 @@ async def async_setup_entry(
     async_add_entities(entities)
 
 
-class ToyaLegacyDecoderMediaPlayer(CoordinatorEntity, MediaPlayerEntity):
+class ToyaLegacyDecoderMediaPlayer(
+    CoordinatorEntity[ToyaDecoderCoordinator], MediaPlayerEntity
+):
     """Media player entity representing a Toya legacy decoder."""
 
     _attr_has_entity_name = True
     _attr_icon = "mdi:television"
-    if MediaPlayerDeviceClass is not None:
-        _attr_device_class = MediaPlayerDeviceClass.TV
+    _attr_device_class = MediaPlayerDeviceClass.TV
+    _attr_supported_features = _SUPPORTED_FEATURES
 
     def __init__(
         self,
@@ -133,7 +119,6 @@ class ToyaLegacyDecoderMediaPlayer(CoordinatorEntity, MediaPlayerEntity):
         self._smart_card = device.smart_card
         self._chip_id = device.chip_id
         self._attr_name = f"{base_name} {self._smart_card}"
-        self.coordinator = coordinator
         self._attr_unique_id = f"toya_decoder_{entry_id}_{self._smart_card}"
         self._channels = channels
         self._attr_device_info = DeviceInfo(
@@ -142,75 +127,46 @@ class ToyaLegacyDecoderMediaPlayer(CoordinatorEntity, MediaPlayerEntity):
             manufacturer="Toya",
             model=self._chip_id,
         )
+        self._attr_media_content_type = MediaType.CHANNEL
+        self._attr_extra_state_attributes = {
+            "smart_card": self._smart_card,
+            "chip_id": self._chip_id,
+            "remote_commands": REMOTE_COMMANDS,
+        }
+        self._update_supported_features()
+        self._update_state()
 
-        self._attr_supported_features = (
-            _POWER_FEATURES
-            | _feature("VOLUME_STEP")
-            | _feature("VOLUME_MUTE")
-            | _feature("NEXT_TRACK")
-            | _feature("PREVIOUS_TRACK")
-            | _feature("PLAY")
-            | _feature("PAUSE")
-            | _feature("BROWSE_MEDIA")
-            | _feature("PLAY_MEDIA")
-        )
-
-    @property
-    def supported_features(self) -> MediaPlayerEntityFeature:
-        """Return supported features, masked by current device state."""
-        features = self._attr_supported_features
+    def _update_supported_features(self) -> None:
+        """Update supported features based on device status."""
+        features = _SUPPORTED_FEATURES
         device = self._device()
         if device is None or device.status != DeviceStatus.ON:
-            return features & ~_POWER_FEATURES
+            features &= ~_POWER_FEATURES
+        self._attr_supported_features = features
 
-        return features
-
-    @property
-    def available(self) -> bool:
-        """Return True when the coordinator last updated successfully."""
-
-        return self.coordinator.last_update_success
-
-    @property
-    def state(self) -> MediaPlayerState | None:
-        """Return the media player state derived from device status."""
+    def _update_state(self) -> None:
+        """Update state based on device status."""
         device = self._device()
         if device is None:
-            return MediaPlayerState.OFF
+            self._attr_state = MediaPlayerState.OFF
+            return
 
-        return (
+        self._attr_state = (
             MediaPlayerState.PLAYING
             if device.status == DeviceStatus.ON
             else MediaPlayerState.OFF
         )
 
-    @property
-    def media_content_type(self) -> str:
-        """Return the content type shown in the media browser."""
-
-        return "channel"
-
-    @property
-    def volume_level(self) -> float | None:
-        """Return None because volume level is not reported."""
-
-        return None
+    def _handle_coordinator_update(self) -> None:
+        """Handle updated data from the coordinator."""
+        self._update_supported_features()
+        self._update_state()
+        super()._handle_coordinator_update()
 
     @property
-    def is_volume_muted(self) -> bool | None:
-        """Return None because mute state is not reported."""
-
-        return None
-
-    @property
-    def extra_state_attributes(self) -> dict[str, list[str] | str]:
-        """Expose the smart card and available remote commands."""
-
-        return {
-            "smart_card": self._smart_card,
-            "chip_id": self._chip_id,
-            "remote_commands": REMOTE_COMMANDS,
-        }
+    def available(self) -> bool:  # type: ignore[override]
+        """Return True when the coordinator last updated successfully."""
+        return self.coordinator.last_update_success
 
     def _device(self) -> ToyaDecoderDevice | None:
         """Return the matching device from coordinator data."""
@@ -221,7 +177,6 @@ class ToyaLegacyDecoderMediaPlayer(CoordinatorEntity, MediaPlayerEntity):
         for device in devices:
             if device.smart_card == self._smart_card:
                 return device
-
         return None
 
     def _resolve_channel_number(self, media_id: str) -> str | None:
@@ -233,7 +188,6 @@ class ToyaLegacyDecoderMediaPlayer(CoordinatorEntity, MediaPlayerEntity):
         channel = self._channels.get(payload)
         if channel is not None and channel.number is not None:
             return str(channel.number)
-
         return None
 
     async def _send_keys(self, *keys: RemoteCommand) -> None:
@@ -303,33 +257,21 @@ class ToyaLegacyDecoderMediaPlayer(CoordinatorEntity, MediaPlayerEntity):
         self,
         media_content_type: str | None = None,
         media_content_id: str | None = None,
-    ) -> BrowseMedia | None:
+    ) -> BrowseMedia:
         """Build the media browser tree of available channels."""
-        if BrowseMedia is None:
-            return None
-
-        channel_class = (
-            MediaClass.CHANNEL if MediaClass is not None else "channel"
-        )
-        channel_type = MediaType.CHANNEL if MediaType is not None else "channel"
-        children: list[BrowseMedia] = []
-        for label, channel in self._channels.items():
-            channel_number = str(channel.number)
-            children.append(
-                BrowseMedia(
-                    title=label,
-                    media_class=channel_class,
-                    media_content_id=channel_number,
-                    media_content_type=channel_type,
-                    can_play=True,
-                    can_expand=False,
-                    thumbnail=channel.thumbnail or None,
-                )
+        children: list[BrowseMedia] = [
+            BrowseMedia(
+                title=label,
+                media_class=MediaClass.CHANNEL,
+                media_content_id=str(channel.number),
+                media_content_type=MediaType.CHANNEL,
+                can_play=True,
+                can_expand=False,
+                thumbnail=channel.thumbnail,
             )
+            for label, channel in self._channels.items()
+        ]
 
-        root_class = (
-            MediaClass.DIRECTORY if MediaClass is not None else "directory"
-        )
         translations = await async_get_translations(
             self.hass,
             self.hass.config.language,
@@ -342,9 +284,9 @@ class ToyaLegacyDecoderMediaPlayer(CoordinatorEntity, MediaPlayerEntity):
 
         return BrowseMedia(
             title=title,
-            media_class=root_class,
+            media_class=MediaClass.DIRECTORY,
             media_content_id="channels",
-            media_content_type=channel_type,
+            media_content_type=MediaType.CHANNEL,
             can_play=False,
             can_expand=True,
             children=children,

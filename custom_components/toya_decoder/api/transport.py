@@ -15,10 +15,9 @@ class _TimeoutTransport(xmlrpc.client.Transport):
         super().__init__()
         self._timeout_s = timeout_s
 
-    def make_connection(self, host: str) -> Any:
+    def make_connection(self, host: Any) -> Any:
         conn = super().make_connection(host)
         conn.timeout = self._timeout_s
-
         return conn
 
 
@@ -29,10 +28,9 @@ class _TimeoutSafeTransport(xmlrpc.client.SafeTransport):
         super().__init__(context=ssl.create_default_context())
         self._timeout_s = timeout_s
 
-    def make_connection(self, host: str) -> Any:
+    def make_connection(self, host: Any) -> Any:
         conn = super().make_connection(host)
         conn.timeout = self._timeout_s
-
         return conn
 
 

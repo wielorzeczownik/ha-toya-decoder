@@ -4,25 +4,19 @@ from __future__ import annotations
 
 import voluptuous as vol
 from homeassistant import config_entries
-from homeassistant.data_entry_flow import FlowResult
+from homeassistant.const import CONF_NAME, CONF_PASSWORD, CONF_USERNAME
 
 from .api import (
     ToyaDecoderApi,
     ToyaDecoderAuthError,
     ToyaDecoderConnectionError,
 )
-from .const import (
-    CONF_NAME,
-    CONF_PASSWORD,
-    CONF_USERNAME,
-    DOMAIN,
-)
+from .const import DOMAIN
 from .helpers import async_get_default_name
 
 
 def _unique_id_from_username(username: str) -> str:
     """Normalize the username used as unique id."""
-
     return username.strip().lower()
 
 
@@ -34,7 +28,6 @@ async def _validate_input(data: dict, default_name: str) -> dict:
     )
     await api.async_login()
     devices = await api.async_get_devices()
-
     return {
         "title": data.get(CONF_NAME) or default_name,
         "devices": devices,
@@ -48,7 +41,7 @@ class ConfigFlow(config_entries.ConfigFlow, domain=DOMAIN):
 
     async def async_step_user(
         self, user_input: dict | None = None
-    ) -> FlowResult:
+    ) -> config_entries.ConfigFlowResult:
         """Handle the initial step from the UI."""
         errors: dict[str, str] = {}
         default_name = await async_get_default_name(
@@ -84,12 +77,13 @@ class ConfigFlow(config_entries.ConfigFlow, domain=DOMAIN):
                 vol.Optional(CONF_NAME, default=default_name): str,
             }
         )
-
         return self.async_show_form(
             step_id="user", data_schema=schema, errors=errors
         )
 
-    async def async_step_reauth(self, entry_data: dict) -> FlowResult:
+    async def async_step_reauth(
+        self, entry_data: dict
+    ) -> config_entries.ConfigFlowResult:
         """Handle reauthentication when credentials are invalid."""
         entry_id = self.context.get("entry_id")
         self._reauth_entry = (
@@ -101,7 +95,7 @@ class ConfigFlow(config_entries.ConfigFlow, domain=DOMAIN):
 
     async def async_step_reauth_confirm(
         self, user_input: dict | None = None
-    ) -> FlowResult:
+    ) -> config_entries.ConfigFlowResult:
         """Confirm reauthentication credentials."""
         errors: dict[str, str] = {}
         entry = getattr(self, "_reauth_entry", None)
@@ -142,7 +136,6 @@ class ConfigFlow(config_entries.ConfigFlow, domain=DOMAIN):
                     return self.async_abort(reason="reauth_successful")
 
         schema = vol.Schema({vol.Required(CONF_PASSWORD): str})
-
         return self.async_show_form(
             step_id="reauth_confirm", data_schema=schema, errors=errors
         )
