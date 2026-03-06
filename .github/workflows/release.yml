@@ -121,20 +121,21 @@ jobs:
               exit 0
             fi
 
-            commits_since_tag=$(git rev-list --count "${current_tag}..HEAD")
-            if [[ "$commits_since_tag" -eq 0 ]]; then
-              echo "No new commits since ${current_tag}. Nothing to release."
-              echo "released=false" >> "$GITHUB_OUTPUT"
-              echo "version=$current_version" >> "$GITHUB_OUTPUT"
-              echo "tag=$current_tag" >> "$GITHUB_OUTPUT"
-              echo "commit_changes=false" >> "$GITHUB_OUTPUT"
-              exit 0
-            fi
+            echo "No user-facing commits since ${current_tag}. Nothing to release."
+            echo "released=false" >> "$GITHUB_OUTPUT"
+            echo "version=$current_version" >> "$GITHUB_OUTPUT"
+            echo "tag=$current_tag" >> "$GITHUB_OUTPUT"
+            echo "commit_changes=false" >> "$GITHUB_OUTPUT"
+            exit 0
+          fi
 
-            IFS='.' read -r major minor patch <<< "$current_version"
-            next_version="${major}.${minor}.$((patch + 1))"
-            next_tag="v${next_version}"
-            echo "No semantic bump from git-cliff; fallback to patch bump -> ${next_tag}"
+          if [[ "$(printf '%s\n' "$current_version" "$next_version" | sort -V | tail -1)" != "$next_version" ]]; then
+            echo "git-cliff returned $next_version which is lower than current $current_version. Nothing to release."
+            echo "released=false" >> "$GITHUB_OUTPUT"
+            echo "version=$current_version" >> "$GITHUB_OUTPUT"
+            echo "tag=$current_tag" >> "$GITHUB_OUTPUT"
+            echo "commit_changes=false" >> "$GITHUB_OUTPUT"
+            exit 0
           fi
 
           python3 - "$manifest_path" "$next_version" <<'PY'
