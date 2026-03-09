@@ -2,7 +2,7 @@
 
 from __future__ import annotations
 
-from enum import Enum, IntEnum
+from enum import IntEnum, StrEnum
 
 from homeassistant.const import Platform
 
@@ -17,11 +17,8 @@ DEFAULT_MODEL = "homeassistant"
 PLATFORMS = [Platform.MEDIA_PLAYER]
 
 
-class RemoteCommand(str, Enum):
+class RemoteCommand(StrEnum):
     """Supported remote control commands."""
-
-    def __str__(self) -> str:
-        return self.value
 
     PLAYPAUSE = "playpause"
     PREV = "prev"
