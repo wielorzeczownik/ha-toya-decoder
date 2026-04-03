@@ -1,5 +1,5 @@
 <h1 align="center">
- TOYA Decoder — integracja Home Assistant
+ TOYA Decoder
 </h1>
 
 <p align="center">
