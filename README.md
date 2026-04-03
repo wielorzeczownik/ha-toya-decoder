@@ -16,53 +16,66 @@
 <p align="center">
   <img
     src="https://raw.githubusercontent.com/wielorzeczownik/ha-toya-decoder/main/assets/toya-decoder.png"
-    alt="TOYA Decoder"
+    alt="TOYA Decoder Home Assistant Integration"
     width="260"
   >
 </p>
 
-Home Assistant custom integration for legacy TOYA decoders (non-Android TV).
-It uses an unofficial API based on decompilation of an older [Toya GO](https://play.google.com/store/apps/details?id=com.toya.toyago&hl=pl) app.
+<p align="center">🇬🇧 English | 🇵🇱 <a href="https://github.com/wielorzeczownik/ha-toya-decoder/blob/main/README.pl.md">Polski</a></p>
+
+Control your **TOYA decoder** (set-top box) directly from **Home Assistant**. This custom integration exposes your TOYA cable TV decoder as a `media_player` entity, enabling full remote control, channel switching, and home automation - all from the Home Assistant UI or via automations.
 
 <p align="center">
   <a href="https://my.home-assistant.io/redirect/hacs_repository/?owner=wielorzeczownik&repository=ha-toya-decoder&category=integration"><img src="https://my.home-assistant.io/badges/hacs_repository.svg" alt="Open HACS Repository"/></a>
   <a href="https://my.home-assistant.io/redirect/config_flow_start/?domain=toya_decoder"><img src="https://my.home-assistant.io/badges/config_flow_start.svg" alt="Add Integration" /></a>
 </p>
 
-## What it provides
+## Features
 
-- A `media_player` entity per decoder.
-- Standard media player controls in the HA UI: power toggle, volume up/down,
-  mute, play/pause, stop, and channel up/down.
-- Media browser with a channel list and `media_player.play_media` support
-  (by channel number or label).
+- **Media player entity** per decoder - visible in the Home Assistant dashboard
+- **Power control** - turn the TOYA decoder on and off via Home Assistant
+- **Volume control** - volume up, volume down, and mute
+- **Channel switching** - channel up/down, or jump directly to a channel number or name
+- **Media browser** - browse the full TOYA channel list from the HA UI
+- **`media_player.play_media` support** - automate channel changes in scripts and automations
+- **Remote commands** - send any remote control key (play, pause, stop, back, OK, arrows, etc.)
+
+## Installation via HACS
+
+1. In Home Assistant, open **HACS → Integrations**.
+2. Search for **TOYA Decoder** and install it.
+3. Restart Home Assistant.
+4. Go to **Settings → Devices & Services → Add Integration** and search for **TOYA Decoder**.
+5. Enter your TOYA account credentials (the same login you use in the Toya GO app).
 
 ## Supported devices
 
-This integration only supports decoders that return a non-empty `smartcard` value from the API. Android TV (ATV) devices return an empty string and are not supported, so they will not work with this integration.
+This integration supports legacy TOYA decoders (non-Android TV) that return a non-empty `smartcard` value from the API. Android TV (ATV) devices return an empty smartcard and are not supported.
+
+**Known legacy models (non-Android TV) - should be compatible:**
+
+| Model                                             | Generation |
+| ------------------------------------------------- | ---------- |
+| Intek HD-C20CXM, HD-C20CXM Model S, HD-C20CXM PVR | 3G HD      |
+| Intek HD-C63CX, HD-C64CXM                         | 3G HD      |
+| Arion ARC-5510DR, ARC-5511DR                      | 3G HD      |
+| Arion ARC-1010YR, ARC-1011YR, ARC-1013YR          | HD         |
+| Intek C311CX                                      | SD         |
+
+**Not supported (Android TV):** MAXX 4K (DTC974x, DTC974y, ARC-S110ZR), MAXX 4K IPTV (ARI-U110UR), TOYA 4K (UHD-C55CX).
 
 > [!NOTE]
-> Toya recently introduced 2FA for its customer portal. The app that this integration is based on does not require 2FA yet, so enabling 2FA on your account does not affect this integration.
+> Toya recently introduced 2FA for its customer portal. The Toya GO app API that this integration uses does not require 2FA, so enabling 2FA on your account does not affect this integration.
 
-## Installation (HACS)
+## Known limitations
 
-1. HACS -> Integrations -> Search for "TOYA Decoder" and install it.
-2. Restart Home Assistant.
-3. Settings -> Devices & Services -> Add Integration -> "TOYA Decoder".
-
-## Known limitations and issues
-
-- The API does not expose a direct "set channel" endpoint. Channel changes are
-  implemented by emulating remote key presses (digits and navigation), so the
-  behavior depends on the on-screen UI state. In some screens the channel change
-  must be confirmed with the Play button (which behaves like OK in that frame).
-- Active standby is reported as ON by the API even when the device looks off.
-- Passive standby is reported as OFF and the device cannot be powered on via API.
-- Channel mapping issues reported by the API:
-  - TVN HD is reported as channel 5 even though it is actually on 4.
+- The API does not expose a direct "set channel" endpoint. Channel changes are implemented by emulating remote key presses (digit keys + navigation), so the result depends on the current on-screen UI state. In some screens the channel change must be confirmed with the Play button.
+- Active standby is reported as ON by the API even when the decoder appears off.
+- Passive standby is reported as OFF and the decoder cannot be powered on via the API.
+- Channel number mapping issues in the API:
+  - TVN HD is reported as channel 5 even though it is physically on channel 4.
   - Toya HD and Toya VOD are both reported as channel 6.
 
 ## Disclaimer
 
-This project is community-made, unofficial, and may break if the backend API
-changes.
+This is a community-made, unofficial integration not affiliated with TOYA. It may break if the backend API changes.
