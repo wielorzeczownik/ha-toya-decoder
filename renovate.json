@@ -5,8 +5,25 @@
   "semanticCommits": "enabled",
   "packageRules": [
     {
-      "matchUpdateTypes": ["minor", "patch"],
+      "matchUpdateTypes": [
+        "minor",
+        "patch"
+      ],
       "automerge": true
+    },
+    {
+      "matchManagers": [
+        "github-actions"
+      ],
+      "semanticCommitType": "ci"
+    },
+    {
+      "matchManagers": [
+        "pip_requirements",
+        "pip-compile",
+        "pipenv"
+      ],
+      "semanticCommitType": "build"
     }
   ]
 }
