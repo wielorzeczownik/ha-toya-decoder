@@ -177,34 +177,13 @@ class ToyaDecoderApi:
         )
 
     def _get_channels(self, token: str) -> list[ToyaDecoderChannel]:
-        """Fetch channel list by trying several API variants."""
-        product_types = ("channel_dvb", "channel")
-        variants: list[tuple[int, int, bool]] = [
-            (-1, -1, True),
-            (-1, -1, False),
-            (0, 1, False),
-        ]
-        for product_type in product_types:
-            for start, end, include in variants:
-                res = self._call(
-                    "toyago.GetProducts",
-                    [
-                        self._device_id,
-                        product_type,
-                        [],
-                        start,
-                        end,
-                        ["0"],
-                        include,
-                        token,
-                    ],
-                )
-                xml = extract_products_xml(res)
-                if not xml or xml == "[object Object]":
-                    continue
-
-                parsed = parse_channels(xml)
-                if parsed:
-                    return parsed
-
-        raise ToyaDecoderApiError("No channels parsed from GetProducts")
+        """Fetch the full channel list from the API."""
+        res = self._call(
+            "toyago.GetProducts",
+            [self._device_id, "channel_dvb", [], -1, -1, ["0"], True, token],
+        )
+        xml = extract_products_xml(res)
+        parsed = parse_channels(xml)
+        if not parsed:
+            raise ToyaDecoderApiError("No channels parsed from GetProducts")
+        return parsed

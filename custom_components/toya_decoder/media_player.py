@@ -75,12 +75,6 @@ async def async_setup_entry(
     default_name = await async_get_default_name(hass)
     base_name = entry.data.get(CONF_NAME) or default_name
     devices = coordinator.data or []
-    if not devices:
-        try:
-            devices = await coordinator.api.async_get_devices()
-        except Exception as err:  # noqa: BLE001
-            _LOGGER.warning("Failed to fetch devices during setup: %s", err)
-            devices = []
 
     try:
         fetched = await coordinator.api.async_get_channels()
