@@ -21,7 +21,7 @@
   >
 </p>
 
-Steruj **dekoderem TOYA** bezpośrednio z **Home Assistant**. Integracja udostępnia dekoder telewizji kablowej TOYA jako encję `media_player`, co umożliwia pełne sterowanie pilotem, zmianę kanałów i automatyzację - wszystko z poziomu interfejsu Home Assistant lub przez automatyzacje.
+Steruj **dekoderem TOYA** bezpośrednio z **Home Assistant**. Integracja udostępnia dekoder telewizji kablowej TOYA jako encję `media_player`, co umożliwia pełne sterowanie pilotem, zmianę kanałów i automatyzację – wszystko z poziomu interfejsu Home Assistant lub przez automatyzacje.
 
 <p align="center">🇬🇧 <a href="https://github.com/wielorzeczownik/ha-toya-decoder/blob/main/README.md">English</a> | 🇵🇱 Polski</p>
 
@@ -32,13 +32,13 @@ Steruj **dekoderem TOYA** bezpośrednio z **Home Assistant**. Integracja udostę
 
 ## Co umożliwia integracja
 
-- **Encja media player** dla każdego dekodera TOYA - widoczna w panelu Home Assistant
-- **Sterowanie zasilaniem** - włączanie i wyłączanie dekodera TOYA z Home Assistant
-- **Sterowanie głośnością** - ciszej, głośniej, wyciszenie
-- **Zmiana kanałów** - kanał wyżej/niżej lub przeskoczenie bezpośrednio na wybrany numer bądź nazwę kanału
-- **Przeglądarka mediów** - przeglądanie pełnej listy kanałów TOYA z poziomu interfejsu HA
-- **Obsługa `media_player.play_media`** - automatyczna zmiana kanału w skryptach i automatyzacjach
-- **Komendy pilota** - wysyłanie dowolnego przycisku pilota (play, pause, stop, wstecz, OK, strzałki itd.)
+- **Encja media player** dla każdego dekodera TOYA – widoczna w panelu Home Assistant
+- **Sterowanie zasilaniem** – włączanie i wyłączanie dekodera TOYA z Home Assistant
+- **Sterowanie głośnością** – ciszej, głośniej, wyciszenie
+- **Zmiana kanałów** – kanał wyżej/niżej lub przeskoczenie bezpośrednio na wybrany numer bądź nazwę kanału
+- **Przeglądarka mediów** – przeglądanie pełnej listy kanałów TOYA z poziomu interfejsu HA
+- **Obsługa `media_player.play_media`** – automatyczna zmiana kanału w skryptach i automatyzacjach
+- **Komendy pilota** – wysyłanie dowolnego przycisku pilota (play, pause, stop, wstecz, OK, strzałki itd.)
 
 ## Instalacja przez HACS
 
@@ -52,7 +52,7 @@ Steruj **dekoderem TOYA** bezpośrednio z **Home Assistant**. Integracja udostę
 
 Integracja obsługuje dekodery TOYA bez Android TV, które zwracają niepustą wartość `smartcard` z API. Urządzenia Android TV (ATV) zwracają pusty smartcard i nie są obsługiwane.
 
-**Znane modele legacy (bez Android TV) - powinny być kompatybilne:**
+**Znane modele legacy (bez Android TV) – powinny być kompatybilne:**
 
 | Model                                             | Generacja |
 | ------------------------------------------------- | --------- |
@@ -65,7 +65,7 @@ Integracja obsługuje dekodery TOYA bez Android TV, które zwracają niepustą w
 **Nieobsługiwane (Android TV):** MAXX 4K (DTC974x, DTC974y, ARC-S110ZR), MAXX 4K IPTV (ARI-U110UR), TOYA 4K (UHD-C55CX).
 
 > [!NOTE]
-> TOYA wprowadził niedawno weryfikację dwuetapową (2FA) w portalu klienta. API aplikacji Toya GO, z którego korzysta ta integracja, nie wymaga 2FA - włączenie 2FA na koncie nie ma wpływu na działanie integracji.
+> TOYA wprowadził niedawno weryfikację dwuetapową (2FA) w portalu klienta. API aplikacji Toya GO, z którego korzysta ta integracja, nie wymaga 2FA – włączenie 2FA na koncie nie ma wpływu na działanie integracji.
 
 ## Znane ograniczenia
 

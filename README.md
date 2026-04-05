@@ -32,13 +32,13 @@ Control your **TOYA decoder** (set-top box) directly from **Home Assistant**. Th
 
 ## Features
 
-- **Media player entity** per decoder - visible in the Home Assistant dashboard
-- **Power control** - turn the TOYA decoder on and off via Home Assistant
-- **Volume control** - volume up, volume down, and mute
-- **Channel switching** - channel up/down, or jump directly to a channel number or name
-- **Media browser** - browse the full TOYA channel list from the HA UI
-- **`media_player.play_media` support** - automate channel changes in scripts and automations
-- **Remote commands** - send any remote control key (play, pause, stop, back, OK, arrows, etc.)
+- **Media player entity** per decoder – visible in the Home Assistant dashboard
+- **Power control** – turn the TOYA decoder on and off via Home Assistant
+- **Volume control** – volume up, volume down, and mute
+- **Channel switching** – channel up/down, or jump directly to a channel number or name
+- **Media browser** – browse the full TOYA channel list from the HA UI
+- **`media_player.play_media` support** – automate channel changes in scripts and automations
+- **Remote commands** – send any remote control key (play, pause, stop, back, OK, arrows, etc.)
 
 ## Installation via HACS
 
