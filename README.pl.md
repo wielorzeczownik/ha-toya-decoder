@@ -21,9 +21,9 @@
   >
 </p>
 
-Steruj **dekoderem TOYA** bezpośrednio z **Home Assistant**. Integracja udostępnia dekoder telewizji kablowej TOYA jako encję `media_player`, co umożliwia pełne sterowanie pilotem, zmianę kanałów i automatyzację – wszystko z poziomu interfejsu Home Assistant lub przez automatyzacje.
-
 <p align="center">🇬🇧 <a href="https://github.com/wielorzeczownik/ha-toya-decoder/blob/main/README.md">English</a> | 🇵🇱 Polski</p>
+
+Steruj **dekoderem TOYA** bezpośrednio z **Home Assistant**. Integracja udostępnia dekoder telewizji kablowej TOYA jako encję `media_player`, co umożliwia pełne sterowanie pilotem, zmianę kanałów i automatyzację – wszystko z poziomu interfejsu Home Assistant lub przez automatyzacje.
 
 <p align="center">
   <a href="https://my.home-assistant.io/redirect/hacs_repository/?owner=wielorzeczownik&repository=ha-toya-decoder&category=integration"><img src="https://my.home-assistant.io/badges/hacs_repository.svg" alt="Otwórz w HACS"/></a>
