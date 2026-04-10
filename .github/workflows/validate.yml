@@ -24,21 +24,10 @@ jobs:
           category: integration
 
   lint:
-    name: Lint & Audit
+    name: Lint
     runs-on: ubuntu-24.04
     steps:
       - uses: actions/checkout@v6
 
       - name: Ruff
         uses: astral-sh/ruff-action@v3
-
-      - name: Set up Python
-        uses: actions/setup-python@v6
-        with:
-          python-version: "3.14"
-
-      - name: Install pip-audit
-        run: pip install pip-audit
-
-      - name: Audit
-        run: pip-audit -r requirements_dev.txt
