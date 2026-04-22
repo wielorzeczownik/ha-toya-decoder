@@ -30,4 +30,4 @@ jobs:
       - uses: actions/checkout@v6
 
       - name: Ruff
-        uses: astral-sh/ruff-action@v3
+        uses: astral-sh/ruff-action@v4.0.0
