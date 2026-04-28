@@ -12,9 +12,11 @@
 
 ## Checklist
 
-- [ ] `ruff check .` passes
-- [ ] `ruff format --check .` passes
-- [ ] CI validators workflow passes (hassfest, HACS, ruff)
+<!-- Check only what applies to this PR -->
+
+- [ ] Python lints cleanly — if `custom_components/` or `scripts/` (`.py`) changed
+- [ ] Shell scripts formatted — if `scripts/` (`.sh`) changed
+- [ ] Markdown lints cleanly — if any `.md` changed
 - [ ] Relevant documentation updated (README, strings.json, translations)
 
 ## Related issue
