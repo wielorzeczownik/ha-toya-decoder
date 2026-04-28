@@ -3,6 +3,7 @@
   "platformAutomerge": true,
   "automergeType": "pr",
   "semanticCommits": "enabled",
+  "minimumReleaseAge": "3 days",
   "packageRules": [
     {
       "matchUpdateTypes": [
@@ -15,6 +16,7 @@
       "matchManagers": [
         "github-actions"
       ],
+      "minimumReleaseAge": "7 days",
       "semanticCommitType": "ci"
     },
     {
@@ -24,6 +26,16 @@
         "pipenv"
       ],
       "semanticCommitType": "build"
+    },
+    {
+      "matchManagers": [
+        "github-actions"
+      ],
+      "matchPackageNames": [
+        "actions/upload-artifact",
+        "actions/download-artifact"
+      ],
+      "groupName": "artifact actions"
     }
   ]
 }
