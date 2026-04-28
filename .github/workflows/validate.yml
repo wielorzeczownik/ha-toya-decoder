@@ -9,25 +9,79 @@ permissions:
 jobs:
   hassfest:
     name: hassfest
-    runs-on: ubuntu-24.04
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
     steps:
-      - uses: actions/checkout@v6
-      - uses: home-assistant/actions/hassfest@master
+      - name: Checkout
+        uses: actions/checkout@v6.0.2
+        with:
+          persist-credentials: false
+
+      - name: Run hassfest
+        uses: home-assistant/actions/hassfest@master
 
   hacs:
     name: HACS
-    runs-on: ubuntu-24.04
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
     steps:
-      - uses: actions/checkout@v6
-      - uses: hacs/action@main
+      - name: Checkout
+        uses: actions/checkout@v6.0.2
+        with:
+          persist-credentials: false
+
+      - name: Run HACS validation
+        uses: hacs/action@main
         with:
           category: integration
 
-  lint:
-    name: Lint
-    runs-on: ubuntu-24.04
+  ruff:
+    name: Ruff
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
     steps:
-      - uses: actions/checkout@v6
+      - name: Checkout
+        uses: actions/checkout@v6.0.2
+        with:
+          persist-credentials: false
 
-      - name: Ruff
+      - name: Lint
         uses: astral-sh/ruff-action@v4.0.0
+        with:
+          args: check
+
+      - name: Format check
+        uses: astral-sh/ruff-action@v4.0.0
+        with:
+          args: format --check
+
+  shfmt:
+    name: shfmt
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v6.0.2
+        with:
+          persist-credentials: false
+
+      - name: Set up shfmt
+        uses: mfinelli/setup-shfmt@v4.0.1
+
+      - name: Format check shell scripts
+        run: shfmt --diff scripts/
+
+  markdownlint:
+    name: markdownlint
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v6.0.2
+        with:
+          persist-credentials: false
+
+      - name: Lint Markdown
+        uses: DavidAnson/markdownlint-cli2-action@v23.0.0
+        with:
+          globs: '**/*.md'
