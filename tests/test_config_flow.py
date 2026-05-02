@@ -3,9 +3,8 @@
 from __future__ import annotations
 
 from contextlib import ExitStack, contextmanager
-from unittest.mock import AsyncMock, patch
+from unittest.mock import patch
 
-import pytest
 from homeassistant.config_entries import SOURCE_REAUTH, SOURCE_USER
 from homeassistant.const import CONF_NAME, CONF_PASSWORD, CONF_USERNAME
 from homeassistant.core import HomeAssistant
@@ -19,9 +18,7 @@ from custom_components.toya_decoder.api import (
 from custom_components.toya_decoder.const import DOMAIN
 
 from .conftest import (
-    MOCK_CHANNEL,
     MOCK_CONFIG_ENTRY_DATA,
-    MOCK_DEVICE,
     MOCK_NAME,
     MOCK_PASSWORD,
     MOCK_USERNAME,

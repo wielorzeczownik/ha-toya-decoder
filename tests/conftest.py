@@ -8,27 +8,22 @@ from unittest.mock import AsyncMock, MagicMock, patch
 import pytest
 from homeassistant.core import HomeAssistant
 
-
-@pytest.fixture(autouse=True)
-def auto_enable_custom_integrations(
-    enable_custom_integrations: HomeAssistant,
-) -> None:
-    """Enable custom integrations for all tests."""
-
-
 from custom_components.toya_decoder.api import (
     ToyaDecoderApi,
     ToyaDecoderChannel,
     ToyaDecoderDevice,
 )
-from custom_components.toya_decoder.const import DeviceStatus, DOMAIN
+from custom_components.toya_decoder.const import DOMAIN, DeviceStatus
 
 MOCK_USERNAME = "test@example.com"
 MOCK_PASSWORD = "secret"
 MOCK_NAME = "My Decoder"
 MOCK_SMART_CARD = "SC123456"
 MOCK_CHIP_ID = "CHIP001"
-MOCK_ENTITY_ID = f"media_player.my_decoder_sc123456_my_decoder_sc123456"
+
+# With _attr_has_entity_name=True, HA builds entity_id from device_name + entity_name.
+# Both equal "{MOCK_NAME} {MOCK_SMART_CARD}", so they're concatenated when slugified.
+MOCK_ENTITY_ID = "media_player.my_decoder_sc123456_my_decoder_sc123456"
 
 MOCK_CONFIG_ENTRY_DATA = {
     "username": MOCK_USERNAME,
@@ -78,6 +73,13 @@ def make_mock_api(
     api.async_send_key = AsyncMock(return_value=None)
     api.async_set_channel = AsyncMock(return_value=None)
     return api
+
+
+@pytest.fixture(autouse=True)
+def auto_enable_custom_integrations(
+    enable_custom_integrations: HomeAssistant,
+) -> None:
+    """Enable custom integrations for all tests."""
 
 
 @pytest.fixture

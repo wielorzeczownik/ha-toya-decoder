@@ -4,7 +4,6 @@ from __future__ import annotations
 
 from unittest.mock import patch
 
-import pytest
 from homeassistant.const import CONF_PASSWORD, CONF_USERNAME
 from homeassistant.core import HomeAssistant
 from pytest_homeassistant_custom_component.common import MockConfigEntry
@@ -30,8 +29,6 @@ async def _setup_entry(hass: HomeAssistant):
 
 async def test_diagnostics_redacts_credentials(hass: HomeAssistant) -> None:
     """Diagnostics output must not contain username or password."""
-    from homeassistant.components.diagnostics import async_redact_data
-
     entry = await _setup_entry(hass)
 
     from custom_components.toya_decoder.diagnostics import (

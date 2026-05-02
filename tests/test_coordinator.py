@@ -2,9 +2,7 @@
 
 from __future__ import annotations
 
-import pytest
 from homeassistant.core import HomeAssistant
-from homeassistant.helpers.update_coordinator import UpdateFailed
 
 from custom_components.toya_decoder.api import ToyaDecoderConnectionError
 from custom_components.toya_decoder.coordinator import ToyaDecoderCoordinator
