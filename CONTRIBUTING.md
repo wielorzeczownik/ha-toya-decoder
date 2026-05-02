@@ -41,9 +41,12 @@ shfmt --diff scripts/
 
 # Markdown
 markdownlint-cli2 "**/*.md"
+
+# Tests
+pytest
 ```
 
-With Docker (no local installs required)
+### With Docker (no local installs required)
 
 ```bash
 docker run --rm -v "$(pwd):/src" -w /src ghcr.io/astral-sh/ruff check .
