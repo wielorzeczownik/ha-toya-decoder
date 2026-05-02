@@ -18,6 +18,7 @@ from homeassistant.components.media_player.const import (
 from homeassistant.config_entries import ConfigEntry
 from homeassistant.const import CONF_NAME
 from homeassistant.core import HomeAssistant
+from homeassistant.exceptions import ServiceValidationError
 from homeassistant.helpers.device_registry import DeviceInfo
 from homeassistant.helpers.entity_platform import AddEntitiesCallback
 from homeassistant.helpers.translation import async_get_translations
@@ -29,6 +30,8 @@ from .coordinator import ToyaDecoderCoordinator
 from .helpers import async_get_default_name
 
 _LOGGER = logging.getLogger(__name__)
+
+PARALLEL_UPDATES = 0
 
 _POWER_FEATURES = (
     MediaPlayerEntityFeature.TURN_ON | MediaPlayerEntityFeature.TURN_OFF
@@ -69,8 +72,7 @@ async def async_setup_entry(
     async_add_entities: AddEntitiesCallback,
 ) -> None:
     """Set up media player entities for the config entry."""
-    data = hass.data[DOMAIN][entry.entry_id]
-    coordinator: ToyaDecoderCoordinator = data["coordinator"]
+    coordinator: ToyaDecoderCoordinator = entry.runtime_data.coordinator
 
     default_name = await async_get_default_name(hass)
     base_name = entry.data.get(CONF_NAME) or default_name
@@ -156,11 +158,6 @@ class ToyaLegacyDecoderMediaPlayer(
         self._update_supported_features()
         self._update_state()
         super()._handle_coordinator_update()
-
-    @property
-    def available(self) -> bool:  # type: ignore[override]
-        """Return True when the coordinator last updated successfully."""
-        return self.coordinator.last_update_success
 
     def _device(self) -> ToyaDecoderDevice | None:
         """Return the matching device from coordinator data."""
@@ -287,13 +284,16 @@ class ToyaLegacyDecoderMediaPlayer(
         )
 
     async def async_play_media(
-        self, media_type: str, media_id: str, **kwargs
+        self, media_type: str, media_id: str, **kwargs: object
     ) -> None:
         """Tune to a channel by number or label."""
         channel_number = self._resolve_channel_number(media_id)
         if channel_number is None:
-            _LOGGER.warning("Unknown media_id requested: %s", media_id)
-            return
+            raise ServiceValidationError(
+                translation_domain=DOMAIN,
+                translation_key="unknown_media_id",
+                translation_placeholders={"media_id": media_id},
+            )
 
         await self.coordinator.api.async_set_channel(
             self._smart_card, channel_number
