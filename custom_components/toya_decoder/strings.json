@@ -16,6 +16,14 @@
         "data": {
           "password": "Password"
         }
+      },
+      "reconfigure": {
+        "title": "Reconfigure TOYA decoder",
+        "description": "Update your password or integration name",
+        "data": {
+          "password": "Password",
+          "name": "Name"
+        }
       }
     },
     "error": {
@@ -26,11 +34,17 @@
     },
     "abort": {
       "reauth_successful": "Reauthentication was successful",
-      "reauth_missing_entry": "Missing reauthentication entry"
+      "reauth_missing_entry": "Missing reauthentication entry",
+      "reconfigure_successful": "Reconfiguration was successful"
     }
   },
   "common": {
     "channels": "Channels",
     "default_name": "TOYA Decoder"
+  },
+  "exceptions": {
+    "unknown_media_id": {
+      "message": "Unknown channel or media ID: {media_id}"
+    }
   }
 }

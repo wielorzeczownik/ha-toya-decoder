@@ -139,3 +139,49 @@ class ConfigFlow(config_entries.ConfigFlow, domain=DOMAIN):
         return self.async_show_form(
             step_id="reauth_confirm", data_schema=schema, errors=errors
         )
+
+    async def async_step_reconfigure(
+        self, user_input: dict | None = None
+    ) -> config_entries.ConfigFlowResult:
+        """Allow the user to update credentials and name without re-adding the entry."""
+        entry = self._get_reconfigure_entry()
+        errors: dict[str, str] = {}
+        default_name = entry.data.get(
+            CONF_NAME
+        ) or await async_get_default_name(
+            self.hass, self.context.get("language")
+        )
+
+        if user_input is not None:
+            try:
+                info = await _validate_input(
+                    {**user_input, CONF_USERNAME: entry.data[CONF_USERNAME]},
+                    default_name,
+                )
+            except ToyaDecoderAuthError:
+                errors["base"] = "invalid_auth"
+            except ToyaDecoderConnectionError:
+                errors["base"] = "cannot_connect"
+            except Exception:  # noqa: BLE001
+                errors["base"] = "unknown"
+            else:
+                if not info["devices"]:
+                    errors["base"] = "no_devices"
+                else:
+                    return self.async_update_reload_and_abort(
+                        entry,
+                        data={**entry.data, **user_input},
+                        reason="reconfigure_successful",
+                    )
+
+        schema = vol.Schema(
+            {
+                vol.Required(CONF_PASSWORD): str,
+                vol.Optional(
+                    CONF_NAME, default=entry.data.get(CONF_NAME, default_name)
+                ): str,
+            }
+        )
+        return self.async_show_form(
+            step_id="reconfigure", data_schema=schema, errors=errors
+        )

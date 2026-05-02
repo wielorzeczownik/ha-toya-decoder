@@ -16,6 +16,14 @@
         "data": {
           "password": "Пароль"
         }
+      },
+      "reconfigure": {
+        "title": "Переналаштування декодера TOYA",
+        "description": "Оновіть пароль або назву інтеграції",
+        "data": {
+          "password": "Пароль",
+          "name": "Назва"
+        }
       }
     },
     "error": {
@@ -26,11 +34,17 @@
     },
     "abort": {
       "reauth_successful": "Повторна автентифікація успішна",
-      "reauth_missing_entry": "Відсутній запис для повторної автентифікації"
+      "reauth_missing_entry": "Відсутній запис для повторної автентифікації",
+      "reconfigure_successful": "Переналаштування виконано успішно"
     }
   },
   "common": {
     "channels": "Канали",
     "default_name": "Декодер TOYA"
+  },
+  "exceptions": {
+    "unknown_media_id": {
+      "message": "Невідомий канал або ідентифікатор медіа: {media_id}"
+    }
   }
 }

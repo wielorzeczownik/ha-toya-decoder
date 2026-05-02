@@ -16,6 +16,14 @@
         "data": {
           "password": "Hasło"
         }
+      },
+      "reconfigure": {
+        "title": "Zmień konfigurację dekodera TOYA",
+        "description": "Zaktualizuj hasło lub nazwę integracji",
+        "data": {
+          "password": "Hasło",
+          "name": "Nazwa"
+        }
       }
     },
     "error": {
@@ -26,11 +34,17 @@
     },
     "abort": {
       "reauth_successful": "Ponowna autoryzacja zakończona",
-      "reauth_missing_entry": "Brak wpisu do ponownej autoryzacji"
+      "reauth_missing_entry": "Brak wpisu do ponownej autoryzacji",
+      "reconfigure_successful": "Rekonfiguracja zakończona pomyślnie"
     }
   },
   "common": {
     "channels": "Kanały",
     "default_name": "Dekoder TOYA"
+  },
+  "exceptions": {
+    "unknown_media_id": {
+      "message": "Nieznany kanał lub identyfikator mediów: {media_id}"
+    }
   }
 }
