@@ -11,6 +11,22 @@ A Home Assistant custom integration that exposes your TOYA cable TV decoder as a
 ```text
 .
 ├── custom_components/toya_decoder/   Home Assistant integration source
+│   ├── api/                          HTTP client, auth, models, error types
+│   ├── translations/                 UI strings
+│   ├── __init__.py                   entry setup and teardown
+│   ├── config_flow.py                UI flow for adding / reconfiguring the integration
+│   ├── coordinator.py                DataUpdateCoordinator – polls the API
+│   ├── data.py                       runtime_data dataclass (api + coordinator)
+│   ├── diagnostics.py                redacted diagnostics for issue reports
+│   ├── media_player.py               media_player entity
+│   └── manifest.json                 integration metadata
+├── tests/
+│   ├── conftest.py                   shared fixtures and mock helpers
+│   ├── test_config_flow.py           config-flow happy path and error cases
+│   ├── test_coordinator.py           coordinator fetch and failure handling
+│   ├── test_diagnostics.py           credential redaction and output shape
+│   ├── test_init.py                  entry setup / unload lifecycle
+│   └── test_media_player.py          entity state and service calls
 └── scripts/
     ├── bump-version.sh               determines the next release version and updates the manifest
     ├── get_manifest_version.py       reads the current version from manifest.json
