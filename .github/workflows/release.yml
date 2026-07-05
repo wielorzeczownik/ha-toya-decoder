@@ -137,6 +137,8 @@ jobs:
     timeout-minutes: 10
     permissions:
       contents: read
+      id-token: write
+      attestations: write
     steps:
       - name: Checkout tag
         uses: actions/checkout@v7.0.0
@@ -149,11 +151,21 @@ jobs:
           mkdir -p dist
           (cd custom_components/toya_decoder && zip -r ../../dist/toya_decoder.zip .)
 
+      - name: Compute SHA-256 checksum
+        shell: bash
+        working-directory: dist
+        run: sha256sum toya_decoder.zip > toya_decoder.zip.sha256
+
+      - name: Attest build provenance
+        uses: actions/attest-build-provenance@v4.1.1
+        with:
+          subject-path: dist/toya_decoder.zip
+
       - name: Upload zip artifact
         uses: actions/upload-artifact@v7.0.1
         with:
           name: release-zip
-          path: dist/toya_decoder.zip
+          path: dist/*
 
   publish-release:
     needs:
@@ -183,4 +195,6 @@ jobs:
           tag_name: ${{ needs.prepare-release.outputs.tag }}
           name: ${{ needs.prepare-release.outputs.tag }}
           body_path: release-notes.md
-          files: dist/toya_decoder.zip
+          files: |
+            dist/toya_decoder.zip
+            dist/toya_decoder.zip.sha256
