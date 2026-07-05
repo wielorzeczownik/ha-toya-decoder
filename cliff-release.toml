@@ -1,3 +1,7 @@
+# Configuration for per-release notes shown on the GitHub release page and for
+# determining the next version bump (user-facing changes only).
+# The cumulative CHANGELOG.md file uses cliff.toml.
+
 [changelog]
 header = """
 """
