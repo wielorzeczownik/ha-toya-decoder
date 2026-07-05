@@ -4,17 +4,7 @@ from __future__ import annotations
 
 from enum import IntEnum, StrEnum
 
-from homeassistant.const import Platform
-
 DOMAIN = "toya_decoder"
-
-DEFAULT_NAME = "TOYA Decoder"
-DEFAULT_POLL_INTERVAL = 5
-DEFAULT_ENDPOINT = "https://api-go.toya.net.pl/toyago/index.php"
-DEFAULT_VERSION = "2.3.20 (build 107)"
-DEFAULT_MODEL = "homeassistant"
-
-PLATFORMS = [Platform.MEDIA_PLAYER]
 
 
 class RemoteCommand(StrEnum):

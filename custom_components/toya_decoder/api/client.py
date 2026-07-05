@@ -9,13 +9,7 @@ import xmlrpc.client
 from pathlib import Path
 from typing import TYPE_CHECKING, Any, TypeVar
 
-from custom_components.toya_decoder.const import (
-    DEFAULT_ENDPOINT,
-    DEFAULT_MODEL,
-    DEFAULT_VERSION,
-    REMOTE_COMMANDS,
-    DeviceStatus,
-)
+from custom_components.toya_decoder.const import REMOTE_COMMANDS, DeviceStatus
 
 from .auth import extract_token, is_auth_fault_message, raise_if_auth_fault
 from .channels import extract_products_xml, parse_channels
@@ -32,6 +26,10 @@ if TYPE_CHECKING:
     from collections.abc import Callable
 
 _T = TypeVar("_T")
+
+DEFAULT_ENDPOINT = "https://api-go.toya.net.pl/toyago/index.php"
+DEFAULT_VERSION = "2.3.20 (build 107)"
+DEFAULT_MODEL = "homeassistant"
 
 
 def _build_device_id() -> str:

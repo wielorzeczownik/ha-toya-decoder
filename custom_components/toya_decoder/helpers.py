@@ -6,10 +6,12 @@ from typing import TYPE_CHECKING
 
 from homeassistant.helpers.translation import async_get_translations
 
-from .const import DEFAULT_NAME, DOMAIN
+from .const import DOMAIN
 
 if TYPE_CHECKING:
     from homeassistant.core import HomeAssistant
+
+DEFAULT_NAME = "TOYA Decoder"
 
 
 async def async_get_default_name(

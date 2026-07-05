@@ -12,12 +12,14 @@ from homeassistant.helpers.update_coordinator import (
 )
 
 from .api import ToyaDecoderApi, ToyaDecoderDevice
-from .const import DEFAULT_POLL_INTERVAL, DOMAIN
+from .const import DOMAIN
 
 if TYPE_CHECKING:
     from homeassistant.core import HomeAssistant
 
 _LOGGER = logging.getLogger(__name__)
+
+DEFAULT_POLL_INTERVAL = 5
 
 
 class ToyaDecoderCoordinator(DataUpdateCoordinator[list[ToyaDecoderDevice]]):

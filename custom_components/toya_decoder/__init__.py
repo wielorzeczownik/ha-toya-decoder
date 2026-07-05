@@ -4,16 +4,17 @@ from __future__ import annotations
 
 from typing import TYPE_CHECKING
 
-from homeassistant.const import CONF_PASSWORD, CONF_USERNAME
+from homeassistant.const import CONF_PASSWORD, CONF_USERNAME, Platform
 
 from .api import ToyaDecoderApi
-from .const import PLATFORMS
 from .coordinator import ToyaDecoderCoordinator
 from .data import ToyaDecoderData
 
 if TYPE_CHECKING:
     from homeassistant.config_entries import ConfigEntry
     from homeassistant.core import HomeAssistant
+
+PLATFORMS = [Platform.MEDIA_PLAYER]
 
 
 async def async_setup_entry(hass: HomeAssistant, entry: ConfigEntry) -> bool:
