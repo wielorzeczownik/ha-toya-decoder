@@ -2,13 +2,13 @@
 
 from __future__ import annotations
 
+from typing import TYPE_CHECKING
 from unittest.mock import patch
 
 import pytest
 from homeassistant.components.media_player.const import (
     MediaPlayerState,
 )
-from homeassistant.core import HomeAssistant
 from homeassistant.exceptions import ServiceValidationError
 from pytest_homeassistant_custom_component.common import MockConfigEntry
 
@@ -25,6 +25,9 @@ from .conftest import (
     MOCK_USERNAME,
     make_mock_api,
 )
+
+if TYPE_CHECKING:
+    from homeassistant.core import HomeAssistant
 
 
 def _patch_api(api=None):
@@ -82,7 +85,7 @@ async def test_entity_state_off(hass: HomeAssistant) -> None:
 async def test_play_media_by_channel_number(hass: HomeAssistant) -> None:
     """play_media with a numeric string tunes to that channel."""
     api = make_mock_api()
-    entry, api = await _setup_entry(hass, api)
+    _entry, api = await _setup_entry(hass, api)
 
     entity_id = MOCK_ENTITY_ID
     await hass.services.async_call(
@@ -102,7 +105,7 @@ async def test_play_media_by_channel_number(hass: HomeAssistant) -> None:
 async def test_play_media_by_channel_label(hass: HomeAssistant) -> None:
     """play_media with a label tunes to the matching channel number."""
     api = make_mock_api(channels=[MOCK_CHANNEL])
-    entry, api = await _setup_entry(hass, api)
+    _entry, api = await _setup_entry(hass, api)
 
     entity_id = MOCK_ENTITY_ID
     await hass.services.async_call(
@@ -122,7 +125,7 @@ async def test_play_media_by_channel_label(hass: HomeAssistant) -> None:
 async def test_play_media_unknown_raises(hass: HomeAssistant) -> None:
     """play_media with an unresolvable media_id raises ServiceValidationError."""
     api = make_mock_api(channels=[MOCK_CHANNEL])
-    entry, api = await _setup_entry(hass, api)
+    _entry, api = await _setup_entry(hass, api)
 
     entity_id = MOCK_ENTITY_ID
     with pytest.raises(ServiceValidationError):

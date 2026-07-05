@@ -4,19 +4,19 @@ from __future__ import annotations
 
 import asyncio
 import hashlib
-import os
 import socket
 import xmlrpc.client
-from collections.abc import Callable
-from typing import Any, TypeVar
+from pathlib import Path
+from typing import TYPE_CHECKING, Any, TypeVar
 
-from ..const import (
+from custom_components.toya_decoder.const import (
     DEFAULT_ENDPOINT,
     DEFAULT_MODEL,
     DEFAULT_VERSION,
     REMOTE_COMMANDS,
     DeviceStatus,
 )
+
 from .auth import extract_token, is_auth_fault_message, raise_if_auth_fault
 from .channels import extract_products_xml, parse_channels
 from .devices import parse_devices
@@ -28,13 +28,18 @@ from .errors import (
 from .models import ToyaDecoderChannel, ToyaDecoderDevice, ToyaDecoderState
 from .transport import make_client
 
+if TYPE_CHECKING:
+    from collections.abc import Callable
+
 _T = TypeVar("_T")
 
 
 def _build_device_id() -> str:
     """Build a deterministic device id for the API session."""
-    base = f"{socket.gethostname()}|{os.getcwd()}"
-    digest = hashlib.sha1(base.encode("utf-8")).hexdigest()[:16]
+    base = f"{socket.gethostname()}|{Path.cwd()}"
+    digest = hashlib.sha1(
+        base.encode("utf-8"), usedforsecurity=False
+    ).hexdigest()[:16]
     return f"ha-{digest}"
 
 
@@ -74,6 +79,36 @@ class ToyaDecoderApi:
         self._timeout_s = timeout_s
         self._token: str | None = None
         self._set_version: str | None = None
+
+    @property
+    def endpoint(self) -> str:
+        """Return the configured API endpoint URL."""
+        return self._endpoint
+
+    @property
+    def version(self) -> str:
+        """Return the configured protocol version."""
+        return self._version
+
+    @property
+    def model(self) -> str:
+        """Return the configured model identifier."""
+        return self._model
+
+    @property
+    def device_id(self) -> str:
+        """Return the device id used for the API session."""
+        return self._device_id
+
+    @property
+    def timeout_s(self) -> float:
+        """Return the per-call timeout in seconds."""
+        return self._timeout_s
+
+    @property
+    def key_delay_s(self) -> float:
+        """Return the delay between key presses in seconds."""
+        return self._key_delay_s
 
     async def async_get_state(self) -> ToyaDecoderState:
         """Return a simplified power state computed from device status."""
@@ -149,7 +184,6 @@ class ToyaDecoderApi:
         try:
             res = getattr(client, method)(*params)
             raise_if_auth_fault(res)
-            return res
         except xmlrpc.client.Fault as err:
             if method == "toyago.GetAuth" or is_auth_fault_message(
                 err.faultString
@@ -164,6 +198,8 @@ class ToyaDecoderApi:
             ) from err
         except OSError as err:
             raise ToyaDecoderConnectionError(str(err)) from err
+        else:
+            return res
 
     def _get_pvr_devices(self, token: str) -> list[ToyaDecoderDevice]:
         """Fetch devices for the given auth token."""

@@ -5,7 +5,8 @@ from __future__ import annotations
 import re
 from typing import Any
 
-from ..const import DeviceStatus
+from custom_components.toya_decoder.const import DeviceStatus
+
 from .models import ToyaDecoderDevice
 
 
@@ -19,25 +20,36 @@ def parse_devices(res: Any) -> list[ToyaDecoderDevice]:
         devices = res["devices"]
 
     if isinstance(devices, (list, tuple)):
-        out: list[ToyaDecoderDevice] = []
-        for item in devices:
-            if not isinstance(item, dict):
-                continue
+        return _parse_structured_devices(devices)
 
-            smart_card = item.get("smartcard")
-            chip_id = item.get("chipid")
-            status = item.get("status", 0)
-            if smart_card and chip_id is not None:
-                out.append(
-                    ToyaDecoderDevice(
-                        str(smart_card),
-                        _status_from_value(status),
-                        str(chip_id),
-                    )
+    return _parse_raw_devices(str(devices))
+
+
+def _parse_structured_devices(
+    devices: list[Any] | tuple[Any, ...],
+) -> list[ToyaDecoderDevice]:
+    """Parse devices from a list of mapping entries."""
+    out: list[ToyaDecoderDevice] = []
+    for item in devices:
+        if not isinstance(item, dict):
+            continue
+
+        smart_card = item.get("smartcard")
+        chip_id = item.get("chipid")
+        status = item.get("status", 0)
+        if smart_card and chip_id is not None:
+            out.append(
+                ToyaDecoderDevice(
+                    str(smart_card),
+                    _status_from_value(status),
+                    str(chip_id),
                 )
-        return out
+            )
+    return out
 
-    raw = str(devices)
+
+def _parse_raw_devices(raw: str) -> list[ToyaDecoderDevice]:
+    """Parse devices from a flattened key=value string payload."""
     raw = raw.strip()
     if (raw.startswith("[") and raw.endswith("]")) or (
         raw.startswith("{") and raw.endswith("}")
@@ -45,7 +57,7 @@ def parse_devices(res: Any) -> list[ToyaDecoderDevice]:
         raw = raw[1:-1]
 
     parts = [part for part in re.split(r"=|, |\}\{|\{|\}", raw) if part]
-    out = []
+    out: list[ToyaDecoderDevice] = []
     key = ""
     smart_card: str | None = None
     chip_id: str | None = None
@@ -56,13 +68,12 @@ def parse_devices(res: Any) -> list[ToyaDecoderDevice]:
             key = part
             continue
 
-        value = part
         if key == "status":
-            status = _status_from_value(value)
+            status = _status_from_value(part)
         elif key == "smartcard":
-            smart_card = value
+            smart_card = part
         elif key == "chipid":
-            chip_id = value
+            chip_id = part
 
         if (
             smart_card is not None

@@ -1,10 +1,14 @@
+# ruff: noqa: INP001, T201  # standalone CLI helper for CI; prints to stdout
+"""Print the version field from a manifest.json file."""
+
 import json
 import sys
+from pathlib import Path
 
 
 def main() -> None:
     manifest_path = sys.argv[1]
-    with open(manifest_path, encoding="utf-8") as f:
+    with Path(manifest_path).open(encoding="utf-8") as f:
         data = json.load(f)
     version = str(data.get("version", "")).strip()
     if not version:

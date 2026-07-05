@@ -2,9 +2,9 @@
 
 from __future__ import annotations
 
+from typing import TYPE_CHECKING
 from unittest.mock import patch
 
-from homeassistant.core import HomeAssistant
 from pytest_homeassistant_custom_component.common import MockConfigEntry
 
 from custom_components.toya_decoder.const import DOMAIN
@@ -12,6 +12,9 @@ from custom_components.toya_decoder.coordinator import ToyaDecoderCoordinator
 from custom_components.toya_decoder.data import ToyaDecoderData
 
 from .conftest import MOCK_CONFIG_ENTRY_DATA, MOCK_USERNAME, make_mock_api
+
+if TYPE_CHECKING:
+    from homeassistant.core import HomeAssistant
 
 
 def _patch_api(api=None):

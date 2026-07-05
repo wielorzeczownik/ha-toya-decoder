@@ -2,15 +2,21 @@
 
 from __future__ import annotations
 
+from typing import TYPE_CHECKING
 from unittest.mock import patch
 
 from homeassistant.const import CONF_PASSWORD, CONF_USERNAME
-from homeassistant.core import HomeAssistant
 from pytest_homeassistant_custom_component.common import MockConfigEntry
 
 from custom_components.toya_decoder.const import DOMAIN
+from custom_components.toya_decoder.diagnostics import (
+    async_get_config_entry_diagnostics,
+)
 
 from .conftest import MOCK_CONFIG_ENTRY_DATA, MOCK_USERNAME, make_mock_api
+
+if TYPE_CHECKING:
+    from homeassistant.core import HomeAssistant
 
 
 async def _setup_entry(hass: HomeAssistant):
@@ -31,10 +37,6 @@ async def test_diagnostics_redacts_credentials(hass: HomeAssistant) -> None:
     """Diagnostics output must not contain username or password."""
     entry = await _setup_entry(hass)
 
-    from custom_components.toya_decoder.diagnostics import (
-        async_get_config_entry_diagnostics,
-    )
-
     result = await async_get_config_entry_diagnostics(hass, entry)
     result_str = str(result)
 
@@ -47,10 +49,6 @@ async def test_diagnostics_contains_coordinator_info(
 ) -> None:
     """Diagnostics includes coordinator last_update_success."""
     entry = await _setup_entry(hass)
-
-    from custom_components.toya_decoder.diagnostics import (
-        async_get_config_entry_diagnostics,
-    )
 
     result = await async_get_config_entry_diagnostics(hass, entry)
 

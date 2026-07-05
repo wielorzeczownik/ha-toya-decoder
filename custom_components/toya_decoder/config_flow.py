@@ -2,6 +2,9 @@
 
 from __future__ import annotations
 
+import logging
+from typing import Any, cast
+
 import voluptuous as vol
 from homeassistant import config_entries
 from homeassistant.const import CONF_NAME, CONF_PASSWORD, CONF_USERNAME
@@ -14,13 +17,17 @@ from .api import (
 from .const import DOMAIN
 from .helpers import async_get_default_name
 
+_LOGGER = logging.getLogger(__name__)
+
 
 def _unique_id_from_username(username: str) -> str:
     """Normalize the username used as unique id."""
     return username.strip().lower()
 
 
-async def _validate_input(data: dict, default_name: str) -> dict:
+async def _validate_input(
+    data: dict[str, Any], default_name: str
+) -> dict[str, Any]:
     """Validate user credentials and fetch devices."""
     api = ToyaDecoderApi(
         username=data[CONF_USERNAME],
@@ -40,12 +47,12 @@ class ConfigFlow(config_entries.ConfigFlow, domain=DOMAIN):
     VERSION = 1
 
     async def async_step_user(
-        self, user_input: dict | None = None
+        self, user_input: dict[str, Any] | None = None
     ) -> config_entries.ConfigFlowResult:
         """Handle the initial step from the UI."""
         errors: dict[str, str] = {}
         default_name = await async_get_default_name(
-            self.hass, self.context.get("language")
+            self.hass, cast("str | None", self.context.get("language"))
         )
 
         if user_input is not None:
@@ -59,7 +66,8 @@ class ConfigFlow(config_entries.ConfigFlow, domain=DOMAIN):
                 errors["base"] = "invalid_auth"
             except ToyaDecoderConnectionError:
                 errors["base"] = "cannot_connect"
-            except Exception:  # noqa: BLE001
+            except Exception:
+                _LOGGER.exception("Unexpected error validating credentials")
                 errors["base"] = "unknown"
             else:
                 devices = info["devices"]
@@ -82,7 +90,8 @@ class ConfigFlow(config_entries.ConfigFlow, domain=DOMAIN):
         )
 
     async def async_step_reauth(
-        self, entry_data: dict
+        self,
+        entry_data: dict[str, Any],  # noqa: ARG002  # signature mandated by the reauth flow; entry is read from context
     ) -> config_entries.ConfigFlowResult:
         """Handle reauthentication when credentials are invalid."""
         entry_id = self.context.get("entry_id")
@@ -94,7 +103,7 @@ class ConfigFlow(config_entries.ConfigFlow, domain=DOMAIN):
         return await self.async_step_reauth_confirm()
 
     async def async_step_reauth_confirm(
-        self, user_input: dict | None = None
+        self, user_input: dict[str, Any] | None = None
     ) -> config_entries.ConfigFlowResult:
         """Confirm reauthentication credentials."""
         errors: dict[str, str] = {}
@@ -106,7 +115,7 @@ class ConfigFlow(config_entries.ConfigFlow, domain=DOMAIN):
         default_name = entry.data.get(
             CONF_NAME
         ) or await async_get_default_name(
-            self.hass, self.context.get("language")
+            self.hass, cast("str | None", self.context.get("language"))
         )
 
         if user_input is not None:
@@ -122,7 +131,8 @@ class ConfigFlow(config_entries.ConfigFlow, domain=DOMAIN):
                 errors["base"] = "invalid_auth"
             except ToyaDecoderConnectionError:
                 errors["base"] = "cannot_connect"
-            except Exception:  # noqa: BLE001
+            except Exception:
+                _LOGGER.exception("Unexpected error validating credentials")
                 errors["base"] = "unknown"
             else:
                 if not info["devices"]:
@@ -141,7 +151,7 @@ class ConfigFlow(config_entries.ConfigFlow, domain=DOMAIN):
         )
 
     async def async_step_reconfigure(
-        self, user_input: dict | None = None
+        self, user_input: dict[str, Any] | None = None
     ) -> config_entries.ConfigFlowResult:
         """Allow the user to update credentials and name without re-adding the entry."""
         entry = self._get_reconfigure_entry()
@@ -149,7 +159,7 @@ class ConfigFlow(config_entries.ConfigFlow, domain=DOMAIN):
         default_name = entry.data.get(
             CONF_NAME
         ) or await async_get_default_name(
-            self.hass, self.context.get("language")
+            self.hass, cast("str | None", self.context.get("language"))
         )
 
         if user_input is not None:
@@ -162,7 +172,8 @@ class ConfigFlow(config_entries.ConfigFlow, domain=DOMAIN):
                 errors["base"] = "invalid_auth"
             except ToyaDecoderConnectionError:
                 errors["base"] = "cannot_connect"
-            except Exception:  # noqa: BLE001
+            except Exception:
+                _LOGGER.exception("Unexpected error validating credentials")
                 errors["base"] = "unknown"
             else:
                 if not info["devices"]:

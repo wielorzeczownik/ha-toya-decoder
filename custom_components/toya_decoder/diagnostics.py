@@ -2,15 +2,17 @@
 
 from __future__ import annotations
 
-from typing import Any
+from typing import TYPE_CHECKING, Any
 
 from homeassistant.components.diagnostics import async_redact_data
-from homeassistant.config_entries import ConfigEntry
 from homeassistant.const import CONF_PASSWORD, CONF_USERNAME
-from homeassistant.core import HomeAssistant
 
-from .api.models import ToyaDecoderDevice
-from .data import ToyaDecoderData
+if TYPE_CHECKING:
+    from homeassistant.config_entries import ConfigEntry
+    from homeassistant.core import HomeAssistant
+
+    from .api.models import ToyaDecoderDevice
+    from .data import ToyaDecoderData
 
 REDACT_KEYS = {
     CONF_USERNAME,
@@ -31,7 +33,8 @@ def _device_to_dict(device: ToyaDecoderDevice) -> dict[str, Any]:
 
 
 async def async_get_config_entry_diagnostics(
-    hass: HomeAssistant, entry: ConfigEntry
+    hass: HomeAssistant,  # noqa: ARG001  # signature mandated by the diagnostics platform
+    entry: ConfigEntry,
 ) -> dict[str, Any]:
     """Return diagnostics for a config entry."""
     runtime: ToyaDecoderData = entry.runtime_data
@@ -53,12 +56,12 @@ async def async_get_config_entry_diagnostics(
             "data": [_device_to_dict(d) for d in (coordinator.data or [])],
         },
         "api": {
-            "endpoint": api._endpoint,
-            "version": api._version,
-            "model": api._model,
-            "device_id": api._device_id,
-            "timeout_s": api._timeout_s,
-            "key_delay_s": api._key_delay_s,
+            "endpoint": api.endpoint,
+            "version": api.version,
+            "model": api.model,
+            "device_id": api.device_id,
+            "timeout_s": api.timeout_s,
+            "key_delay_s": api.key_delay_s,
         },
     }
 

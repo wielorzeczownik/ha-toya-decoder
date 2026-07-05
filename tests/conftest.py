@@ -2,11 +2,10 @@
 
 from __future__ import annotations
 
-from collections.abc import Generator
+from typing import TYPE_CHECKING
 from unittest.mock import AsyncMock, MagicMock, patch
 
 import pytest
-from homeassistant.core import HomeAssistant
 
 from custom_components.toya_decoder.api import (
     ToyaDecoderApi,
@@ -15,8 +14,13 @@ from custom_components.toya_decoder.api import (
 )
 from custom_components.toya_decoder.const import DOMAIN, DeviceStatus
 
+if TYPE_CHECKING:
+    from collections.abc import Generator
+
+    from homeassistant.core import HomeAssistant
+
 MOCK_USERNAME = "test@example.com"
-MOCK_PASSWORD = "secret"
+MOCK_PASSWORD = "secret"  # noqa: S105  # dummy credential for tests
 MOCK_NAME = "My Decoder"
 MOCK_SMART_CARD = "SC123456"
 MOCK_CHIP_ID = "CHIP001"
@@ -52,12 +56,12 @@ def make_mock_api(
 ) -> MagicMock:
     """Return a mocked ToyaDecoderApi."""
     api = MagicMock(spec=ToyaDecoderApi)
-    api._endpoint = "https://api.example.com"
-    api._version = "2.3.20"
-    api._model = "homeassistant"
-    api._device_id = "ha-testdevice"
-    api._timeout_s = 10.0
-    api._key_delay_s = 0.25
+    api.endpoint = "https://api.example.com"
+    api.version = "2.3.20"
+    api.model = "homeassistant"
+    api.device_id = "ha-testdevice"
+    api.timeout_s = 10.0
+    api.key_delay_s = 0.25
 
     if login_error:
         api.async_login = AsyncMock(side_effect=login_error)

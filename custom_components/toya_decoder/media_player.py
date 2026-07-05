@@ -3,6 +3,7 @@
 from __future__ import annotations
 
 import logging
+from typing import TYPE_CHECKING
 
 from homeassistant.components.media_player import (
     MediaPlayerDeviceClass,
@@ -15,19 +16,23 @@ from homeassistant.components.media_player.const import (
     MediaPlayerState,
     MediaType,
 )
-from homeassistant.config_entries import ConfigEntry
 from homeassistant.const import CONF_NAME
-from homeassistant.core import HomeAssistant
 from homeassistant.exceptions import ServiceValidationError
 from homeassistant.helpers.device_registry import DeviceInfo
-from homeassistant.helpers.entity_platform import AddEntitiesCallback
 from homeassistant.helpers.translation import async_get_translations
 from homeassistant.helpers.update_coordinator import CoordinatorEntity
 
-from .api import ToyaDecoderChannel, ToyaDecoderDevice
+from .api import ToyaDecoderApiError
 from .const import DOMAIN, REMOTE_COMMANDS, DeviceStatus, RemoteCommand
 from .coordinator import ToyaDecoderCoordinator
 from .helpers import async_get_default_name
+
+if TYPE_CHECKING:
+    from homeassistant.config_entries import ConfigEntry
+    from homeassistant.core import HomeAssistant
+    from homeassistant.helpers.entity_platform import AddEntitiesCallback
+
+    from .api import ToyaDecoderChannel, ToyaDecoderDevice
 
 _LOGGER = logging.getLogger(__name__)
 
@@ -80,7 +85,7 @@ async def async_setup_entry(
 
     try:
         fetched = await coordinator.api.async_get_channels()
-    except Exception as err:  # noqa: BLE001
+    except ToyaDecoderApiError as err:
         _LOGGER.warning("Failed to fetch channels: %s", err)
         fetched = []
     channels = _build_channel_sources(fetched)
@@ -216,7 +221,7 @@ class ToyaLegacyDecoderMediaPlayer(
         """Send volume down."""
         await self._send_keys(RemoteCommand.LEFT)
 
-    async def async_mute_volume(self, mute: bool) -> None:
+    async def async_mute_volume(self, mute: bool) -> None:  # noqa: ARG002  # only toggle mute is supported; `mute` state is ignored
         """Toggle mute (stateful mute is not supported by the API)."""
         await self._send_keys(RemoteCommand.MUTE)
 
@@ -246,8 +251,8 @@ class ToyaLegacyDecoderMediaPlayer(
 
     async def async_browse_media(
         self,
-        media_content_type: str | None = None,
-        media_content_id: str | None = None,
+        media_content_type: str | None = None,  # noqa: ARG002  # mandated by MediaPlayerEntity; this device exposes a flat channel list
+        media_content_id: str | None = None,  # noqa: ARG002  # mandated by MediaPlayerEntity; this device exposes a flat channel list
     ) -> BrowseMedia:
         """Build the media browser tree of available channels."""
         children: list[BrowseMedia] = [
@@ -284,7 +289,10 @@ class ToyaLegacyDecoderMediaPlayer(
         )
 
     async def async_play_media(
-        self, media_type: str, media_id: str, **kwargs: object
+        self,
+        media_type: str,  # noqa: ARG002  # mandated by MediaPlayerEntity; only media_id is used
+        media_id: str,
+        **kwargs: object,  # noqa: ARG002  # mandated by MediaPlayerEntity; only media_id is used
     ) -> None:
         """Tune to a channel by number or label."""
         channel_number = self._resolve_channel_number(media_id)

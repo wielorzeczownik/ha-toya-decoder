@@ -12,8 +12,8 @@ __all__ = [
     "ToyaDecoderApi",
     "ToyaDecoderApiError",
     "ToyaDecoderAuthError",
-    "ToyaDecoderConnectionError",
     "ToyaDecoderChannel",
+    "ToyaDecoderConnectionError",
     "ToyaDecoderDevice",
     "ToyaDecoderState",
 ]

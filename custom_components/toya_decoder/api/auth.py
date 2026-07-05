@@ -34,14 +34,37 @@ def _normalize_token(raw: str) -> str:
     return token
 
 
+_TOKEN_KEYS = (
+    "token",
+    "auth",
+    "authToken",
+    "authorization",
+    "result",
+    "value",
+)
+
+
+def _extract_token_from_mapping(res: dict[str, Any]) -> str | None:
+    """Search a mapping for a token, preferring well-known keys."""
+    for key in _TOKEN_KEYS:
+        if key in res:
+            token = _extract_token_from_value(res[key])
+            if token:
+                return token
+
+    values = list(res.values())
+    if len(values) == 1:
+        return _extract_token_from_value(values[0])
+    return None
+
+
 def _extract_token_from_value(res: Any) -> str | None:
     """Search nested response structures for a token-like value."""
     if res is None:
         return None
 
     if isinstance(res, (str, int, bool)):
-        token = _normalize_token(str(res))
-        return token or None
+        return _normalize_token(str(res)) or None
 
     if isinstance(res, (list, tuple)):
         for item in res:
@@ -51,22 +74,8 @@ def _extract_token_from_value(res: Any) -> str | None:
         return None
 
     if isinstance(res, dict):
-        for key in (
-            "token",
-            "auth",
-            "authToken",
-            "authorization",
-            "result",
-            "value",
-        ):
-            if key in res:
-                token = _extract_token_from_value(res[key])
-                if token:
-                    return token
+        return _extract_token_from_mapping(res)
 
-        values = list(res.values())
-        if len(values) == 1:
-            return _extract_token_from_value(values[0])
     return None
 
 

@@ -3,11 +3,11 @@
 from __future__ import annotations
 
 from contextlib import ExitStack, contextmanager
+from typing import TYPE_CHECKING
 from unittest.mock import patch
 
 from homeassistant.config_entries import SOURCE_REAUTH, SOURCE_USER
 from homeassistant.const import CONF_NAME, CONF_PASSWORD, CONF_USERNAME
-from homeassistant.core import HomeAssistant
 from homeassistant.data_entry_flow import FlowResultType
 from pytest_homeassistant_custom_component.common import MockConfigEntry
 
@@ -24,6 +24,9 @@ from .conftest import (
     MOCK_USERNAME,
     make_mock_api,
 )
+
+if TYPE_CHECKING:
+    from homeassistant.core import HomeAssistant
 
 
 @contextmanager

@@ -13,9 +13,23 @@ extend-exclude = [
 ]
 
 [tool.ruff.lint]
-select = ["E", "F", "W", "I", "B", "UP", "SIM", "C4"]
-ignore = ["E501"]
+select = ["ALL"]
+ignore = [
+  "E501",             # line length is enforced by the formatter
+  "D",                # docstrings are not mandated (matches HA core)
+  "ANN401",           # allow explicit typing.Any where needed
+  "COM812",           # conflicts with the formatter
+  "ISC001",           # conflicts with the formatter
+  "TRY003",           # long messages inside raise
+  "EM101", "EM102",   # string literals in exceptions
+  "PLR0913",          # too many arguments (HA setup signatures)
+  "PLR2004",          # magic value comparisons
+  "FBT001", "FBT002", # boolean positional args (pervasive in HA)
+]
 fixable = ["ALL"]
+
+[tool.ruff.lint.per-file-ignores]
+"tests/**" = ["S101", "PLR2004", "ANN", "SLF001", "ARG"]
 
 [tool.ruff.format]
 quote-style = "double"

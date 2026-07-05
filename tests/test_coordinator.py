@@ -2,12 +2,15 @@
 
 from __future__ import annotations
 
-from homeassistant.core import HomeAssistant
+from typing import TYPE_CHECKING
 
 from custom_components.toya_decoder.api import ToyaDecoderConnectionError
 from custom_components.toya_decoder.coordinator import ToyaDecoderCoordinator
 
 from .conftest import MOCK_DEVICE, make_mock_api
+
+if TYPE_CHECKING:
+    from homeassistant.core import HomeAssistant
 
 
 async def test_coordinator_fetches_devices(hass: HomeAssistant) -> None:
