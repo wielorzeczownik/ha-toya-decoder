@@ -5,7 +5,7 @@ All notable changes to this project are documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
-## [Unreleased]
+## [0.2.1](https://github.com/wielorzeczownik/ha-toya-decoder/compare/v0.2.0...v0.2.1) - 2026-07-05
 
 ### Refactoring
 
@@ -18,6 +18,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Build System
 
+- Split git-cliff into cumulative and release configs ([3fec260](https://github.com/wielorzeczownik/ha-toya-decoder/commit/3fec260e2ec398c01791abea45c8428fd54a7fc7))
+- Split git-cliff into cumulative and release configs ([90aca1b](https://github.com/wielorzeczownik/ha-toya-decoder/commit/90aca1b5f2ebdb2a0815bd1acfcbd1188e3c470e))
 - Update dependency pytest-homeassistant-custom-component to v0.13.344 (#60) ([6fb5d0b](https://github.com/wielorzeczownik/ha-toya-decoder/commit/6fb5d0bf2fcd5a126ef2d98f26d3eb50aebe787e))
 - Update dependency pytest-homeassistant-custom-component to v0.13.343 (#59) ([3b61135](https://github.com/wielorzeczownik/ha-toya-decoder/commit/3b611358069fffbe84496b931c318fe238610826))
 - Update dependency pytest-homeassistant-custom-component to v0.13.342 (#57) ([60ffcfb](https://github.com/wielorzeczownik/ha-toya-decoder/commit/60ffcfbe8b4679808e0510522afc8431438f7a56))
@@ -50,6 +52,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### CI/CD
 
+- Add SHA-256 checksum and provenance attestation for the zip ([6fc228a](https://github.com/wielorzeczownik/ha-toya-decoder/commit/6fc228af83c27203fb81d7d61fb4a0802ace3001))
 - Update actions/setup-python action to v6.3.0 (#58) ([85ab516](https://github.com/wielorzeczownik/ha-toya-decoder/commit/85ab51641b5d39902cf7f651e5e909388f4e2a48))
 - Update softprops/action-gh-release action to v3.0.1 (#54) ([5a64501](https://github.com/wielorzeczownik/ha-toya-decoder/commit/5a645017205bbefb5cc28a59a99fc25bf44a2132))
 - Update actions/checkout action to v7 ([0be87d3](https://github.com/wielorzeczownik/ha-toya-decoder/commit/0be87d3a90dc08ac5274bd101721a9b68922c674))
