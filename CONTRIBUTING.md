@@ -51,6 +51,7 @@ Alternatively, open the repository in VSCode – the included devcontainer provi
 # Python
 ruff check .
 ruff format --check .
+mypy custom_components/toya_decoder
 
 # Shell
 shfmt --diff scripts/
@@ -67,6 +68,8 @@ pytest
 ```bash
 docker run --rm -v "$(pwd):/src" -w /src ghcr.io/astral-sh/ruff check .
 docker run --rm -v "$(pwd):/src" -w /src ghcr.io/astral-sh/ruff format --check .
+
+docker run --rm -v "$(pwd):/src" -w /src python:3.14 sh -c "pip install -q -r requirements_dev.txt && mypy custom_components/toya_decoder"
 
 docker run --rm -v "$(pwd):/src" -w /src mvdan/shfmt --diff scripts/
 
@@ -97,7 +100,7 @@ Keep commits focused on a single concern. If a change touches both logic and tes
 
 - Keep PRs focused on a single concern.
 - Reference any related issue in the PR description.
-- All CI checks must pass before merging: hassfest, HACS, Python linting, shell linting, and Markdown linting.
+- All CI checks must pass before merging: hassfest, HACS, Python linting, type checking (mypy), shell linting, and Markdown linting.
 
 ## Reporting bugs
 
