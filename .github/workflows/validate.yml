@@ -46,12 +46,12 @@ jobs:
           persist-credentials: false
 
       - name: Lint
-        uses: astral-sh/ruff-action@v4.0.0
+        uses: astral-sh/ruff-action@v4.1.0
         with:
           args: check
 
       - name: Format check
-        uses: astral-sh/ruff-action@v4.0.0
+        uses: astral-sh/ruff-action@v4.1.0
         with:
           args: format --check
 
