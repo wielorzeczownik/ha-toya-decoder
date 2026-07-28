@@ -11,64 +11,36 @@ _LOGGER = logging.getLogger(__name__)
 
 
 def _normalize_token(raw: str) -> str:
-    """Normalize token strings returned by XML-RPC responses."""
+    """Strip surrounding whitespace and quoting from a token string."""
     token = raw.strip()
-    if not token:
-        return token
-
-    parts = token.split("=")
-    if len(parts) >= 2:
-        token = "=".join(parts[1:]).strip()
-
-    if token.endswith(";"):
-        token = token[:-1].strip()
-
-    if token.startswith('"') and token.endswith('"') and len(token) >= 2:
+    if len(token) >= 2 and token.startswith('"') and token.endswith('"'):
         token = token[1:-1]
     return token
 
 
-_TOKEN_KEYS = (
-    "token",
-    "auth",
-    "authToken",
-    "authorization",
-    "result",
-    "value",
-)
-
-
-def _extract_token_from_mapping(res: dict[str, Any]) -> str | None:
-    """Search a mapping for a token, preferring well-known keys."""
-    for key in _TOKEN_KEYS:
-        if key in res:
-            token = _extract_token_from_value(res[key])
-            if token:
-                return token
-
-    values = list(res.values())
-    if len(values) == 1:
-        return _extract_token_from_value(values[0])
-    return None
+# GetAuth answers with {"token": "<26 chars>"}
+_TOKEN_KEYS = ("token", "authToken", "auth")
 
 
 def _extract_token_from_value(res: Any) -> str | None:
-    """Search nested response structures for a token-like value."""
-    if res is None:
-        return None
+    """Find the token in a GetAuth response."""
+    if isinstance(res, str):
+        return _normalize_token(res) or None
 
-    if isinstance(res, (str, int, bool)):
-        return _normalize_token(str(res)) or None
+    if isinstance(res, dict):
+        for key in _TOKEN_KEYS:
+            value = res.get(key)
+            if isinstance(value, str):
+                token = _normalize_token(value)
+                if token:
+                    return token
+        return None
 
     if isinstance(res, (list, tuple)):
         for item in res:
-            token = _extract_token_from_value(item)
-            if token:
-                return token
-        return None
-
-    if isinstance(res, dict):
-        return _extract_token_from_mapping(res)
+            nested = _extract_token_from_value(item)
+            if nested:
+                return nested
 
     return None
 
