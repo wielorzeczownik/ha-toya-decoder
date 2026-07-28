@@ -5,6 +5,48 @@ All notable changes to this project are documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [0.2.2](https://github.com/wielorzeczownik/ha-toya-decoder/compare/v0.2.1...v0.2.2) - 2026-07-28
+
+### Bug Fixes
+
+- Stop relaying upstream payloads to callers ([64b2904](https://github.com/wielorzeczownik/ha-toya-decoder/commit/64b2904169235f76e00e1631e57d048fdb69705f))
+- Redact credentials from the client representation ([19cfc44](https://github.com/wielorzeczownik/ha-toya-decoder/commit/19cfc44be0d172c09e6864e5a6e5beaa926063b0))
+
+### Refactoring
+
+- Emit workflow outputs through one helper ([6c4f82c](https://github.com/wielorzeczownik/ha-toya-decoder/commit/6c4f82cc4a4ff24e91bd9a13191d426bde16e0a7))
+
+### Documentation
+
+- List the shell, workflow and Prettier checks ([dc3baee](https://github.com/wielorzeczownik/ha-toya-decoder/commit/dc3baeeb1824f81dd4ce177668d8362b0c978680))
+
+### Testing
+
+- Assert secrets stay out of errors and repr ([e806eb0](https://github.com/wielorzeczownik/ha-toya-decoder/commit/e806eb0b12a5db90f3cb5ba7c917c2a75c9e0738))
+- Lint the test suite like production code ([5a42f75](https://github.com/wielorzeczownik/ha-toya-decoder/commit/5a42f75fa047b1272f5e061125ef53f94b0c247d))
+
+### Styling
+
+- Enforce Prettier on YAML and JSON ([c276119](https://github.com/wielorzeczownik/ha-toya-decoder/commit/c276119397c0f21eeae5b850d08e8b9bc7156bc7))
+
+### Build System
+
+- Update dependency mypy to v2.3.0 ([633574e](https://github.com/wielorzeczownik/ha-toya-decoder/commit/633574e851a0954aed814bfa64b73b3b5967ec76))
+- Update dependency pytest-homeassistant-custom-component to v0.13.346 (#66) ([f7b49f5](https://github.com/wielorzeczownik/ha-toya-decoder/commit/f7b49f552c71d9e2569d846cb5c62fe4f882c9be))
+- Update dependency ruff to v0.15.22 (#65) ([79717bf](https://github.com/wielorzeczownik/ha-toya-decoder/commit/79717bfd802025a7c6b2dcc6ec7d374f3ecd483c))
+- Update dependency mypy to v2.2.0 (#62) ([15909d2](https://github.com/wielorzeczownik/ha-toya-decoder/commit/15909d29a8b3be5339baf54f49439e2f43ca6139))
+- Update dependency pytest-homeassistant-custom-component to v0.13.345 (#61) ([ab9ad2e](https://github.com/wielorzeczownik/ha-toya-decoder/commit/ab9ad2e9a4568aec97dde082c80040057673146b))
+
+### CI/CD
+
+- Pin every action to a commit SHA ([17ce76c](https://github.com/wielorzeczownik/ha-toya-decoder/commit/17ce76c2ed8483df2c7916bc4dd0db63dbc1b486))
+- Add scheduled dependency audit ([26a7745](https://github.com/wielorzeczownik/ha-toya-decoder/commit/26a774518bc2e9f5b6ab513442af04be5b581064))
+- Gate every job behind a path filter ([16fe1dd](https://github.com/wielorzeczownik/ha-toya-decoder/commit/16fe1ddfb70d583b4b76681d6fcf145e33feb7c9))
+- Never cancel an in-flight release ([8868bfd](https://github.com/wielorzeczownik/ha-toya-decoder/commit/8868bfd483150b06918918718e65ccc31d68c56f))
+- Update softprops/action-gh-release action to v3.0.2 ([dfed821](https://github.com/wielorzeczownik/ha-toya-decoder/commit/dfed821632b552038f0ccd818799a783cbf2668a))
+- Update astral-sh/ruff-action action to v4.1.0 ([12474b5](https://github.com/wielorzeczownik/ha-toya-decoder/commit/12474b5ce0034621938d16ba3553090e7f5b7fdf))
+- Update davidanson/markdownlint-cli2-action action to v24 ([f4c927e](https://github.com/wielorzeczownik/ha-toya-decoder/commit/f4c927e157985a8eb4911c81200bf1bfd142a217))
+
 ## [0.2.1](https://github.com/wielorzeczownik/ha-toya-decoder/compare/v0.2.0...v0.2.1) - 2026-07-05
 
 ### Refactoring
@@ -52,6 +94,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### CI/CD
 
+- Add mypy type-checking job ([4022469](https://github.com/wielorzeczownik/ha-toya-decoder/commit/4022469423572f1e31a54ce9f99d90744b3f4fbe))
 - Add SHA-256 checksum and provenance attestation for the zip ([6fc228a](https://github.com/wielorzeczownik/ha-toya-decoder/commit/6fc228af83c27203fb81d7d61fb4a0802ace3001))
 - Update actions/setup-python action to v6.3.0 (#58) ([85ab516](https://github.com/wielorzeczownik/ha-toya-decoder/commit/85ab51641b5d39902cf7f651e5e909388f4e2a48))
 - Update softprops/action-gh-release action to v3.0.1 (#54) ([5a64501](https://github.com/wielorzeczownik/ha-toya-decoder/commit/5a645017205bbefb5cc28a59a99fc25bf44a2132))
