@@ -6,12 +6,18 @@ import logging
 from datetime import timedelta
 from typing import TYPE_CHECKING
 
+from homeassistant.exceptions import ConfigEntryAuthFailed
 from homeassistant.helpers.update_coordinator import (
     DataUpdateCoordinator,
     UpdateFailed,
 )
 
-from .api import ToyaDecoderApi, ToyaDecoderApiError, ToyaDecoderDevice
+from .api import (
+    ToyaDecoderApi,
+    ToyaDecoderApiError,
+    ToyaDecoderAuthError,
+    ToyaDecoderDevice,
+)
 from .const import DOMAIN
 
 if TYPE_CHECKING:
@@ -38,6 +44,8 @@ class ToyaDecoderCoordinator(DataUpdateCoordinator[list[ToyaDecoderDevice]]):
         """Fetch the latest device list from the API."""
         try:
             return await self.api.async_get_devices()
+        except ToyaDecoderAuthError as err:
+            raise ConfigEntryAuthFailed(str(err)) from err
         except ToyaDecoderApiError as err:
             raise UpdateFailed(str(err)) from err
         except Exception as err:

@@ -40,6 +40,19 @@ def test_unparsable_auth_response_never_reaches_the_message() -> None:
     assert "unexpected" not in str(excinfo.value)
 
 
+def test_token_containing_base64_padding_survives_intact() -> None:
+    """Nothing rewrites the credential; `=` is a legal token character."""
+    padded = "c29tZS10b2tlbi12YWx1ZQ=="
+
+    assert extract_token({"token": padded}) == padded
+
+
+def test_status_like_response_does_not_become_a_token() -> None:
+    """A response without a token field raises rather than inventing one."""
+    with pytest.raises(ToyaDecoderAuthError):
+        extract_token({"result": "OK"})
+
+
 def test_upstream_fault_payload_never_reaches_the_message() -> None:
     """The upstream fault body stays out of the error the caller sees."""
     payload = {

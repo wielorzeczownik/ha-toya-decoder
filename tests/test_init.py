@@ -5,13 +5,19 @@ from __future__ import annotations
 from typing import TYPE_CHECKING
 from unittest.mock import MagicMock, patch
 
+from homeassistant.helpers import entity_registry as er
 from pytest_homeassistant_custom_component.common import MockConfigEntry
 
 from custom_components.toya_decoder.const import DOMAIN
 from custom_components.toya_decoder.coordinator import ToyaDecoderCoordinator
 from custom_components.toya_decoder.data import ToyaDecoderData
 
-from .conftest import MOCK_CONFIG_ENTRY_DATA, MOCK_USERNAME, make_mock_api
+from .conftest import (
+    MOCK_CONFIG_ENTRY_DATA,
+    MOCK_SMART_CARD,
+    MOCK_USERNAME,
+    make_mock_api,
+)
 
 if TYPE_CHECKING:
     from contextlib import AbstractContextManager
@@ -45,6 +51,34 @@ async def test_setup_entry_stores_runtime_data(hass: HomeAssistant) -> None:
 
     assert isinstance(entry.runtime_data, ToyaDecoderData)
     assert isinstance(entry.runtime_data.coordinator, ToyaDecoderCoordinator)
+
+
+async def test_entry_scoped_unique_ids_are_migrated(
+    hass: HomeAssistant,
+) -> None:
+    """An existing entity keeps its identity, so its history survives."""
+    entry = MockConfigEntry(
+        domain=DOMAIN,
+        data=MOCK_CONFIG_ENTRY_DATA,
+        unique_id=MOCK_USERNAME,
+    )
+    entry.add_to_hass(hass)
+
+    registry = er.async_get(hass)
+    legacy = registry.async_get_or_create(
+        "media_player",
+        DOMAIN,
+        f"{DOMAIN}_{entry.entry_id}_{MOCK_SMART_CARD}",
+        config_entry=entry,
+    )
+
+    with _patch_api():
+        assert await hass.config_entries.async_setup(entry.entry_id)
+        await hass.async_block_till_done()
+
+    migrated = registry.async_get(legacy.entity_id)
+    assert migrated is not None
+    assert migrated.unique_id == f"{DOMAIN}_{MOCK_SMART_CARD}"
 
 
 async def test_unload_entry(hass: HomeAssistant) -> None:
