@@ -23,7 +23,9 @@ ignore = [
   "TRY003",           # long messages inside raise
   "EM101", "EM102",   # string literals in exceptions
   "PLR0913",          # too many arguments (HA setup signatures)
+  "PLR0917",          # too many positional arguments (same signatures)
   "PLR2004",          # magic value comparisons
+  "CPY001",           # per-file copyright headers (LICENSE covers the repo)
   "FBT001", "FBT002", # boolean positional args (pervasive in HA)
 ]
 fixable = ["ALL"]
