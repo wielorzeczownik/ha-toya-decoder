@@ -90,9 +90,7 @@ async def async_setup_entry(
         fetched = []
     channels = _build_channel_sources(fetched)
     entities = [
-        ToyaLegacyDecoderMediaPlayer(
-            base_name, device, coordinator, entry.entry_id, channels
-        )
+        ToyaLegacyDecoderMediaPlayer(base_name, device, coordinator, channels)
         for device in devices
     ]
     async_add_entities(entities)
@@ -113,14 +111,13 @@ class ToyaLegacyDecoderMediaPlayer(
         base_name: str,
         device: ToyaDecoderDevice,
         coordinator: ToyaDecoderCoordinator,
-        entry_id: str,
         channels: dict[str, ToyaDecoderChannel],
     ) -> None:
         super().__init__(coordinator)
         self._smart_card = device.smart_card
         self._chip_id = device.chip_id
         self._attr_name = f"{base_name} {self._smart_card}"
-        self._attr_unique_id = f"toya_decoder_{entry_id}_{self._smart_card}"
+        self._attr_unique_id = f"{DOMAIN}_{self._smart_card}"
         self._channels = channels
         self._attr_device_info = DeviceInfo(
             identifiers={(DOMAIN, self._chip_id)},
