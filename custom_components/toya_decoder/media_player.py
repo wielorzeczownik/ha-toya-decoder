@@ -149,7 +149,7 @@ class ToyaLegacyDecoderMediaPlayer(
         """Update state based on device status."""
         device = self._device()
         if device is None:
-            self._attr_state = MediaPlayerState.OFF
+            self._attr_state = None
             return
 
         self._attr_state = (

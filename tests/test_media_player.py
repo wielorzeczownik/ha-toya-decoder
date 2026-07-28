@@ -88,6 +88,22 @@ async def test_entity_state_off(hass: HomeAssistant) -> None:
     assert state.state == MediaPlayerState.OFF
 
 
+async def test_missing_device_is_not_reported_as_off(
+    hass: HomeAssistant,
+) -> None:
+    """A decoder absent from the poll is unknown, never off."""
+    api = make_mock_api(devices=[MOCK_DEVICE])
+    _entry, api = await _setup_entry(hass, api)
+
+    api.async_get_devices.return_value = []
+    await _entry.runtime_data.coordinator.async_refresh()
+    await hass.async_block_till_done()
+
+    state = hass.states.get(MOCK_ENTITY_ID)
+    assert state is not None
+    assert state.state != MediaPlayerState.OFF
+
+
 async def test_play_media_by_channel_number(hass: HomeAssistant) -> None:
     """play_media with a numeric string tunes to that channel."""
     api = make_mock_api()
