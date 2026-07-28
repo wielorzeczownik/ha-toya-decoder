@@ -19,6 +19,14 @@
       "matchStrings": ["pip-audit==(?<currentValue>\\d+\\.\\d+\\.\\d+)"],
       "depNameTemplate": "pip-audit",
       "datasourceTemplate": "pypi"
+    },
+    {
+      "customType": "regex",
+      "fileMatch": ["^\\.github/workflows/[^/]+\\.yml$"],
+      "matchStrings": [
+        "# renovate: datasource=(?<datasource>[a-z-]+) depName=(?<depName>\\S+)\\s+version: (?<currentValue>\\S+)"
+      ],
+      "versioningTemplate": "semver"
     }
   ],
   "packageRules": [
