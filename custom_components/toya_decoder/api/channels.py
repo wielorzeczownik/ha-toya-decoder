@@ -4,9 +4,25 @@ from __future__ import annotations
 
 import html
 import re
+from functools import lru_cache
 from typing import Any
 
 from .models import ToyaDecoderChannel
+
+_OBJECT_PATTERN = re.compile(
+    r'<object\b[^>]*type="product"[^>]*id="([^"]+)"[^>]*>([\s\S]*?)</object>',
+    re.IGNORECASE,
+)
+
+
+@lru_cache(maxsize=32)
+def _attr_pattern(key: str) -> re.Pattern[str]:
+    """Return the compiled pattern for one product attribute."""
+    return re.compile(
+        rf'<attr\b[^>]*key="{re.escape(key)}"[^>]*>'
+        r"[\s\S]*?<value>([\s\S]*?)</value>",
+        re.IGNORECASE,
+    )
 
 
 def extract_products_xml(res: Any) -> str:
@@ -30,11 +46,7 @@ def extract_products_xml(res: Any) -> str:
 
 def _extract_attr_value(body: str, key: str) -> str | None:
     """Extract a product attribute value from the XML payload."""
-    pattern = re.compile(
-        rf'<attr\b[^>]*key="{re.escape(key)}"[^>]*>[\s\S]*?<value>([\s\S]*?)</value>',
-        re.IGNORECASE,
-    )
-    match = pattern.search(body)
+    match = _attr_pattern(key).search(body)
     if not match:
         return None
     return html.unescape(match.group(1).strip())
@@ -43,11 +55,7 @@ def _extract_attr_value(body: str, key: str) -> str | None:
 def parse_channels(xml: str) -> list[ToyaDecoderChannel]:
     """Parse channel entries from the GetProducts XML body."""
     out: list[ToyaDecoderChannel] = []
-    pattern = re.compile(
-        r'<object\b[^>]*type="product"[^>]*id="([^"]+)"[^>]*>([\s\S]*?)</object>',
-        re.IGNORECASE,
-    )
-    for match in pattern.finditer(xml):
+    for match in _OBJECT_PATTERN.finditer(xml):
         channel_id = match.group(1)
         body = match.group(2)
         name = _extract_attr_value(body, "name") or _extract_attr_value(
