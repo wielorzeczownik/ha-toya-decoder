@@ -11,7 +11,7 @@ from homeassistant.helpers.update_coordinator import (
     UpdateFailed,
 )
 
-from .api import ToyaDecoderApi, ToyaDecoderDevice
+from .api import ToyaDecoderApi, ToyaDecoderApiError, ToyaDecoderDevice
 from .const import DOMAIN
 
 if TYPE_CHECKING:
@@ -38,5 +38,8 @@ class ToyaDecoderCoordinator(DataUpdateCoordinator[list[ToyaDecoderDevice]]):
         """Fetch the latest device list from the API."""
         try:
             return await self.api.async_get_devices()
-        except Exception as err:
+        except ToyaDecoderApiError as err:
             raise UpdateFailed(str(err)) from err
+        except Exception as err:
+            _LOGGER.debug("Unexpected refresh failure", exc_info=err)
+            raise UpdateFailed("Unexpected error refreshing devices") from err

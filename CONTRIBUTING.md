@@ -22,6 +22,7 @@ A Home Assistant custom integration that exposes your TOYA cable TV decoder as a
 │   └── manifest.json                 integration metadata
 ├── tests/
 │   ├── conftest.py                   shared fixtures and mock helpers
+│   ├── test_api.py                   redaction of credentials in errors and repr
 │   ├── test_config_flow.py           config-flow happy path and error cases
 │   ├── test_coordinator.py           coordinator fetch and failure handling
 │   ├── test_diagnostics.py           credential redaction and output shape
@@ -30,6 +31,7 @@ A Home Assistant custom integration that exposes your TOYA cable TV decoder as a
 └── scripts/
     ├── bump-version.sh               determines the next release version and updates the manifest
     ├── get_manifest_version.py       reads the current version from manifest.json
+    ├── security-audit.sh             runs pip-audit and reports what it could not fix
     └── set_manifest_version.py       writes a new version to manifest.json
 ```
 
@@ -55,9 +57,16 @@ mypy custom_components/toya_decoder
 
 # Shell
 shfmt --diff scripts/
+shellcheck scripts/*.sh
+
+# GitHub Actions workflows
+actionlint
 
 # Markdown
 markdownlint-cli2 "**/*.md"
+
+# YAML, JSON and Markdown formatting
+npx prettier --check .
 
 # Tests
 pytest
@@ -72,6 +81,9 @@ docker run --rm -v "$(pwd):/src" -w /src ghcr.io/astral-sh/ruff format --check .
 docker run --rm -v "$(pwd):/src" -w /src python:3.14 sh -c "pip install -q -r requirements_dev.txt && mypy custom_components/toya_decoder"
 
 docker run --rm -v "$(pwd):/src" -w /src mvdan/shfmt --diff scripts/
+docker run --rm -v "$(pwd):/mnt" -w /mnt koalaman/shellcheck:stable scripts/*.sh
+
+docker run --rm -v "$(pwd):/repo" -w /repo rhysd/actionlint
 
 docker run --rm -v "$(pwd):/workdir" davidanson/markdownlint-cli2 "**/*.md"
 ```
@@ -100,7 +112,7 @@ Keep commits focused on a single concern. If a change touches both logic and tes
 
 - Keep PRs focused on a single concern.
 - Reference any related issue in the PR description.
-- All CI checks must pass before merging: hassfest, HACS, Python linting, type checking (mypy), shell linting, and Markdown linting.
+- All CI checks must pass before merging: hassfest, HACS, Ruff, mypy, tests, shell linting, workflow linting, Prettier, and Markdown linting. Each job is gated on the paths it covers, so unrelated jobs report as skipped.
 
 ## Reporting bugs
 

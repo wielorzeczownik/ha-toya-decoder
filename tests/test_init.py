@@ -3,7 +3,7 @@
 from __future__ import annotations
 
 from typing import TYPE_CHECKING
-from unittest.mock import patch
+from unittest.mock import MagicMock, patch
 
 from pytest_homeassistant_custom_component.common import MockConfigEntry
 
@@ -14,10 +14,14 @@ from custom_components.toya_decoder.data import ToyaDecoderData
 from .conftest import MOCK_CONFIG_ENTRY_DATA, MOCK_USERNAME, make_mock_api
 
 if TYPE_CHECKING:
+    from contextlib import AbstractContextManager
+
     from homeassistant.core import HomeAssistant
 
 
-def _patch_api(api=None):
+def _patch_api(
+    api: MagicMock | None = None,
+) -> AbstractContextManager[MagicMock]:
     if api is None:
         api = make_mock_api()
     return patch(

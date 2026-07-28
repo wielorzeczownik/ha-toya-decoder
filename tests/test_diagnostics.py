@@ -19,7 +19,7 @@ if TYPE_CHECKING:
     from homeassistant.core import HomeAssistant
 
 
-async def _setup_entry(hass: HomeAssistant):
+async def _setup_entry(hass: HomeAssistant) -> MockConfigEntry:
     api = make_mock_api()
     entry = MockConfigEntry(
         domain=DOMAIN,

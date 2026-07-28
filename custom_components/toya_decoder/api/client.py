@@ -4,6 +4,7 @@ from __future__ import annotations
 
 import asyncio
 import hashlib
+import logging
 import socket
 import xmlrpc.client
 from pathlib import Path
@@ -24,6 +25,8 @@ from .transport import make_client
 
 if TYPE_CHECKING:
     from collections.abc import Callable
+
+_LOGGER = logging.getLogger(__name__)
 
 _T = TypeVar("_T")
 
@@ -77,6 +80,14 @@ class ToyaDecoderApi:
         self._timeout_s = timeout_s
         self._token: str | None = None
         self._set_version: str | None = None
+
+    def __repr__(self) -> str:
+        """Return a representation that carries no credentials."""
+        return (
+            f"{type(self).__name__}(endpoint={self._endpoint!r}, "
+            f"device_id={self._device_id!r}, username='<redacted>', "
+            f"password='<redacted>', token='<redacted>')"
+        )
 
     @property
     def endpoint(self) -> str:
@@ -183,19 +194,18 @@ class ToyaDecoderApi:
             res = getattr(client, method)(*params)
             raise_if_auth_fault(res)
         except xmlrpc.client.Fault as err:
+            _LOGGER.debug("XML-RPC fault from %s: %s", method, err)
             if method == "toyago.GetAuth" or is_auth_fault_message(
                 err.faultString
             ):
-                raise ToyaDecoderAuthError(
-                    f"XML-RPC auth fault: {err}"
-                ) from err
-            raise ToyaDecoderApiError(f"XML-RPC fault: {err}") from err
+                raise ToyaDecoderAuthError("XML-RPC auth fault") from err
+            raise ToyaDecoderApiError("XML-RPC fault") from err
         except xmlrpc.client.ProtocolError as err:
-            raise ToyaDecoderConnectionError(
-                f"XML-RPC protocol error: {err}"
-            ) from err
+            _LOGGER.debug("XML-RPC protocol error from %s: %s", method, err)
+            raise ToyaDecoderConnectionError("XML-RPC protocol error") from err
         except OSError as err:
-            raise ToyaDecoderConnectionError(str(err)) from err
+            _LOGGER.debug("Transport error calling %s: %s", method, err)
+            raise ToyaDecoderConnectionError("Could not reach the API") from err
         else:
             return res
 

@@ -3,7 +3,7 @@
 from __future__ import annotations
 
 from typing import TYPE_CHECKING
-from unittest.mock import patch
+from unittest.mock import MagicMock, patch
 
 import pytest
 from homeassistant.components.media_player.const import (
@@ -27,10 +27,14 @@ from .conftest import (
 )
 
 if TYPE_CHECKING:
+    from contextlib import AbstractContextManager
+
     from homeassistant.core import HomeAssistant
 
 
-def _patch_api(api=None):
+def _patch_api(
+    api: MagicMock | None = None,
+) -> AbstractContextManager[MagicMock]:
     if api is None:
         api = make_mock_api()
     return patch(
@@ -39,7 +43,9 @@ def _patch_api(api=None):
     )
 
 
-async def _setup_entry(hass: HomeAssistant, api=None):
+async def _setup_entry(
+    hass: HomeAssistant, api: MagicMock | None = None
+) -> tuple[MockConfigEntry, MagicMock]:
     """Create and load a config entry, return (entry, api)."""
     if api is None:
         api = make_mock_api()

@@ -2,18 +2,12 @@
 
 from __future__ import annotations
 
-import json
+import logging
 from typing import Any
 
 from .errors import ToyaDecoderAuthError
 
-
-def _format_response(res: Any) -> str:
-    """Format a response for diagnostic messages."""
-    try:
-        return json.dumps(res)
-    except TypeError:
-        return repr(res)
+_LOGGER = logging.getLogger(__name__)
 
 
 def _normalize_token(raw: str) -> str:
@@ -83,9 +77,7 @@ def extract_token(res: Any) -> str:
     """Extract a token from a GetAuth response or raise on failure."""
     token = _extract_token_from_value(res)
     if not token:
-        raise ToyaDecoderAuthError(
-            f"Unexpected GetAuth response: {_format_response(res)}"
-        )
+        raise ToyaDecoderAuthError("Unexpected GetAuth response")
     return token
 
 
@@ -136,6 +128,5 @@ def _is_auth_fault(res: Any) -> bool:
 def raise_if_auth_fault(res: Any) -> None:
     """Raise an auth error if the response contains an auth fault."""
     if _is_auth_fault(res):
-        raise ToyaDecoderAuthError(
-            f"User not authorised: {_format_response(res)}"
-        )
+        _LOGGER.debug("Auth fault in response: %r", res)
+        raise ToyaDecoderAuthError("User not authorised")

@@ -4,7 +4,7 @@ from __future__ import annotations
 
 from contextlib import ExitStack, contextmanager
 from typing import TYPE_CHECKING
-from unittest.mock import patch
+from unittest.mock import MagicMock, patch
 
 from homeassistant.config_entries import SOURCE_REAUTH, SOURCE_USER
 from homeassistant.const import CONF_NAME, CONF_PASSWORD, CONF_USERNAME
@@ -26,11 +26,13 @@ from .conftest import (
 )
 
 if TYPE_CHECKING:
+    from collections.abc import Iterator
+
     from homeassistant.core import HomeAssistant
 
 
 @contextmanager
-def _patch_api(api=None):
+def _patch_api(api: MagicMock | None = None) -> Iterator[None]:
     """Patch ToyaDecoderApi in both config_flow and __init__ (HA auto-sets up entry)."""
     if api is None:
         api = make_mock_api()

@@ -10,6 +10,9 @@
 # Generated
 CHANGELOG.md
 
+# Issue template rendered by create-an-issue
+.github/security-advisory-issue.md
+
 # Dependencies
 **/node_modules/
 
