@@ -1,43 +1,58 @@
 {
   "$schema": "https://docs.renovatebot.com/renovate-schema.json",
+  "extends": ["group:monorepos", "group:recommended"],
   "platformAutomerge": true,
   "automergeType": "pr",
   "semanticCommits": "enabled",
   "minimumReleaseAge": "3 days",
+  "customManagers": [
+    {
+      "customType": "regex",
+      "fileMatch": ["^\\.github/workflows/[^/]+\\.yml$"],
+      "matchStrings": ["prettier@(?<currentValue>\\d+\\.\\d+\\.\\d+)"],
+      "depNameTemplate": "prettier",
+      "datasourceTemplate": "npm"
+    },
+    {
+      "customType": "regex",
+      "fileMatch": ["^\\.github/workflows/[^/]+\\.yml$"],
+      "matchStrings": ["pip-audit==(?<currentValue>\\d+\\.\\d+\\.\\d+)"],
+      "depNameTemplate": "pip-audit",
+      "datasourceTemplate": "pypi"
+    }
+  ],
   "packageRules": [
     {
-      "matchUpdateTypes": [
-        "minor",
-        "patch",
-        "pin",
-        "digest"
-      ],
+      "matchUpdateTypes": ["minor", "patch", "pin", "digest"],
       "automerge": true
     },
     {
-      "matchManagers": [
-        "github-actions"
-      ],
+      "matchManagers": ["github-actions"],
+      "pinDigests": true,
       "minimumReleaseAge": "7 days",
       "semanticCommitType": "ci"
     },
     {
-      "matchManagers": [
-        "pip_requirements",
-        "pip-compile",
-        "pipenv"
-      ],
-      "semanticCommitType": "build"
+      "matchManagers": ["github-actions"],
+      "matchUpdateTypes": ["minor", "patch", "digest"],
+      "groupName": "github actions"
     },
     {
-      "matchManagers": [
-        "github-actions"
-      ],
+      "matchManagers": ["github-actions"],
       "matchPackageNames": [
         "actions/upload-artifact",
         "actions/download-artifact"
       ],
       "groupName": "artifact actions"
+    },
+    {
+      "matchManagers": ["pip_requirements"],
+      "semanticCommitType": "build"
+    },
+    {
+      "matchManagers": ["regex"],
+      "matchFileNames": [".github/workflows/**"],
+      "semanticCommitType": "ci"
     }
   ]
 }
