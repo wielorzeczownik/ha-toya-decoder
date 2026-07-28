@@ -5,6 +5,40 @@ All notable changes to this project are documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [0.2.3](https://github.com/wielorzeczownik/ha-toya-decoder/compare/v0.2.2...v0.2.3) - 2026-07-28
+
+### Bug Fixes
+
+- Drop the config entry id from entity unique ids ([7d1f954](https://github.com/wielorzeczownik/ha-toya-decoder/commit/7d1f9542a182ef8349d6cbb1e423ce49aacb2d85))
+- Report a missing decoder as unknown, not off ([5091fca](https://github.com/wielorzeczownik/ha-toya-decoder/commit/5091fcaf55b564404acb734ef72271771d17e1bd))
+- Stop rewriting tokens during extraction ([e0c49b3](https://github.com/wielorzeczownik/ha-toya-decoder/commit/e0c49b348ebdc4150611d0d40922452adf76d08e))
+- Hand rejected credentials to the reauth flow ([d1bb146](https://github.com/wielorzeczownik/ha-toya-decoder/commit/d1bb1463fce2a80534e9800fedbbe8f75fb99c2a))
+
+### Performance
+
+- Compile the product patterns once ([e5254a3](https://github.com/wielorzeczownik/ha-toya-decoder/commit/e5254a34cc7f3245487470a6edc6cf9478b773f9))
+- Reuse one XML-RPC connection per client ([e678f66](https://github.com/wielorzeczownik/ha-toya-decoder/commit/e678f66a1cb7433ff524b034df3075cde5b58e9f))
+
+### Refactoring
+
+- Drop the unreachable flat-string parser ([cd8312c](https://github.com/wielorzeczownik/ha-toya-decoder/commit/cd8312c78b2fb0c4a7fe9daa375496e421fc6fd3))
+
+### Styling
+
+- Ignore CPY001 and PLR0917 promoted out of preview ([fea82e8](https://github.com/wielorzeczownik/ha-toya-decoder/commit/fea82e88c0aa8bd000a8462beb53cd97560c05e4))
+
+### Build System
+
+- Update dependency pytest-homeassistant-custom-component to v0.13.348 ([6430694](https://github.com/wielorzeczownik/ha-toya-decoder/commit/6430694ff0c283389e4a12b511b41f7306296753))
+- Update dependency ruff to v0.16.0 ([c30d95b](https://github.com/wielorzeczownik/ha-toya-decoder/commit/c30d95b4a0309b524ebb777a0c8dbcb247dc6f03))
+
+### CI/CD
+
+- Update actions/setup-python action to v7 ([763ceea](https://github.com/wielorzeczownik/ha-toya-decoder/commit/763ceea98c87bfabc31f6387aec4b4785151758d))
+- Update github actions ([de547b4](https://github.com/wielorzeczownik/ha-toya-decoder/commit/de547b41b4ad1a5ac9453da3996938b6f6ecfbc6))
+- Install actionlint from its own action ([107c651](https://github.com/wielorzeczownik/ha-toya-decoder/commit/107c6516df397c185637c9dbd36096a1fa7d74f5))
+- Emit a single SHA256SUMS manifest ([2324824](https://github.com/wielorzeczownik/ha-toya-decoder/commit/23248242b640e1e71bdd6382f4a39dc39c13d904))
+
 ## [0.2.2](https://github.com/wielorzeczownik/ha-toya-decoder/compare/v0.2.1...v0.2.2) - 2026-07-28
 
 ### Bug Fixes
