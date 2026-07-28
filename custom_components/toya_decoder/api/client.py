@@ -6,6 +6,7 @@ import asyncio
 import hashlib
 import logging
 import socket
+import threading
 import xmlrpc.client
 from pathlib import Path
 from typing import TYPE_CHECKING, Any, TypeVar
@@ -80,6 +81,8 @@ class ToyaDecoderApi:
         self._timeout_s = timeout_s
         self._token: str | None = None
         self._set_version: str | None = None
+        self._lock = threading.RLock()
+        self._client: xmlrpc.client.ServerProxy | None = None
 
     def __repr__(self) -> str:
         """Return a representation that carries no credentials."""
@@ -174,40 +177,53 @@ class ToyaDecoderApi:
         if not self._username or not self._password:
             raise ToyaDecoderAuthError("Missing credentials")
 
-        auth_res = self._call(
-            "toyago.GetAuth", [self._device_id, self._username, self._password]
-        )
-        token = extract_token(auth_res)
+        with self._lock:
+            if self._token:
+                return self._token
 
-        set_version_res = self._call(
-            "toyago.SetVersion",
-            [self._device_id, f"{self._version}-{self._model}", token],
-        )
-        self._token = token
-        self._set_version = str(set_version_res)
-        return token
+            auth_res = self._call(
+                "toyago.GetAuth",
+                [self._device_id, self._username, self._password],
+            )
+            token = extract_token(auth_res)
+
+            set_version_res = self._call(
+                "toyago.SetVersion",
+                [self._device_id, f"{self._version}-{self._model}", token],
+            )
+            self._token = token
+            self._set_version = str(set_version_res)
+            return token
 
     def _call(self, method: str, params: list[Any]) -> Any:
         """Call a raw XML-RPC method and translate failures."""
-        client = make_client(self._endpoint, self._timeout_s)
-        try:
-            res = getattr(client, method)(*params)
-            raise_if_auth_fault(res)
-        except xmlrpc.client.Fault as err:
-            _LOGGER.debug("XML-RPC fault from %s: %s", method, err)
-            if method == "toyago.GetAuth" or is_auth_fault_message(
-                err.faultString
-            ):
-                raise ToyaDecoderAuthError("XML-RPC auth fault") from err
-            raise ToyaDecoderApiError("XML-RPC fault") from err
-        except xmlrpc.client.ProtocolError as err:
-            _LOGGER.debug("XML-RPC protocol error from %s: %s", method, err)
-            raise ToyaDecoderConnectionError("XML-RPC protocol error") from err
-        except OSError as err:
-            _LOGGER.debug("Transport error calling %s: %s", method, err)
-            raise ToyaDecoderConnectionError("Could not reach the API") from err
-        else:
-            return res
+        with self._lock:
+            if self._client is None:
+                self._client = make_client(self._endpoint, self._timeout_s)
+            try:
+                res = getattr(self._client, method)(*params)
+                raise_if_auth_fault(res)
+            except xmlrpc.client.Fault as err:
+                _LOGGER.debug("XML-RPC fault from %s: %s", method, err)
+                if method == "toyago.GetAuth" or is_auth_fault_message(
+                    err.faultString
+                ):
+                    raise ToyaDecoderAuthError("XML-RPC auth fault") from err
+                raise ToyaDecoderApiError("XML-RPC fault") from err
+            except xmlrpc.client.ProtocolError as err:
+                _LOGGER.debug("XML-RPC protocol error from %s: %s", method, err)
+                self._client = None
+                raise ToyaDecoderConnectionError(
+                    "XML-RPC protocol error"
+                ) from err
+            except OSError as err:
+                _LOGGER.debug("Transport error calling %s: %s", method, err)
+                self._client = None
+                raise ToyaDecoderConnectionError(
+                    "Could not reach the API"
+                ) from err
+            else:
+                return res
 
     def _get_pvr_devices(self, token: str) -> list[ToyaDecoderDevice]:
         """Fetch devices for the given auth token."""
