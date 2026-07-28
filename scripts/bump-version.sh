@@ -3,6 +3,15 @@ set -euo pipefail
 
 manifest_path="custom_components/toya_decoder/manifest.json"
 
+emit() {
+  {
+    echo "released=$1"
+    echo "version=$2"
+    echo "tag=$3"
+    echo "commit_changes=$4"
+  } >>"$GITHUB_OUTPUT"
+}
+
 current_version=$(python3 scripts/get_manifest_version.py "$manifest_path")
 
 next_tag=$(echo "${CLIFF_BUMPED_VERSION:-}" | tr -d '[:space:]')
@@ -24,43 +33,28 @@ latest_tag=$(git describe --tags --abbrev=0 2>/dev/null || true)
 
 if [[ "$has_current_tag" == "false" && -z "$latest_tag" ]]; then
   echo "No existing tags found. Creating initial release for ${current_tag}."
-  echo "released=true" >>"$GITHUB_OUTPUT"
-  echo "version=$current_version" >>"$GITHUB_OUTPUT"
-  echo "tag=$current_tag" >>"$GITHUB_OUTPUT"
-  echo "commit_changes=false" >>"$GITHUB_OUTPUT"
+  emit true "$current_version" "$current_tag" false
   exit 0
 fi
 
 if [[ "$next_version" == "$current_version" ]]; then
   if [[ "$has_current_tag" == "false" ]]; then
     echo "No bump from git-cliff, but no current tag exists. Creating release for ${current_tag}."
-    echo "released=true" >>"$GITHUB_OUTPUT"
-    echo "version=$current_version" >>"$GITHUB_OUTPUT"
-    echo "tag=$current_tag" >>"$GITHUB_OUTPUT"
-    echo "commit_changes=false" >>"$GITHUB_OUTPUT"
+    emit true "$current_version" "$current_tag" false
     exit 0
   fi
 
   echo "No user-facing commits since ${current_tag}. Nothing to release."
-  echo "released=false" >>"$GITHUB_OUTPUT"
-  echo "version=$current_version" >>"$GITHUB_OUTPUT"
-  echo "tag=$current_tag" >>"$GITHUB_OUTPUT"
-  echo "commit_changes=false" >>"$GITHUB_OUTPUT"
+  emit false "$current_version" "$current_tag" false
   exit 0
 fi
 
 if [[ "$(printf '%s\n' "$current_version" "$next_version" | sort -V | tail -1)" != "$next_version" ]]; then
   echo "git-cliff returned $next_version which is lower than current $current_version. Nothing to release."
-  echo "released=false" >>"$GITHUB_OUTPUT"
-  echo "version=$current_version" >>"$GITHUB_OUTPUT"
-  echo "tag=$current_tag" >>"$GITHUB_OUTPUT"
-  echo "commit_changes=false" >>"$GITHUB_OUTPUT"
+  emit false "$current_version" "$current_tag" false
   exit 0
 fi
 
 python3 scripts/set_manifest_version.py "$manifest_path" "$next_version"
 
-echo "released=true" >>"$GITHUB_OUTPUT"
-echo "version=$next_version" >>"$GITHUB_OUTPUT"
-echo "tag=$next_tag" >>"$GITHUB_OUTPUT"
-echo "commit_changes=true" >>"$GITHUB_OUTPUT"
+emit true "$next_version" "$next_tag" true
