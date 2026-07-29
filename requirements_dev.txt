@@ -1,7 +1,3 @@
---requirement requirements_lint.txt
+-r requirements_lint.txt
 mypy==2.3.0
 pytest-homeassistant-custom-component==0.13.348
-# pip-audit: subdependency explicitly fixed
-pillow==12.3.0
-    # pip-audit: subdependency explicitly fixed
-pyjwt==2.13.0

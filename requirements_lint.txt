@@ -1,5 +1,1 @@
 ruff==0.16.0
-# pip-audit: subdependency explicitly fixed
-pillow==12.3.0
-    # pip-audit: subdependency explicitly fixed
-pyjwt==2.13.0
