@@ -21,6 +21,7 @@ jobs:
     outputs:
       integration: ${{ steps.filter.outputs.integration }}
       python: ${{ steps.filter.outputs.python }}
+      deps: ${{ steps.filter.outputs.deps }}
       shell: ${{ steps.filter.outputs.shell }}
       markdown: ${{ steps.filter.outputs.markdown }}
       format: ${{ steps.filter.outputs.format }}
@@ -42,6 +43,11 @@ jobs:
             integration:
               - *python
               - 'hacs.json'
+            deps:
+              - '.github/workflows/validate.yml'
+              - 'pyproject.toml'
+              - 'requirements_dev.txt'
+              - 'requirements_lint.txt'
             shell:
               - '.github/workflows/validate.yml'
               - 'scripts/**'
@@ -158,6 +164,43 @@ jobs:
 
       - name: Run tests
         run: pytest --cov=custom_components/toya_decoder --cov-report=term-missing
+
+  pip-audit:
+    name: Pip audit
+    needs: changes
+    if: ${{ needs.changes.outputs.deps == 'true' }}
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - name: Checkout
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          persist-credentials: false
+
+      - name: Set up Python
+        uses: actions/setup-python@5fda3b95a4ea91299a34e894583c3862153e4b97 # v7.0.0
+        with:
+          python-version: '3.14'
+
+      - name: Install pip-audit
+        run: pip install pip-audit==2.10.1
+
+      - name: Pip audit
+        shell: bash
+        run: |
+          set -uo pipefail
+          requirements=(--requirement requirements_dev.txt --requirement requirements_lint.txt)
+          if pip-audit "${requirements[@]}" --desc 2>&1 | tee audit.log; then
+            exit 0
+          fi
+          echo "::warning title=pip-audit::Advisories found – see the job summary. Not blocking this pull request."
+          {
+            echo "### pip-audit findings"
+            echo
+            echo '```text'
+            cat audit.log
+            echo '```'
+          } >>"$GITHUB_STEP_SUMMARY"
 
   shell-lint:
     name: Shell (shfmt + shellcheck)
