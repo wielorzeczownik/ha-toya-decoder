@@ -10,5 +10,5 @@ decision.
 ## Audit output
 
 ```text
-{{{ env.AUDIT_REPORT }}}
+{{ env.AUDIT_REPORT }}
 ```
