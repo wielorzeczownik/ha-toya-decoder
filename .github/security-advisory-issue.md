@@ -1,7 +1,6 @@
 ---
 title: Unresolved security advisories
 labels: security-advisory
-assignees: {{ env.REPO_OWNER }}
 ---
 
 `pip-audit` reports advisories that `pip-audit --fix` could not resolve
