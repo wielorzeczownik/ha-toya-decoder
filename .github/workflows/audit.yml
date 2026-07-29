@@ -7,7 +7,6 @@ on:
 
 concurrency:
   group: security-audit
-  # Two overlapping runs would both push a fixed requirements file and race.
   cancel-in-progress: false
 
 permissions: {}
@@ -15,14 +14,16 @@ permissions: {}
 jobs:
   audit:
     name: Audit dependencies
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-24.04
     timeout-minutes: 20
     permissions:
-      contents: write
+      contents: read
       issues: write
     steps:
       - name: Checkout
         uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          persist-credentials: false
 
       - name: Set up Python
         uses: actions/setup-python@5fda3b95a4ea91299a34e894583c3862153e4b97 # v7.0.0
@@ -36,15 +37,6 @@ jobs:
         id: audit
         shell: bash
         run: bash scripts/security-audit.sh
-
-      - name: Commit fixed requirements
-        if: ${{ steps.audit.outputs.changed == 'true' }}
-        uses: EndBug/add-and-commit@290ea2c423ad77ca9c62ae0f5b224379612c0321 # v10.0.0
-        with:
-          add: 'requirements_dev.txt requirements_lint.txt'
-          default_author: github_actions
-          message: 'fix(deps): resolve audit advisories'
-          push: true
 
       - name: Create issue
         if: ${{ steps.audit.outputs.unresolved == 'true' }}

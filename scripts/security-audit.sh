@@ -22,27 +22,11 @@ emit_report() {
   } >>"$GITHUB_OUTPUT"
 }
 
-if pip-audit "${requirements[@]}" --desc 2>&1 | tee "$report"; then
-  emit changed false
-  emit unresolved false
-  emit_report
-  exit 0
-fi
-
-echo "Advisories found, attempting pip-audit --fix"
-pip-audit "${requirements[@]}" --fix || echo "pip-audit --fix could not resolve everything"
-
-changed=false
-if ! git diff --quiet -- requirements_dev.txt requirements_lint.txt; then
-  changed=true
-fi
-
 unresolved=true
 if pip-audit "${requirements[@]}" --desc 2>&1 | tee "$report"; then
   unresolved=false
 fi
 
-emit changed "$changed"
 emit unresolved "$unresolved"
 emit_report
-echo "requirements changed: $changed, advisories unresolved: $unresolved"
+echo "advisories unresolved: $unresolved"
