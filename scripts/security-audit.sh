@@ -13,12 +13,16 @@ emit() {
 emit_report() {
   {
     echo 'report<<AUDIT_REPORT_EOF'
-    cat "$report"
+    if [[ -s "$report" ]]; then
+      cat "$report"
+    else
+      echo 'pip-audit produced no output, see the workflow logs.'
+    fi
     echo 'AUDIT_REPORT_EOF'
   } >>"$GITHUB_OUTPUT"
 }
 
-if pip-audit "${requirements[@]}" --desc | tee "$report"; then
+if pip-audit "${requirements[@]}" --desc 2>&1 | tee "$report"; then
   emit changed false
   emit unresolved false
   emit_report
@@ -34,7 +38,7 @@ if ! git diff --quiet -- requirements_dev.txt requirements_lint.txt; then
 fi
 
 unresolved=true
-if pip-audit "${requirements[@]}" --desc | tee "$report"; then
+if pip-audit "${requirements[@]}" --desc 2>&1 | tee "$report"; then
   unresolved=false
 fi
 
