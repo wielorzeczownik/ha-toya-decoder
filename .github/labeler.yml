@@ -9,6 +9,7 @@ dependencies:
       - any-glob-to-any-file:
           - 'pyproject.toml'
           - 'requirements_*.txt'
+          - 'hacs.json'
           - 'renovate.json'
 
 ci:
