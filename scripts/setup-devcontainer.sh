@@ -17,11 +17,12 @@ fi
 python3 -m pip install --upgrade uv
 uv pip install --system -r requirements_dev.txt
 
-if ! python3 - <<'PY'; then
+if ! python3 - <<'PY'
 try:
     import aiousbwatcher  # noqa: F401
 except ImportError:
     raise SystemExit(1)
 PY
+then
   python3 -m pip install aiousbwatcher==1.1.1
 fi
