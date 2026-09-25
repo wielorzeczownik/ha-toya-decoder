@@ -234,6 +234,7 @@ async def test_reconfigure_success(hass: HomeAssistant) -> None:
             result["flow_id"],
             user_input={CONF_PASSWORD: "newpassword", CONF_NAME: MOCK_NAME},
         )
+        await hass.async_block_till_done()
 
     assert result["type"] == FlowResultType.ABORT
     assert result["reason"] == "reconfigure_successful"
