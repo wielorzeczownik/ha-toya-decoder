@@ -78,7 +78,7 @@ jobs:
           persist-credentials: false
 
       - name: Run hassfest
-        uses: home-assistant/actions/hassfest@58bff37c8947f690ace498be413a9b78d6f30f93 # master
+        uses: home-assistant/actions/hassfest@06749dd8c0b54f350bc69c8752456cee498808a3 # master
 
   hacs:
     name: HACS
@@ -197,7 +197,7 @@ jobs:
           persist-credentials: false
 
       - name: Install shfmt and shellcheck
-        uses: taiki-e/install-action@dfae9bf3d6f6c6f20ef4ebb3486c01a51341ff12 # v2.87.18
+        uses: taiki-e/install-action@83ac0ad63c0167e6f06796fab0fce28db1bf3db0 # v2.87.22
         with:
           tool: shfmt,shellcheck
 
