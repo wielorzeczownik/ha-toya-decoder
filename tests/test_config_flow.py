@@ -26,13 +26,13 @@ from .conftest import (
 )
 
 if TYPE_CHECKING:
-    from collections.abc import Iterator
+    from collections.abc import Generator
 
     from homeassistant.core import HomeAssistant
 
 
 @contextmanager
-def _patch_api(api: MagicMock | None = None) -> Iterator[None]:
+def _patch_api(api: MagicMock | None = None) -> Generator[None]:
     """Patch ToyaDecoderApi in both config_flow and __init__ (HA auto-sets up entry)."""
     if api is None:
         api = make_mock_api()
