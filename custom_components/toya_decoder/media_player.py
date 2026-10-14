@@ -5,13 +5,11 @@ from __future__ import annotations
 import logging
 from typing import TYPE_CHECKING
 
-from homeassistant.components.media_player import (
-    MediaPlayerDeviceClass,
-    MediaPlayerEntity,
-)
+from homeassistant.components.media_player import MediaPlayerEntity
 from homeassistant.components.media_player.browse_media import BrowseMedia
 from homeassistant.components.media_player.const import (
     MediaClass,
+    MediaPlayerDeviceClass,
     MediaPlayerEntityFeature,
     MediaPlayerState,
     MediaType,
