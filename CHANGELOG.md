@@ -5,6 +5,114 @@ All notable changes to this project are documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [0.2.4](https://github.com/wielorzeczownik/ha-toya-decoder/compare/v0.2.3...v0.2.4) - 2026-10-14
+
+### Bug Fixes
+
+- Adapt typing to Home Assistant 2026.10 probatio schemas ([4eb48d8](https://github.com/wielorzeczownik/ha-toya-decoder/commit/4eb48d8e6c5b7edf21d8970a16ea7532e0a3ce70))
+- Restore plain @mentions for human authors so avatars render ([4ea5459](https://github.com/wielorzeczownik/ha-toya-decoder/commit/4ea5459fd2b375ce1f5bcd62d606403b3bb8b8da))
+- Link bot authors and pull requests in the release notes ([d69750d](https://github.com/wielorzeczownik/ha-toya-decoder/commit/d69750d1042a3764ddd9fe6a037eea9db3ded991))
+- Cover every dependency manifest in the label rules ([3253914](https://github.com/wielorzeczownik/ha-toya-decoder/commit/325391419c2180bd1f52befaa5636f8d8339c1eb))
+- Drop the pillow and pyjwt pins home assistant cannot satisfy ([e873f03](https://github.com/wielorzeczownik/ha-toya-decoder/commit/e873f038d5e6e8ed35e2c95ee1681339d7a8b145))
+- Capture pip-audit stderr in the advisory report ([c594b5c](https://github.com/wielorzeczownik/ha-toya-decoder/commit/c594b5c9b551f047eb5e2f7a8b05fdcf692ca3ec))
+- Repair the security advisory issue template ([3e67e42](https://github.com/wielorzeczownik/ha-toya-decoder/commit/3e67e42b2ac017b0f89b158fee3902c2228bc79e))
+- Resolve audit advisories ([d47cfd1](https://github.com/wielorzeczownik/ha-toya-decoder/commit/d47cfd11b475ef4661bd1a226e2e5a645d64230d))
+
+### Refactoring
+
+- Collapse the two assign steps into one ([993f6d5](https://github.com/wielorzeczownik/ha-toya-decoder/commit/993f6d52ed6927fe8c3a056125323e1605ed5f15))
+
+### Documentation
+
+- Drop the redundant comment above commit_preprocessors ([9d44157](https://github.com/wielorzeczownik/ha-toya-decoder/commit/9d44157f3264b3b5fb451c7daa18783f0c1bb6ec))
+
+### Styling
+
+- Drop the no-op whitespace trim inside the profile url ([36352e6](https://github.com/wielorzeczownik/ha-toya-decoder/commit/36352e6d512a9141a18aa03adfb0814b4ebf2060))
+
+### Build System
+
+- Update dependency ruff to v0.17.0 (#139) ([e39e095](https://github.com/wielorzeczownik/ha-toya-decoder/commit/e39e095c04fbe1fa3bbc26d6133ae8b2cf39685d))
+- Update dependency mypy to v2.4.0 (#138) ([9e799e7](https://github.com/wielorzeczownik/ha-toya-decoder/commit/9e799e77179155eb59d1e4303f12c6bda4813e3a))
+- Update dependency ruff to v0.16.10 (#137) ([1ae7f4c](https://github.com/wielorzeczownik/ha-toya-decoder/commit/1ae7f4c75d0a56809ca1f6200541fb42dbe7e721))
+- Update dependency pytest-homeassistant-custom-component to v0.13.367 (#134) ([7d5b361](https://github.com/wielorzeczownik/ha-toya-decoder/commit/7d5b361b3c5e7cddbabaf9e59347de931893acd7))
+- Update dependency ruff to v0.16.9 (#132) ([1fb4056](https://github.com/wielorzeczownik/ha-toya-decoder/commit/1fb40563616737aa18e06298b24c1ff0e3b68090))
+- Update dependency pytest-homeassistant-custom-component to v0.13.366 (#128) ([947cb13](https://github.com/wielorzeczownik/ha-toya-decoder/commit/947cb133a664b3270167b10621435aa886bd5054))
+- Update dependency ruff to v0.16.8 (#126) ([079f9ed](https://github.com/wielorzeczownik/ha-toya-decoder/commit/079f9ed73ca6b75a273cd6b15519ba537d56cc9c))
+- Update dependency pytest-homeassistant-custom-component to v0.13.365 (#124) ([670260a](https://github.com/wielorzeczownik/ha-toya-decoder/commit/670260a11d12bf40210f43e25dcd12e2cf2200a8))
+- Update dependency pytest-homeassistant-custom-component to v0.13.364 (#122) ([0ec064e](https://github.com/wielorzeczownik/ha-toya-decoder/commit/0ec064eb97825e7917205026ab39ade51f4afb65))
+- Update dependency ruff to v0.16.7 (#123) ([21fc212](https://github.com/wielorzeczownik/ha-toya-decoder/commit/21fc212a8099610adcfd4e0cbd95c6e317fd7a03))
+- Update dependency pytest-homeassistant-custom-component to v0.13.363 (#119) ([434f4c5](https://github.com/wielorzeczownik/ha-toya-decoder/commit/434f4c5e01da082c483c24e4e8c117643783404d))
+- Update dependency ruff to v0.16.6 (#120) ([8c4a085](https://github.com/wielorzeczownik/ha-toya-decoder/commit/8c4a085a67ac3e6df6e80b9f4b83f3f7899d1a64))
+- Update dependency pytest-homeassistant-custom-component to v0.13.362 (#116) ([73c224b](https://github.com/wielorzeczownik/ha-toya-decoder/commit/73c224b66df6f40d3029f4984e0a21e09a1d9bdf))
+- Update dependency pytest-homeassistant-custom-component to v0.13.361 (#113) ([7ca81a6](https://github.com/wielorzeczownik/ha-toya-decoder/commit/7ca81a6536ce5a33f0f691d29c20f8ba51e30fad))
+- Update dependency pytest-homeassistant-custom-component to v0.13.359 (#111) ([586105f](https://github.com/wielorzeczownik/ha-toya-decoder/commit/586105f9c67eaf764107ca3e853e2ec126abfcbd))
+- Update dependency ruff to v0.16.5 (#109) ([98f5dfe](https://github.com/wielorzeczownik/ha-toya-decoder/commit/98f5dfe2a9d62a25684bd890cc10794b5e0f3c40))
+- Update dependency pytest-homeassistant-custom-component to v0.13.358 (#108) ([749789e](https://github.com/wielorzeczownik/ha-toya-decoder/commit/749789e39571b72fc28349e3ee2ccefce783dfd5))
+- Update dependency ruff to v0.16.4 (#104) ([83426e9](https://github.com/wielorzeczownik/ha-toya-decoder/commit/83426e951d7b7b20cfeb3cd5fd6648ba50f63308))
+- Update dependency pytest-homeassistant-custom-component to v0.13.357 (#105) ([9ccea5f](https://github.com/wielorzeczownik/ha-toya-decoder/commit/9ccea5fb6a217a43700f9c82ba90a3dac0965036))
+- Update dependency pytest-homeassistant-custom-component to v0.13.356 (#101) ([78e989b](https://github.com/wielorzeczownik/ha-toya-decoder/commit/78e989b3b06ac86acb39952cb52af4851fa7cec3))
+- Update dependency mypy to v2.3.1 (#100) ([0f83b8f](https://github.com/wielorzeczownik/ha-toya-decoder/commit/0f83b8f6ccadb2fd9c0bd13aab4439ec25c4cdcd))
+- Update dependency ruff to v0.16.3 (#99) ([e3c547e](https://github.com/wielorzeczownik/ha-toya-decoder/commit/e3c547e45e13a1327aab4704c300755c412ad897))
+- Update dependency pytest-homeassistant-custom-component to v0.13.355 (#98) ([c78c3a9](https://github.com/wielorzeczownik/ha-toya-decoder/commit/c78c3a911821119eaeb95fcd556a665de62b5d62))
+- Update dependency ruff to v0.16.2 (#97) ([16d3d5f](https://github.com/wielorzeczownik/ha-toya-decoder/commit/16d3d5f919721f657c54ac245c37ed4bd8960783))
+- Update dependency pytest-homeassistant-custom-component to v0.13.354 (#96) ([2e9ed15](https://github.com/wielorzeczownik/ha-toya-decoder/commit/2e9ed15bde28bbac16db33116fc1ccde343e9be9))
+- Update dependency pytest-homeassistant-custom-component to v0.13.353 (#93) ([ba7af22](https://github.com/wielorzeczownik/ha-toya-decoder/commit/ba7af22077ed53eb6303166d911b51a905ae5757))
+- Update dependency pytest-homeassistant-custom-component to v0.13.351 (#89) ([8fca12b](https://github.com/wielorzeczownik/ha-toya-decoder/commit/8fca12bbaa1d4e7ea822a883cbc59f11d6384d2e))
+- Update dependency pytest-homeassistant-custom-component to v0.13.350 (#87) ([114bb2d](https://github.com/wielorzeczownik/ha-toya-decoder/commit/114bb2da2e38f736a9423f030e472586f536b57a))
+- Update dependency ruff to v0.16.1 (#86) ([1fa0141](https://github.com/wielorzeczownik/ha-toya-decoder/commit/1fa0141558652fc9e938531af0f470ddd0bf43d7))
+- Update dependency pytest-homeassistant-custom-component to v0.13.349 (#84) ([695fcb9](https://github.com/wielorzeczownik/ha-toya-decoder/commit/695fcb91c2c27e995586c611a8a12e11a18bacc2))
+
+### CI/CD
+
+- Update artifact actions (#142) ([480677e](https://github.com/wielorzeczownik/ha-toya-decoder/commit/480677e74d3bb6a2a867d3a4f3deb07ef117d9cf))
+- Update dependency prettier to v3.9.10 (#140) ([6b21a5c](https://github.com/wielorzeczownik/ha-toya-decoder/commit/6b21a5c02e58e15fb732e9142e3eee2b00547e2b))
+- Update taiki-e/install-action action to v2.87.18 (#133) ([7dc13bd](https://github.com/wielorzeczownik/ha-toya-decoder/commit/7dc13bd8a0002a5266ae7e44d904248137a1dd3f))
+- Update github actions (#129) ([763c5ea](https://github.com/wielorzeczownik/ha-toya-decoder/commit/763c5ea5b03345ff804004b847730a275d1d0b59))
+- Update dependency prettier to v3.9.9 (#130) ([1025aeb](https://github.com/wielorzeczownik/ha-toya-decoder/commit/1025aeb24b3fb9076d5448262f58191a086eccf2))
+- Update github actions (#121) ([9dd91b2](https://github.com/wielorzeczownik/ha-toya-decoder/commit/9dd91b267845d3992972c42ff6854a17e917653e))
+- Update dependency prettier to v3.9.8 (#127) ([2d58b8f](https://github.com/wielorzeczownik/ha-toya-decoder/commit/2d58b8ff395d0b3e326c66029ddca73430b6d20d))
+- Update dependency prettier to v3.9.7 (#125) ([5521ed5](https://github.com/wielorzeczownik/ha-toya-decoder/commit/5521ed5d41fc62401aeb171aa1baed21150007c3))
+- Update softprops/action-gh-release action to v3.0.3 (#118) ([29f9a35](https://github.com/wielorzeczownik/ha-toya-decoder/commit/29f9a35884f6a92240882ac512ed86fed3039a19))
+- Update taiki-e/install-action action to v2.87.1 (#117) ([a1313c9](https://github.com/wielorzeczownik/ha-toya-decoder/commit/a1313c95c39ef20cb5a868dbb87c5ddbea04c9a0))
+- Update taiki-e/install-action action to v2.87.0 (#115) ([87d2f91](https://github.com/wielorzeczownik/ha-toya-decoder/commit/87d2f9187a0a142a8ec2bb7b2768b09822f733aa))
+- Update taiki-e/install-action action to v2.86.8 (#114) ([248fb67](https://github.com/wielorzeczownik/ha-toya-decoder/commit/248fb67872ce66331b8e6635c66498fa8b400252))
+- Update taiki-e/install-action action to v2.86.7 (#112) ([06d9a9b](https://github.com/wielorzeczownik/ha-toya-decoder/commit/06d9a9bdebf72e75e50522ce61e2bb6ef353c4b0))
+- Update taiki-e/install-action action to v2.86.6 (#110) ([d727d43](https://github.com/wielorzeczownik/ha-toya-decoder/commit/d727d438cb2fbae0a22cf01f6461e8d4bd0ddd36))
+- Update taiki-e/install-action action to v2.86.4 (#107) ([61514d0](https://github.com/wielorzeczownik/ha-toya-decoder/commit/61514d0639f935db34edb894884ca884f5a1e1c2))
+- Update taiki-e/install-action action to v2.86.3 (#106) ([bf4b785](https://github.com/wielorzeczownik/ha-toya-decoder/commit/bf4b785cd65a07762e410cc458109d15c9241c34))
+- Update taiki-e/install-action action to v2.86.1 (#103) ([d09735f](https://github.com/wielorzeczownik/ha-toya-decoder/commit/d09735ffa99e2d6b17b27896923aa70cf6d0abb9))
+- Update taiki-e/install-action action to v2.85.12 (#102) ([5e06652](https://github.com/wielorzeczownik/ha-toya-decoder/commit/5e06652b6a50ab3b408dce7e6f41dee5b068a5a7))
+- Update github actions (#95) ([6c0b250](https://github.com/wielorzeczownik/ha-toya-decoder/commit/6c0b250159135fa3331abed07efea8703b58cc89))
+- Update taiki-e/install-action action to v2.85.5 (#94) ([029b5dc](https://github.com/wielorzeczownik/ha-toya-decoder/commit/029b5dc36f9104b0cc674b1b5500155c3361d526))
+- Update taiki-e/install-action action to v2.85.4 (#92) ([aff4b79](https://github.com/wielorzeczownik/ha-toya-decoder/commit/aff4b7935d00a156124232ab7ffc7fd6db455578))
+- Update taiki-e/install-action action to v2.85.3 (#90) ([e13d342](https://github.com/wielorzeczownik/ha-toya-decoder/commit/e13d34290341f025d4ca429782b6ace4e83cc65e))
+- Publish through a deployment environment ([e5900b6](https://github.com/wielorzeczownik/ha-toya-decoder/commit/e5900b669818803eea0d41c7e1547e542f754382))
+- Update taiki-e/install-action action to v2.85.2 (#85) ([8c6c30b](https://github.com/wielorzeczownik/ha-toya-decoder/commit/8c6c30bcb9a19aaa74922610abf0ceff342c4372))
+- Update taiki-e/install-action action to v2.85.1 (#83) ([07bba28](https://github.com/wielorzeczownik/ha-toya-decoder/commit/07bba2822f699bbcb2dfb0340c454235de7aa87b))
+- Sign bot commits via GitHub API (qoomon create-commit/create-tag) ([eea1b92](https://github.com/wielorzeczownik/ha-toya-decoder/commit/eea1b92526bd419baa3912dc2c06cbce8a237189))
+- Update taiki-e/install-action action to v2.85.0 ([d8edf1d](https://github.com/wielorzeczownik/ha-toya-decoder/commit/d8edf1deb1191084fa2a145ab170e529f110b5f3))
+- Derive the version bump from cliff.toml ([5e9f207](https://github.com/wielorzeczownik/ha-toya-decoder/commit/5e9f2070a2c1ca0bfc50a6ccf07079f2e7ccbb2f))
+- Fall back to a placeholder when a release has no user-facing commits ([85a3193](https://github.com/wielorzeczownik/ha-toya-decoder/commit/85a3193d42aa2d033b68d9ae37bb2f4a29b7063d))
+- Update taiki-e/install-action action to v2.84.1 (#80) ([4d962fe](https://github.com/wielorzeczownik/ha-toya-decoder/commit/4d962fe7c0eb639311a8d85c8ae87c90853215bc))
+- Report advisories instead of auto-committing pip-audit fixes ([b63740b](https://github.com/wielorzeczownik/ha-toya-decoder/commit/b63740b693153783c7362e66dcbef99eac321604))
+- Merge the mypy and test jobs and pin the runner image ([05e1f5c](https://github.com/wielorzeczownik/ha-toya-decoder/commit/05e1f5c60d94c821989f95f67d2d0e2cbacbd424))
+- Audit dependencies on pull requests ([9a9e490](https://github.com/wielorzeczownik/ha-toya-decoder/commit/9a9e4900f60fef94ceb1cdb9e821ba7a22617fc3))
+- Pass the advisory assignee as an action input ([0089fde](https://github.com/wielorzeczownik/ha-toya-decoder/commit/0089fded5cb2575b7edd1168575e85d969965519))
+
+### Dependencies
+
+- Update dependency python to v3.15.0 (#141) ([f3b8be8](https://github.com/wielorzeczownik/ha-toya-decoder/commit/f3b8be8849157f757c707bb63124327356a19743))
+
+### Miscellaneous
+
+- Enable vulnerabilityAlerts (#131) ([a3b9ea3](https://github.com/wielorzeczownik/ha-toya-decoder/commit/a3b9ea37bfefc0c328f0572654aee42c091ac750))
+- Shrink the README logo from 88 KB to 10 KB ([f5af9ca](https://github.com/wielorzeczownik/ha-toya-decoder/commit/f5af9ca26c1d87ea42bae29f9ba5b773ec63b133))
+
+### Other
+
+- Ci/labels and automation (#91) ([c6ca2cd](https://github.com/wielorzeczownik/ha-toya-decoder/commit/c6ca2cd335ff1dbe0f4de049693e84f6753b2625))
+
 ## [0.2.3](https://github.com/wielorzeczownik/ha-toya-decoder/compare/v0.2.2...v0.2.3) - 2026-07-28
 
 ### Bug Fixes
@@ -80,6 +188,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Update softprops/action-gh-release action to v3.0.2 ([dfed821](https://github.com/wielorzeczownik/ha-toya-decoder/commit/dfed821632b552038f0ccd818799a783cbf2668a))
 - Update astral-sh/ruff-action action to v4.1.0 ([12474b5](https://github.com/wielorzeczownik/ha-toya-decoder/commit/12474b5ce0034621938d16ba3553090e7f5b7fdf))
 - Update davidanson/markdownlint-cli2-action action to v24 ([f4c927e](https://github.com/wielorzeczownik/ha-toya-decoder/commit/f4c927e157985a8eb4911c81200bf1bfd142a217))
+- Add mypy type-checking job ([4022469](https://github.com/wielorzeczownik/ha-toya-decoder/commit/4022469423572f1e31a54ce9f99d90744b3f4fbe))
 
 ## [0.2.1](https://github.com/wielorzeczownik/ha-toya-decoder/compare/v0.2.0...v0.2.1) - 2026-07-05
 
@@ -91,6 +200,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Documentation
 
 - Expand project structure section ([201e0c8](https://github.com/wielorzeczownik/ha-toya-decoder/commit/201e0c873d44ba4c58bd081637eb9aadc0285be5))
+
+### Testing
+
+- Resolve ruff lint errors in test suite ([407411e](https://github.com/wielorzeczownik/ha-toya-decoder/commit/407411ec1f9c2299c2f04e0a98f028265d428dee))
 
 ### Build System
 
@@ -128,7 +241,6 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### CI/CD
 
-- Add mypy type-checking job ([4022469](https://github.com/wielorzeczownik/ha-toya-decoder/commit/4022469423572f1e31a54ce9f99d90744b3f4fbe))
 - Add SHA-256 checksum and provenance attestation for the zip ([6fc228a](https://github.com/wielorzeczownik/ha-toya-decoder/commit/6fc228af83c27203fb81d7d61fb4a0802ace3001))
 - Update actions/setup-python action to v6.3.0 (#58) ([85ab516](https://github.com/wielorzeczownik/ha-toya-decoder/commit/85ab51641b5d39902cf7f651e5e909388f4e2a48))
 - Update softprops/action-gh-release action to v3.0.1 (#54) ([5a64501](https://github.com/wielorzeczownik/ha-toya-decoder/commit/5a645017205bbefb5cc28a59a99fc25bf44a2132))
@@ -174,7 +286,6 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Testing
 
-- Resolve ruff lint errors in test suite ([407411e](https://github.com/wielorzeczownik/ha-toya-decoder/commit/407411ec1f9c2299c2f04e0a98f028265d428dee))
 - Add full test suite (config flow, coordinator, init, media player, diagnostics) ([f8b60c6](https://github.com/wielorzeczownik/ha-toya-decoder/commit/f8b60c6ac2f9b00d646cc6b3e51d5779516c5c98))
 
 ### Build System
@@ -337,7 +448,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 - Localize default integration name ([0d40d42](https://github.com/wielorzeczownik/ha-toya-decoder/commit/0d40d425dba38e579e3d3b1a88bbb906e7568ce1))
 
-## [0.0.6](https://github.com/wielorzeczownik/ha-toya-decoder/compare/v0.0.5...v0.0.6) - 2026-01-16
+## [0.0.7](https://github.com/wielorzeczownik/ha-toya-decoder/compare/v0.0.6...v0.0.7) - 2026-01-16
 
 ### Bug Fixes
 
@@ -346,6 +457,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Documentation
 
 - Add note about 2FA support ([5cdecd2](https://github.com/wielorzeczownik/ha-toya-decoder/commit/5cdecd226d3ecab3d1f0bb8a0afff91fd9232493))
+
+## [0.0.6](https://github.com/wielorzeczownik/ha-toya-decoder/compare/v0.0.5...v0.0.6) - 2026-01-16
 
 ### Miscellaneous
 
