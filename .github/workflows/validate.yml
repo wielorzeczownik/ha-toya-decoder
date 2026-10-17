@@ -37,16 +37,14 @@ jobs:
               - 'tests/**'
               - 'scripts/*.py'
               - 'pyproject.toml'
-              - 'requirements_dev.txt'
-              - 'requirements_lint.txt'
+              - 'uv.lock'
             integration:
               - *python
               - 'hacs.json'
             deps:
               - '.github/workflows/validate.yml'
               - 'pyproject.toml'
-              - 'requirements_dev.txt'
-              - 'requirements_lint.txt'
+              - 'uv.lock'
               - 'scripts/pip-audit-report.sh'
             shell:
               - '.github/workflows/validate.yml'
@@ -65,16 +63,18 @@ jobs:
               - '**/*.yml'
               - '**/*.yaml'
 
-      - name: Set up Python
+      - name: Set up uv
         if: ${{ steps.filter.outputs.deps == 'true' }}
-        uses: actions/setup-python@5fda3b95a4ea91299a34e894583c3862153e4b97 # v7.0.0
+        uses: astral-sh/setup-uv@1c37ad07a6a961277cf70c0d37d6f313000f5884 # v10.3.0
         with:
+          # renovate: datasource=github-releases depName=astral-sh/uv
+          version: 0.13.1
           python-version: '3.14'
 
       - name: Install pip-audit
         id: install
         if: ${{ steps.filter.outputs.deps == 'true' }}
-        run: pip install --disable-pip-version-check pip-audit==2.10.1
+        run: uv tool install pip-audit==2.10.1
 
       - name: Run hassfest
         if: ${{ !cancelled() && steps.filter.outputs.integration == 'true' }}
@@ -90,18 +90,20 @@ jobs:
         if: ${{ !cancelled() && steps.filter.outputs.python == 'true' }}
         uses: astral-sh/ruff-action@278981a28ce3188b1e39527901f38254bf3aac89 # v4.1.0
         with:
+          version-file: uv.lock
           args: check
 
       - name: Format check Python
         if: ${{ !cancelled() && steps.filter.outputs.python == 'true' }}
         uses: astral-sh/ruff-action@278981a28ce3188b1e39527901f38254bf3aac89 # v4.1.0
         with:
+          version-file: uv.lock
           args: format --check
 
       - name: Audit
         if: ${{ !cancelled() && steps.install.outcome == 'success' && steps.filter.outputs.deps == 'true' }}
         shell: bash
-        run: bash scripts/pip-audit-report.sh --requirement requirements_dev.txt --requirement requirements_lint.txt >>"$GITHUB_STEP_SUMMARY" || echo "::warning title=pip-audit::Advisories found or audit failed, see the job summary. Not blocking this pull request."
+        run: bash scripts/pip-audit-report.sh --disable-pip --requirement <(uv export --frozen --all-groups --no-emit-project --format requirements-txt) >>"$GITHUB_STEP_SUMMARY" || echo "::warning title=pip-audit::Advisories found or audit failed, see the job summary. Not blocking this pull request."
 
       - name: Install shfmt and shellcheck
         if: ${{ !cancelled() && steps.filter.outputs.shell == 'true' }}
@@ -149,18 +151,18 @@ jobs:
         with:
           persist-credentials: false
 
-      - name: Set up Python
-        uses: actions/setup-python@5fda3b95a4ea91299a34e894583c3862153e4b97 # v7.0.0
+      - name: Set up uv
+        uses: astral-sh/setup-uv@1c37ad07a6a961277cf70c0d37d6f313000f5884 # v10.3.0
         with:
+          # renovate: datasource=github-releases depName=astral-sh/uv
+          version: 0.13.1
           python-version: '3.14'
-          cache: pip
-          cache-dependency-path: requirements_*.txt
 
       - name: Install dependencies
-        run: pip install -r requirements_dev.txt
+        run: uv sync --locked
 
       - name: Type check
-        run: mypy custom_components/toya_decoder
+        run: uv run --locked mypy custom_components/toya_decoder
 
       - name: Run tests
-        run: pytest --cov=custom_components/toya_decoder --cov-report=term-missing
+        run: uv run --locked pytest --cov=custom_components/toya_decoder --cov-report=term-missing
