@@ -40,10 +40,10 @@ A Home Assistant custom integration that exposes your TOYA cable TV decoder as a
 ```bash
 git clone https://github.com/wielorzeczownik/ha-toya-decoder.git
 cd ha-toya-decoder
-pip install -r requirements_dev.txt -r requirements_lint.txt
+uv sync
 ```
 
-Alternatively, open the repository in VSCode – the included devcontainer provides a ready-to-use environment.
+Alternatively, open the repository in VSCode: the included devcontainer provides a ready-to-use environment.
 
 ## Running checks locally
 
@@ -78,7 +78,7 @@ pytest
 docker run --rm -v "$(pwd):/src" -w /src ghcr.io/astral-sh/ruff check .
 docker run --rm -v "$(pwd):/src" -w /src ghcr.io/astral-sh/ruff format --check .
 
-docker run --rm -v "$(pwd):/src" -w /src python:3.14 sh -c "pip install -q -r requirements_dev.txt && mypy custom_components/toya_decoder"
+docker run --rm -v "$(pwd):/src" -w /src ghcr.io/astral-sh/uv:python3.14-bookworm uv run --locked mypy custom_components/toya_decoder
 
 docker run --rm -v "$(pwd):/src" -w /src mvdan/shfmt --diff scripts/
 docker run --rm -v "$(pwd):/mnt" -w /mnt koalaman/shellcheck:stable scripts/*.sh

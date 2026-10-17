@@ -15,7 +15,7 @@ if command -v dpkg >/dev/null 2>&1; then
 fi
 
 python3 -m pip install --upgrade uv
-uv pip install --system -r requirements_dev.txt
+uv pip install --system -r <(uv export --frozen --all-groups --no-emit-project --format requirements-txt)
 
 if ! python3 - <<'PY'
 try:

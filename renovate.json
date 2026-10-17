@@ -61,7 +61,7 @@
       "groupName": "artifact actions"
     },
     {
-      "matchManagers": ["pip_requirements"],
+      "matchManagers": ["pep621"],
       "semanticCommitType": "build"
     },
     {
@@ -69,5 +69,8 @@
       "matchFileNames": [".github/workflows/**"],
       "semanticCommitType": "ci"
     }
-  ]
+  ],
+  "lockFileMaintenance": {
+    "enabled": true
+  }
 }
