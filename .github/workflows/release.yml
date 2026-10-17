@@ -13,9 +13,6 @@ permissions: {}
 
 concurrency:
   group: release-main
-  # Never cancel a release in flight: prepare-release pushes the tag before
-  # the zip exists, so a cancelled run would strand that tag with no GitHub
-  # release and no artifact, and no later run would rebuild it.
   cancel-in-progress: false
 
 jobs:
