@@ -31,7 +31,6 @@ A Home Assistant custom integration that exposes your TOYA cable TV decoder as a
 └── scripts/
     ├── bump-version.sh               determines the next release version and updates the manifest
     ├── get_manifest_version.py       reads the current version from manifest.json
-    ├── security-audit.sh             runs pip-audit and reports what it could not fix
     └── set_manifest_version.py       writes a new version to manifest.json
 ```
 
