@@ -17,7 +17,7 @@ concurrency:
 
 jobs:
   hassfest:
-    name: hassfest
+    name: Hassfest
     runs-on: ubuntu-24.04
     timeout-minutes: 10
     permissions:
@@ -47,6 +47,7 @@ jobs:
           category: integration
 
   prepare-release:
+    name: Prepare release
     needs:
       - hassfest
       - hacs
@@ -162,6 +163,7 @@ jobs:
           path: release-notes.md
 
   build-artifact:
+    name: Integration
     needs: prepare-release
     if: ${{ needs.prepare-release.outputs.released == 'true' }}
     runs-on: ubuntu-24.04
@@ -187,6 +189,7 @@ jobs:
           path: dist/*
 
   publish-release:
+    name: Release
     environment:
       name: release
       url: https://github.com/${{ github.repository }}/releases/tag/${{ needs.prepare-release.outputs.tag }}
