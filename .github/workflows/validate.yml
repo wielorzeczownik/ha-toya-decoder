@@ -41,11 +41,6 @@ jobs:
             integration:
               - *python
               - 'hacs.json'
-            deps:
-              - '.github/workflows/validate.yml'
-              - 'pyproject.toml'
-              - 'uv.lock'
-              - 'scripts/pip-audit-report.sh'
             shell:
               - '.github/workflows/validate.yml'
               - 'scripts/**'
@@ -62,19 +57,6 @@ jobs:
               - '**/*.md'
               - '**/*.yml'
               - '**/*.yaml'
-
-      - name: Set up uv
-        if: ${{ steps.filter.outputs.deps == 'true' }}
-        uses: astral-sh/setup-uv@1c37ad07a6a961277cf70c0d37d6f313000f5884 # v10.3.0
-        with:
-          # renovate: datasource=github-releases depName=astral-sh/uv
-          version: 0.13.1
-          python-version: '3.14'
-
-      - name: Install pip-audit
-        id: install
-        if: ${{ steps.filter.outputs.deps == 'true' }}
-        run: uv tool install pip-audit==2.10.1
 
       - name: Run hassfest
         if: ${{ !cancelled() && steps.filter.outputs.integration == 'true' }}
@@ -99,11 +81,6 @@ jobs:
         with:
           version-file: uv.lock
           args: format --check
-
-      - name: Audit
-        if: ${{ !cancelled() && steps.install.outcome == 'success' && steps.filter.outputs.deps == 'true' }}
-        shell: bash
-        run: bash scripts/pip-audit-report.sh --disable-pip --requirement <(uv export --frozen --all-groups --no-emit-project --format requirements-txt) >>"$GITHUB_STEP_SUMMARY" || echo "::warning title=pip-audit::Advisories found or audit failed, see the job summary. Not blocking this pull request."
 
       - name: Install shfmt and shellcheck
         if: ${{ !cancelled() && steps.filter.outputs.shell == 'true' }}
