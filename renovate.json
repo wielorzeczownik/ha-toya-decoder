@@ -31,7 +31,6 @@
   "packageRules": [
     {
       "matchUpdateTypes": ["minor", "patch", "pin", "digest"],
-      "groupName": "all non-major",
       "automerge": true
     },
     {
@@ -39,11 +38,6 @@
       "pinDigests": true,
       "minimumReleaseAge": "7 days",
       "semanticCommitType": "ci"
-    },
-    {
-      "matchManagers": ["github-actions"],
-      "matchUpdateTypes": ["minor", "patch", "digest"],
-      "groupName": "github actions"
     },
     {
       "matchManagers": ["github-actions"],
