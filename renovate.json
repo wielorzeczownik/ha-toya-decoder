@@ -5,11 +5,6 @@
     {
       "matchManagers": ["pep621"],
       "semanticCommitType": "build"
-    },
-    {
-      "matchManagers": ["regex"],
-      "matchFileNames": [".github/workflows/**"],
-      "semanticCommitType": "ci"
     }
   ]
 }
