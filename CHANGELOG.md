@@ -5,6 +5,47 @@ All notable changes to this project are documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [0.2.5](https://github.com/wielorzeczownik/ha-toya-decoder/compare/v0.2.4...v0.2.5) - 2026-10-26
+
+### Bug Fixes
+
+- Draft releases before uploading assets (#153) ([d7aa875](https://github.com/wielorzeczownik/ha-toya-decoder/commit/d7aa875a49634d33fe9df7e48ec03001f2f07c86))
+- Match breaking changes by field so they get their own section ([bdff536](https://github.com/wielorzeczownik/ha-toya-decoder/commit/bdff5362b515079ad7155919e5ee1d6f4be17c5a))
+- Group fix(deps) updates under dependencies ([5dd3660](https://github.com/wielorzeczownik/ha-toya-decoder/commit/5dd3660e413b09fe77bfab131e50316bc78fb7ff))
+
+### Documentation
+
+- Explain how to verify attestations in release notes ([a65e4c1](https://github.com/wielorzeczownik/ha-toya-decoder/commit/a65e4c1f78c0a29c88bd8521aca319255bf75b4c))
+- Use shared pull request template from .github ([2f0f7ad](https://github.com/wielorzeczownik/ha-toya-decoder/commit/2f0f7addfc6bc2522b9869803c97ebe9bd7db847))
+- Use shared code of conduct from .github ([afe8793](https://github.com/wielorzeczownik/ha-toya-decoder/commit/afe8793cd9dd7a536b529fd8eba9d5652ae2299c))
+
+### Build System
+
+- Drop rules covered by shared preset ([afc4c5c](https://github.com/wielorzeczownik/ha-toya-decoder/commit/afc4c5c116489af6f32e8f140bb9d705471700c0))
+- Drop rules covered by shared preset ([059c2f7](https://github.com/wielorzeczownik/ha-toya-decoder/commit/059c2f76f71b96e162fc36c73a329e660afa3ecb))
+- Extend shared preset from .github ([4ee6316](https://github.com/wielorzeczownik/ha-toya-decoder/commit/4ee63160589130acb21dadc30460e68a08e011b6))
+- Open one pull request per dependency (#150) ([bb45893](https://github.com/wielorzeczownik/ha-toya-decoder/commit/bb45893222eadd4cd8a77c69ee9d23ead697856f))
+- Update dependency ruff to v0.17.1 (#148) ([997a8a4](https://github.com/wielorzeczownik/ha-toya-decoder/commit/997a8a4596d4046f467f6a39e30d8b841549a5f7))
+- Lock python dependencies with uv ([59169b2](https://github.com/wielorzeczownik/ha-toya-decoder/commit/59169b206c7c1a0fd8f6972024072a7e3bd6c5ae))
+
+### CI/CD
+
+- Update home-assistant/actions digest to cd6f363 (#154) ([6ee3b93](https://github.com/wielorzeczownik/ha-toya-decoder/commit/6ee3b93e399eb36818b5c65217c4155b4f4b41d5))
+- Cut release candidates on push and stable releases weekly (#152) ([0323c62](https://github.com/wielorzeczownik/ha-toya-decoder/commit/0323c622db8b4fb99e129c8db3ae2b4129f02602))
+- Attach an spdx sbom to releases ([34ce250](https://github.com/wielorzeczownik/ha-toya-decoder/commit/34ce25003b3a9bf6f1b95dab5fb68bad3bc6463c))
+- Move pinned tool versions to workflow env ([f922ec5](https://github.com/wielorzeczownik/ha-toya-decoder/commit/f922ec594a4a7f924611e6c8d5457bf672b971e4))
+- Pin runners and name the jobs (#147) ([76e801c](https://github.com/wielorzeczownik/ha-toya-decoder/commit/76e801c52726f6753fa8c3de39dbdb9b4d9522fa))
+- Hand dependency fixes to renovate (#146) ([9b51cb1](https://github.com/wielorzeczownik/ha-toya-decoder/commit/9b51cb155fced62606b030e6f09012f6c4185840))
+- Merge light checks into one job and render pip-audit reports ([5544a0d](https://github.com/wielorzeczownik/ha-toya-decoder/commit/5544a0d20cd40b3bdacd219c71ee4f01f935f077))
+- Batch updates weekly and skip bot PRs in label/assign ([8c42257](https://github.com/wielorzeczownik/ha-toya-decoder/commit/8c422571e84bfedf6fdb7e246d356927cfd5d202))
+- Update taiki-e/install-action action to v2.87.27 (#143) ([45dd8a3](https://github.com/wielorzeczownik/ha-toya-decoder/commit/45dd8a33b60a903c24e6760fbcae8499022fc83f))
+- Update github actions (#135) ([8f2c7c0](https://github.com/wielorzeczownik/ha-toya-decoder/commit/8f2c7c07bd00077ec6b6e8d7075b1f9b9f2f38d2))
+
+### Dependencies
+
+- Update dependency pytest-homeassistant-custom-component to v0.13.373 (#155) ([96b5266](https://github.com/wielorzeczownik/ha-toya-decoder/commit/96b526635d9f80c3029c32f2b266cd4fd020cb95))
+- Lock file maintenance (#149) ([44d4ceb](https://github.com/wielorzeczownik/ha-toya-decoder/commit/44d4ceb024f439285c8b99d31db8982065bf5ff3))
+
 ## [0.2.4](https://github.com/wielorzeczownik/ha-toya-decoder/compare/v0.2.3...v0.2.4) - 2026-10-14
 
 ### Bug Fixes
@@ -13,10 +54,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Restore plain @mentions for human authors so avatars render ([4ea5459](https://github.com/wielorzeczownik/ha-toya-decoder/commit/4ea5459fd2b375ce1f5bcd62d606403b3bb8b8da))
 - Link bot authors and pull requests in the release notes ([d69750d](https://github.com/wielorzeczownik/ha-toya-decoder/commit/d69750d1042a3764ddd9fe6a037eea9db3ded991))
 - Cover every dependency manifest in the label rules ([3253914](https://github.com/wielorzeczownik/ha-toya-decoder/commit/325391419c2180bd1f52befaa5636f8d8339c1eb))
-- Drop the pillow and pyjwt pins home assistant cannot satisfy ([e873f03](https://github.com/wielorzeczownik/ha-toya-decoder/commit/e873f038d5e6e8ed35e2c95ee1681339d7a8b145))
 - Capture pip-audit stderr in the advisory report ([c594b5c](https://github.com/wielorzeczownik/ha-toya-decoder/commit/c594b5c9b551f047eb5e2f7a8b05fdcf692ca3ec))
 - Repair the security advisory issue template ([3e67e42](https://github.com/wielorzeczownik/ha-toya-decoder/commit/3e67e42b2ac017b0f89b158fee3902c2228bc79e))
-- Resolve audit advisories ([d47cfd1](https://github.com/wielorzeczownik/ha-toya-decoder/commit/d47cfd11b475ef4661bd1a226e2e5a645d64230d))
 
 ### Refactoring
 
@@ -103,6 +142,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Dependencies
 
 - Update dependency python to v3.15.0 (#141) ([f3b8be8](https://github.com/wielorzeczownik/ha-toya-decoder/commit/f3b8be8849157f757c707bb63124327356a19743))
+- Drop the pillow and pyjwt pins home assistant cannot satisfy ([e873f03](https://github.com/wielorzeczownik/ha-toya-decoder/commit/e873f038d5e6e8ed35e2c95ee1681339d7a8b145))
+- Resolve audit advisories ([d47cfd1](https://github.com/wielorzeczownik/ha-toya-decoder/commit/d47cfd11b475ef4661bd1a226e2e5a645d64230d))
 
 ### Miscellaneous
 
